@@ -17,19 +17,19 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	this.screen = { left: 0, top: 0, width: 0, height: 0 };
 
-	this.rotateSpeed = 1.0;
+	this.rotateSpeed = 1.0;							//控制反应速度
 	this.zoomSpeed = 1.2;
 	this.panSpeed = 0.3;
 
-	this.noRotate = false;
+	this.noRotate = false;							//控制他不旋转
 	this.noZoom = false;
 	this.noPan = false;
-	this.noRoll = false;
+	this.noRoll = false;							
 
 	this.staticMoving = false;
-	this.dynamicDampingFactor = 0.2;
+	this.dynamicDampingFactor = 0.2;				//动态阻尼因素？
 
-	this.minDistance = 0;
+	this.minDistance = 0;							//相机可以靠近控制点的最近距离，可能有作用，能防止用户过度拉近视角			
 	this.maxDistance = Infinity;
 
 	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
@@ -60,13 +60,14 @@ THREE.TrackballControls = function ( object, domElement ) {
 	_panEnd = new THREE.Vector2();
 
 	// for reset
+	// 可用来还原之前的视角呀什么的
 
 	this.target0 = this.target.clone();
 	this.position0 = this.object.position.clone();
 	this.up0 = this.object.up.clone();
 
 	// events
-
+	// 看起来可以设置事件，在html中接受事件并作出反应
 	var changeEvent = { type: 'change' };
 	var startEvent = { type: 'start'};
 	var endEvent = { type: 'end'};
