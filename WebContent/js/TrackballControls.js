@@ -21,18 +21,18 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.zoomSpeed = 1.2;
 	this.panSpeed = 0.3;
 
-	this.noRotate = false;							//控制他不旋转
+	this.noRotate = false;							// 控制他不旋转
 	this.noZoom = false;
 	this.noPan = false;
 	this.noRoll = false;							
 
 	this.staticMoving = false;
-	this.dynamicDampingFactor = 0.2;				//动态阻尼因素？
+	this.dynamicDampingFactor = 0.2;				// 动态阻尼因素？
 
-	this.minDistance = 0;							//相机可以靠近控制点的最近距离，可能有作用，能防止用户过度拉近视角			
+	this.minDistance = 0;							// 相机可以靠近控制点的最近距离，可能有作用，能防止用户过度拉近视角			
 	this.maxDistance = Infinity;
 
-	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];	// 按住A，使用鼠标左键进行旋转，按住S，使用鼠标左键进行缩放，按住D，使用鼠标左键进行移动
 
 	// internals
 
@@ -338,8 +338,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 		}
 
 	};
-	
-	//可以将相机位置和状态还原到初始
+
+	// reset用来重置相机的位置视角
 	this.reset = function () {
 
 		_state = STATE.NONE;
