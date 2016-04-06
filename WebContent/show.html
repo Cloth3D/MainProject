@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>3D试衣系统</title>
 <style>
 body {
 	margin: 0;
@@ -25,7 +25,6 @@ canvas {
 
 </div>
 
-	
 	<script src='js/three.js'></script>
 	<script src='js/stats.min.js'></script>
 	<script src='js/TrackballControls.js'></script>
@@ -34,24 +33,18 @@ canvas {
 
 function onWindowResize() //重置窗口大小
 {
-	
 	camera.aspect = window.innerWidth / window.innerHeight;			//重置相机比例
 	camera.updateProjectionMatrix();								//
 
 	renderer.setSize(window.innerWidth, window.innerHeight);		//重置渲染的大小
 	
 	doucument.getElementById('canvas').width = window.innerWidth;	
-	doucument.getElementById('canvas').height = window.innerHeight;
-	
-
+	doucument.getElementById('canvas').height = window.innerHeight;	
 }
+
 window.addEventListener('resize', onWindowResize, false);
 
-</script>
-	<script type="text/javascript">
-
 var canvas=document.getElementById('canvas');					//创建一个canvas
-
 
 var scene = new THREE.Scene();									//创建一个scene
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );	//创建相机
@@ -60,11 +53,10 @@ camera.position.z = 20;
 camera.position.x = 0;
 camera.position.y = 10;
 
-
 var renderer = new THREE.WebGLRenderer({canvas:document.getElementById('canvas'),
 	antialias:true,
 	precision:THREE.highp });					//创建一个渲染器
-renderer.setSize( window.innerWidth, window.innerHeight );		//设置渲染器渲染范围
+renderer.setSize( window.innerWidth, window.innerHeight);		//设置渲染器渲染范围
 renderer.setClearColor(0xEEEEEE);
 
 //添加状态显示模块
@@ -77,7 +69,7 @@ stats.domElement.style.left = '0px';
 stats.domElement.style.top	 = '0px';
 document.body.appendChild(stats.domElement);			//添加到页面中
 
-var axes = new THREE.AxisHelper(5);
+var axes = new THREE.AxisHelper(5);     //添加一个坐标轴
 scene.add(axes);
 
 // TrackballControls 设置一个轨迹球操作器
