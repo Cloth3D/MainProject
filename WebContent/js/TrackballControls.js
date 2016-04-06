@@ -338,7 +338,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 		}
 
 	};
-
+	
+	//可以将相机位置和状态还原到初始
 	this.reset = function () {
 
 		_state = STATE.NONE;
