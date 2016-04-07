@@ -29,7 +29,10 @@ canvas {
 	<script src='js/stats.min.js'></script>
 	<script src='js/TrackballControls.js'></script>
 	<script src='js/OBJLoader.js'></script>
+	<script src='js/VertexNormalsHelper.js'></script>
+	<script src='js/FaceNormalsHelper.js'></script>
 	<script type="text/javascript">
+
 
 function onWindowResize() //重置窗口大小
 {
@@ -81,7 +84,7 @@ cameraControls.rotateSpeed = 1.0;
 cameraControls.panSpeed = 1.0;
 cameraControls.noPan = true;								// 不让移动
 cameraControls.dynamicDampingFactor = 0.5;					// 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
-cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
+//cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
 cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
 
 //添加光线
@@ -90,11 +93,6 @@ directionalLight.position.set(1,1, 1);
 //directionalLight.shadowCameraVisble = true;
 scene.add(directionalLight);
 
-function changeLight()
-{
-	var position = camera.getWorldDirection ();
-	directionalLight.position.set(position.x,position.y,position.z);
-}
 
 //添加网格
 var size = 10;
@@ -117,9 +115,9 @@ scene.add(gridHelper);
 				child.geometry.computeVertexNormals();
 			});
 			mesh = loadedMesh;
-
-			loadedMesh.scale.set(0.1, 0.1, 0.1);
-			scene.add(loadedMesh);
+			mesh.name = 'nakeBody';				// 尝试给模型添加名称
+			mesh.scale.set(0.1, 0.1, 0.1);
+			scene.add(mesh);	
 		});
 		//alert("模型加载完成");
 
