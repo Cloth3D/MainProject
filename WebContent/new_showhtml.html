@@ -36,8 +36,12 @@ canvas {
 	<script src='js/OBJLoader.js'>
 	//用来加载obj模型
 	</script>
+	<script src='js/TransformControls.js'>
+	//控制移动的框架
+	</script>
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
+	
 	var winWidth, winHeight;		// 画板的大小
 	var canvas, scene, camera;		// 画板 场景 相机
 	var renderer, stats;			// 渲染器及帧数显示器
@@ -47,6 +51,7 @@ canvas {
 	var gridHelper;					// 网格助手
 	var objloader;					// objloader
 	var delta;						// 用来获取时间
+	var control;					// 测试移动插件
 	</script>
 <script type="text/javascript">
 function onWindowResize() //重置窗口大小
@@ -91,7 +96,60 @@ function addstats()		// 添加状态显示模块，在init之后执行
 function addListener()		// 用来统一添加监听器
 {
 	window.addEventListener('resize', onWindowResize, false);	// 添加监听器，用来监听窗口变化
+// 	window.addEventListener( 'keydown', function ( event ) {
+
+// 		switch ( event.keyCode ) {
+
+// 			case 81: // Q
+// 				control.setSpace( control.space === "local" ? "world" : "local" );
+// 				break;
+
+// 			case 17: // Ctrl
+// 				control.setTranslationSnap( 100 );
+// 				control.setRotationSnap( THREE.Math.degToRad( 15 ) );
+// 				break;
+
+// 			case 87: // W
+// 				control.setMode( "translate" );
+// 				break;
+
+// 			case 69: // E
+// 				control.setMode( "rotate" );
+// 				break;
+
+// 			case 82: // R
+// 				control.setMode( "scale" );
+// 				break;
+
+// 			case 187:
+// 			case 107: // +, =, num+
+// 				control.setSize( control.size + 0.1 );
+// 				break;
+
+// 			case 189:
+// 			case 109: // -, _, num-
+// 				control.setSize( Math.max( control.size - 0.1, 0.1 ) );
+// 				break;
+
+// 		}
+
+// 	});
+
+// 	window.addEventListener( 'keyup', function ( event ) {
+
+// 		switch ( event.keyCode ) {
+
+// 			case 17: // Ctrl
+// 				control.setTranslationSnap( null );
+// 				control.setRotationSnap( null );
+// 				break;
+
+// 		}
+
+// 	});
+
 }
+
 
 function addTrackball()		// 用来添加轨迹球控制器
 {
@@ -104,8 +162,22 @@ function addTrackball()		// 用来添加轨迹球控制器
 	cameraControls.panSpeed = 1.0;
 	cameraControls.noPan = true;								// 不让移动
 	cameraControls.dynamicDampingFactor = 0.5;					// 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
-	//cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
+	cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
 	cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
+}
+
+function addTransform()			// 添加移动帮助
+{
+	control = new THREE.TransformControls( camera, renderer.domElement );	// 构造函数
+	//control.addEventListener( 'change', animation );						
+	
+	var geometry = new THREE.BoxGeometry( 200, 200, 200 );
+	var material = new THREE.MeshLambertMaterial( { Color: 0xff0000 } );
+	var mesh = new THREE.Mesh( geometry, material );
+	scene.add( mesh );
+
+	control.attach( mesh );
+	scene.add( control );
 }
 
 function addLight()			// 添加光线
@@ -162,6 +234,7 @@ function animation()			// 动画
 	requestAnimationFrame( animation );					// 要求定时渲染
 	render();
 	cameraCtrl();										// 鼠标控制
+	//control.update();
 }
 </script>
 <script type="text/javascript">
@@ -175,6 +248,7 @@ function main()
 	addLight();				// 添加光线
 	addGrid();				// 添加网格
 	animation();			// 调用动画
+	//addTransform();			// 添加移动帮助
 	
 }
 main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
