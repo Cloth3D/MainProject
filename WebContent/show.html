@@ -101,11 +101,6 @@ directionalLight.position.set(1,1, 1);
 //directionalLight.shadowCameraVisble = true;
 scene.add(directionalLight);
 
-function changeLight()
-{
-	var position = camera.getWorldDirection ();
-	directionalLight.position.set(position.x,position.y,position.z);
-}
 
 //添加网格
 var size = 10;
