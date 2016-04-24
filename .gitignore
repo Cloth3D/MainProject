@@ -28,3 +28,9 @@ local.properties
 # PDT-specific
 .buildpath
 /build/
+
+# models don't need to update every times
+.obj
+.png
+.mtl
+/WebContent/models/
