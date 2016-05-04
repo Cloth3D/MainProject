@@ -13,133 +13,152 @@ canvas {
 	width: 100%;
 	height: 100%
 }
-
 </style>
 </head>
 <body>
-<div id = 'div1'>
+	<div id='div1'>
 
-<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
+		<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
 
 </canvas>
 
-</div>
+	</div>
 
 	<script src='js/three.js'></script>
 	<script src='js/stats.min.js'></script>
 	<script src='js/TrackballControls.js'></script>
 	<script src='js/OBJLoader.js'></script>
+	<script src='js/MTLLoader.js'></script>
+	<script src='js/DDSLoader.js'></script>
+	<script src='js/OBJMTLLoader.js'></script>
+
 	<script type="text/javascript">
+		function onWindowResize() //重置窗口大小
+		{
+			camera.aspect = window.innerWidth / window.innerHeight; //重置相机比例
+			camera.updateProjectionMatrix(); //
 
-function onWindowResize() //重置窗口大小
-{
-	camera.aspect = window.innerWidth / window.innerHeight;			//重置相机比例
-	camera.updateProjectionMatrix();								//
+			renderer.setSize(window.innerWidth, window.innerHeight); //重置渲染的大小
 
-	renderer.setSize(window.innerWidth, window.innerHeight);		//重置渲染的大小
-	
-	doucument.getElementById('canvas').width = window.innerWidth;	
-	doucument.getElementById('canvas').height = window.innerHeight;	
-}
+			doucument.getElementById('canvas').width = window.innerWidth;
+			doucument.getElementById('canvas').height = window.innerHeight;
+		}
 
-window.addEventListener('resize', onWindowResize, false);
+		window.addEventListener('resize', onWindowResize, false);
 
-var canvas=document.getElementById('canvas');					//创建一个canvas
+		var canvas = document.getElementById('canvas'); //创建一个canvas
 
-var scene = new THREE.Scene();									//创建一个scene
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );	//创建相机
-// 设置相机初始位置，使其正对着模型
-camera.position.z = 20;
-camera.position.x = 0;
-camera.position.y = 10;
+		var scene = new THREE.Scene(); //创建一个scene
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth
+				/ window.innerHeight, 0.1, 1000); //创建相机
+		// 设置相机初始位置，使其正对着模型
+		camera.position.z = 20;
+		camera.position.x = 0;
+		camera.position.y = 10;
 
-var renderer = new THREE.WebGLRenderer({canvas:document.getElementById('canvas'),
-	antialias:true,
-	precision:THREE.highp });					//创建一个渲染器
-renderer.setSize( window.innerWidth, window.innerHeight);		//设置渲染器渲染范围
-renderer.setClearColor(0xEEEEEE);
+		var renderer = new THREE.WebGLRenderer({
+			canvas : document.getElementById('canvas'),
+			antialias : true,
+			precision : THREE.highp
+		}); //创建一个渲染器
+		renderer.setSize(window.innerWidth, window.innerHeight); //设置渲染器渲染范围
+		renderer.setClearColor(0xEEEEEE);
 
-//添加状态显示模块
-var stats = new Stats();		//定义状态显示器
-stats.setMode(0);				//初始默认显示fps
+		//添加状态显示模块
+		var stats = new Stats(); //定义状态显示器
+		stats.setMode(0); //初始默认显示fps
 
-//设置stats的位置s
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
-stats.domElement.style.top	 = '0px';
-document.body.appendChild(stats.domElement);			//添加到页面中
+		//设置stats的位置s
+		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.left = '0px';
+		stats.domElement.style.top = '0px';
+		document.body.appendChild(stats.domElement); //添加到页面中
 
-var axes = new THREE.AxisHelper(5);     //添加一个坐标轴
-scene.add(axes);
+		var axes = new THREE.AxisHelper(5); //添加一个坐标轴
+		scene.add(axes);
 
-// TrackballControls 设置一个轨迹球操作器
-var clock = new THREE.Clock();
-var cameraControls = new THREE.TrackballControls(camera,renderer.domElement);			// 定义相机控制器
-cameraControls.target.set(0, 10, 0);													// 设置中心点坐标
-cameraControls.zoomSpeed = 1.0;								// 设置缩放速度
-cameraControls.rotateSpeed = 1.0;
-cameraControls.panSpeed = 1.0;
-cameraControls.noPan = true;								// 不让移动
-cameraControls.dynamicDampingFactor = 0.5;					// 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
-cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
-cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
+		// TrackballControls 设置一个轨迹球操作器
+		var clock = new THREE.Clock();
+		var cameraControls = new THREE.TrackballControls(camera,
+				renderer.domElement); // 定义相机控制器
+		cameraControls.target.set(0, 10, 0); // 设置中心点坐标
+		cameraControls.zoomSpeed = 1.0; // 设置缩放速度
+		cameraControls.rotateSpeed = 1.0;
+		cameraControls.panSpeed = 1.0;
+		cameraControls.noPan = true; // 不让移动
+		cameraControls.dynamicDampingFactor = 0.5; // 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
+		cameraControls.minDistance = 10.0; // 设置最近距离，可以使相机不要过分的接近
+		cameraControls.maxDistance = 20.0; // 设置最远距离，可以使相机不要过分的远离
 
-//添加光线
-var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-directionalLight.position.set(1,1, 1);
-//directionalLight.shadowCameraVisble = true;
-scene.add(directionalLight);
+		//添加光线
+		var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+		directionalLight.position.set(1, 1, 1);
+		//directionalLight.shadowCameraVisble = true;
+		scene.add(directionalLight);
 
-function changeLight()
-{
-	var position = camera.getWorldDirection ();
-	directionalLight.position.set(position.x,position.y,position.z);
-}
+		function changeLight() {
+			var position = camera.getWorldDirection();
+			directionalLight.position.set(position.x, position.y, position.z);
+		}
 
-//添加网格
-var size = 10;
-var step = 0.5;
-var gridHelper = new THREE.GridHelper(size, step);
-scene.add(gridHelper);
-
-//导入一个模型
-//instantiate a loader
+		//添加网格
+		var size = 10;
+		var step = 0.5;
+		var gridHelper = new THREE.GridHelper(size, step);
+		scene.add(gridHelper);
+		
+		//导入一个人体mesh(带纹理贴图的)
+		//instantiate a loader
 		var loader = new THREE.OBJLoader();
-		//alert("准备加载模型");
-		//load a resource
-		loader.load('models/nakeBody/nakeBody.obj', function(loadedMesh) {
-			var material = new THREE.MeshLambertMaterial({
-				color : 0xaaaaaa
-			});
-			loadedMesh.children.forEach(function(child) {
-				child.material = material;
-				child.geometry.computeFaceNormals();
-				child.geometry.computeVertexNormals();
-			});
-			mesh = loadedMesh;
+// 		load a resource
+		alert("start load body2");
+		loader.load('models/nakeBody/nakeBody.obj',  function(object) {
+			object.scale.set(0.1, 0.1, 0.1);
+					scene.add(object);
+				} );
 
-			loadedMesh.scale.set(0.1, 0.1, 0.1);
-			scene.add(loadedMesh);
+// 		尝试 导入上衣模型 top
+		loader.load('models/top_1/top_1.obj', function(object) {
+			object.scale.set(0.1, 0.1, 0.1);
+			scene.add(object);
 		});
-		//alert("模型加载完成");
+		
+		//尝试导入下衣bottom
+		loader.load('models/bottom_1/bottom_1.obj', function(object){
+			object.scale.set(0.1, 0.1, 0.1);
+			scene.add(object);
+		});
 
-//制作动画
-function render() 
-{
-	requestAnimationFrame( render );					//要求定时渲染
-	renderer.render( scene, camera );					//渲染相机和场景
-	stats.update();										//更新
-	
-	//相机操控需要
-	var delta = clock.getDelta();
-	cameraControls.update(delta);
-	
-	
-	
-	
-}
-render();
+		//尝试导入头发
+		loader.load('models/hair_1/hair_1.obj', function(object){
+			object.scale.set(0.1, 0.1, 0.1);
+			scene.add(object);
+		});
+		
+		//尝试导入鞋
+			loader.load('models/shoes_1/shoes_1.obj', function(object){
+			object.scale.set(0.1, 0.1, 0.1);
+			scene.add(object);
+		});
+		
+		//尝试导入帽子
+			loader.load('models/hat_1/hat_1.obj', function(object){
+			object.scale.set(0.1, 0.1, 0.1);
+			scene.add(object);
+		});
+		
+		//制作动画
+		function render() {
+			requestAnimationFrame(render); //要求定时渲染
+			renderer.render(scene, camera); //渲染相机和场景
+			stats.update(); //更新
 
-</script>
+			//相机操控需要
+			var delta = clock.getDelta();
+			cameraControls.update(delta);
+
+		}
+		render();
+	</script>
 </body>
 </html>

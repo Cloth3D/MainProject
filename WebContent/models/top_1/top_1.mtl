@@ -1,0 +1,10 @@
+newmtl cloth_1:PackedMaterial2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.40 0.40 0.40
+Tf 1.00 1.00 1.00
+map_Kd cloth_1_Packed2_Diffuse.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks cloth_1_Packed2_Specular.png
+Ns 512.00

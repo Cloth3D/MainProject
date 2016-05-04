@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src = "js/three.js"></script>
+<script src = "js/JSONLoader.js"></script>
+<script src = "js/Animation.js"></script>
+<script src = "js/AnimationHandler.js"></script>
+<script src = "js/AnimationClip.js"></script>
+<script src = "js/AnimationLoader.js"></script>
+</head>
+<body onload="init();">
+	<script type="text/javascript">
+
+function init(){
+	alert("into init");
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1,  1000);
+scene.add(camera);
+
+var renderer = new THREE.WebGLRenderer();
+
+renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMapEnabled = true;
+
+var loader = new THREE.JSONLoader();
+var model;
+loader.load("test.json", function(geometry, materials){
+	model = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+	scene.add(model);
+});
+alert("0.5");
+var animation;
+alert("0.7");
+alert(model.geometry.animation);
+//第一个参数是网格名， 第二个参数是动画名
+ animation = new THREE.Animation(model, model.geometry.animations[0]); 
+ alert("0.85");
+animation.play();
+
+alert("1");
+
+
+var clock = new THREE.Clock();
+
+
+alert("1.5");
+render();
+alert("2");
+function render() {
+	requestAnimationFrame(render); //要求定时渲染
+	renderer.render(scene, camera); //渲染相机和场景
+// 	stats.update(); //更新
+
+	//相机操控需要
+	var delta = clock.getDelta();
+	THREE.AnimationHandler.update(delta);
+// 	cameraControls.update(delta);
+
+}
+
+
+}
+
+</script>
+</body>
+</html>
