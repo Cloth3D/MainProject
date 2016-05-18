@@ -1,0 +1,7 @@
+JSONAnimation.html 是用来测试json播放动画的
+可以参照 webgl_animation_skinning_morph.html将动画播放，暂停做的更全
+loadJSON.html 是用来测试读取json模型的，没有去播放动画
+morphTargetStudy.html
+morphTargets2.html  两个是人体模型变形的部分，代码部分重要的部分在读模型的地方
+我在代码中将mesh的buffergeometry转换成了geometry，然后将转换后geometry新建了一个mesh添加到了场景中。
+loadModelTest.html 是读取模型的测试，也是我也用来测试新功能使用的模板（通过增加改变函数来实现）

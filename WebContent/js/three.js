@@ -22893,7 +22893,8 @@ THREE.Skeleton.prototype.update = ( function () {
 
 			offsetMatrix.multiplyMatrices( matrix, this.boneInverses[ b ] );
 			offsetMatrix.flattenToArrayOffset( this.boneMatrices, b * 16 );
-
+			
+			//if( this.bones[ b ].scalling !== null ) matrix.scale( this.bones[ b ].scalling );	// 据说这样就能修改bone的scale
 		}
 
 		if ( this.useVertexTexture ) {
@@ -22946,7 +22947,10 @@ THREE.SkinnedMesh = function ( geometry, material, useVertexTexture ) {
 			gbone = this.geometry.bones[ b ];
 
 			bone = new THREE.Bone( this );
+			//alert("这句话");
 			bones.push( bone );
+			//alert(bones.length);
+			//alert("执行");
 
 			bone.name = gbone.name;
 			bone.position.fromArray( gbone.pos );
@@ -22972,12 +22976,12 @@ THREE.SkinnedMesh = function ( geometry, material, useVertexTexture ) {
 		}
 
 	}
-
+	//alert(bones.length);
 	this.normalizeSkinWeights();
 
 	this.updateMatrixWorld( true );
 	this.bind( new THREE.Skeleton( bones, undefined, useVertexTexture ), this.matrixWorld );
-
+	//alert(bones.length);
 };
 
 

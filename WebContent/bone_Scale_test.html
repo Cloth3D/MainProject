@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>测试能否使用JSON读取动画</title>
+<title>测试骨骼缩放物体</title>
 <script type="text/javascript">
 try{
     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -23,9 +23,28 @@ canvas {
 	width: 100%;
 	height: 100%
 }
+
+#ctrl {
+				position: absolute;
+				top: 200px;
+				left: 0px;
+				width: 200px;
+				color: #555555;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				z-index:100;
+			}
 </style>
 </head>
 <body>
+<div id="ctrl">
+			Use controls to change morph target influences:<br/>
+			放大x  <input type="range" value="10" min="0" max="100" onchange="model.skeleton.bones[0].position.x = value/10;model.skeleton.bones[1].position.x = value/10;" /><br/>
+			放大y	  <input type="range" value="10" min="0" max="100" onchange="model.skeleton.bones[0].scale.y = value/10;model.skeleton.bones[1].scale.y = value/10;" /><br/>
+			放大z  <input type="range" value="10" min="0" max="100" onchange="model.skeleton.bones[0].scale.z = value/10;model.skeleton.bones[1].scale.z = value/10;" /><br/>
+			<button onclick = "model.skeleton.update();">测试</button>
+</div>
 <div id = 'div1'>
 <canvas id='canvas' width=window.innerWidth height=window.innerHeight>
 你的浏览器不支持本应用
@@ -65,7 +84,7 @@ canvas {
 	var objloader;					// objloader
 	var delta;						// 用来获取时间
 	var control;					// 测试移动插件
-	var model,mixer,bonesClip;		// 动画部分
+	var model,mixer,bonesClip,helper;		// 动画部分
 	</script>
 <script type="text/javascript">
 function onWindowResize() //重置窗口大小
@@ -174,9 +193,9 @@ function addTrackball()		// 用来添加轨迹球控制器
 	cameraControls.zoomSpeed = 1.0;								// 设置缩放速度
 	cameraControls.rotateSpeed = 1.0;
 	cameraControls.panSpeed = 1.0;
-	cameraControls.noPan = true;								// 不让移动
+	//cameraControls.noPan = true;								// 不让移动
 	cameraControls.dynamicDampingFactor = 0.5;					// 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
-	cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
+	//cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
 	//cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
 }
 
@@ -214,13 +233,16 @@ function loadjson()			// 读取一个JSON模型
 {
 	var loader = new THREE.JSONLoader();
 	
-	loader.load('models/testwalking.json', function (geometry, materials) {
+	loader.load('models/bone_scale_test.json', function (geometry, materials) {
 		//alert(geometry instanceof THREE.Geometry);				// 结论，此处是geometry类型的
 		//alert(geometry instanceof THREE.BufferGeometry);
 	    model = new THREE.SkinnedMesh(
 	    		geometry,
 	    		new THREE.MeshLambertMaterial({color:0xaaaaaa}));
-	    model.scale.set(5,5,5);
+	    var skeleton = model.skeleton.clone();
+	    model.bind(skeleton);
+	  //alert(model.bones.length);
+	    model.scale.set(100,100,100);
 	    scene.add(model);
 	    // alert("hh");
 	    model.visible = true;						// 测试能否导入骨架信息
@@ -229,7 +251,8 @@ function loadjson()			// 读取一个JSON模型
 		helper.material.linewidth = 10;
 		helper.visible = true;
 		scene.add( helper );
-
+		
+		
 	});
 }
 
@@ -278,6 +301,8 @@ function animation()			// 动画
 	render();
 	cameraCtrl();										// 鼠标控制
 	//control.update();
+	if(helper)
+		helper.update();
 }
 </script>
 <script type="text/javascript">
