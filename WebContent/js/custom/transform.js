@@ -8,7 +8,7 @@
         this.control = new THREE.TransformControls( show.camera, show.renderer.domElement );       // 给场景加上控制器
 		    this.stats = true;
 
-        console.log("这句话执行了");
+        //console.log("这句话执行了");
         show.scene.add(this.control);
         if(show.selected !== null)
         this.control.attach(show.selected);
@@ -81,7 +81,7 @@
 
  update:function()        // 加在动画上
  {
-   this.control.update();
+    this.control.update();
  },
 
  work:function()          // 开始工作或是停止工作，开始工作时会默认选择 show.selected
