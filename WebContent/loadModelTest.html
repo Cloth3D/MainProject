@@ -242,7 +242,7 @@ function load()				// 读取模型
 	//alert("准备加载模型");
 	//load a resource
 	loader.load('models/nakeBody/nakeBody.obj', function(loadedMesh) {
-		var material = new THREE.MeshLambertMaterial({
+		var material = new THREE.MeshPhongMaterial({
 			color : 0xaaaaaa
 		});
 		loadedMesh.children.forEach(function(child) {

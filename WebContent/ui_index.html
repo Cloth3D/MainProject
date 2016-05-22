@@ -38,11 +38,10 @@ canvas {
 </head>
 <body>
 <div id="ctrl">
-			Use controls to change morph target influences:<br/>
-
-			<button onclick = "fileInput.click();">测试1</button>
-			<button onclick = "trans.work();">测试2</button>
-			<h1 id = 'times'></h1>
+			<button onclick = "fileInput.click();">读取模型</button><br>
+			<button onclick = "trans.work();">停止移动工具</button><br>
+			<button onclick = "addmaterial();">读取贴图测试</button>
+			
 </div>
 <div id = 'div1'>
 <canvas id='canvas' width=window.innerWidth height=window.innerHeight>
@@ -82,10 +81,8 @@ canvas {
   <script src = 'js/TransformControls.js'>// 移动控制器</script>
 
 	<script src = 'js/custom/Loader.js'>// 用来加载模型文件</script>
-  <script src = 'js/custom/transform.js'>
-  console.log("文件已导入");
-  // 用来控制移动
-  </script>
+  <script src = 'js/custom/transform.js'>// 用来控制移动 </script>
+  <script src = 'js/custom/MaterialTools.js'>// 添加贴图工具</script>
 
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
@@ -160,6 +157,14 @@ function animation()			// 动画
 {
 	requestAnimationFrame( animation );					// 要求定时渲染
 	render();
+}
+
+function addmaterial()
+{
+	var tool = new MaterialTool();
+	tool.addMeshLambertMaterial(show.selected,
+			'models/model/model_Packed0_Diffuse.png',
+			'models/model/model_Packed0_Specular.png');
 }
 
 function addImport()

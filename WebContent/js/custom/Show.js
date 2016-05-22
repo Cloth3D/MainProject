@@ -86,12 +86,12 @@
 
         // 定义相机控制器
         this.cameraControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);	//创建控制器
-        this.cameraControl.enable = false;                           // 是否开启控制器, 在一些操作时需要关闭控制器，操作结束后再打开
-        this.cameraControl.minDistance = 5.0;                      // 设置最远最近
-        this.cameraControl.maxDistance = 200.0;
-        this.cameraControl.minPolarAngle = Math.PI/5;               // 设置视角极限
-        this.cameraControl.maxPolarAngle = 2/3 * Math.PI;
-        this.cameraControl.enablePan = false;                       // 拒绝移动控制器中心
+//        this.cameraControl.enable = true;                           // 是否开启控制器, 在一些操作时需要关闭控制器，操作结束后再打开 , 貌似有buffergeometry
+//        this.cameraControl.minDistance = 5.0;                      // 设置最远最近
+//        this.cameraControl.maxDistance = 200.0;
+//        this.cameraControl.minPolarAngle = Math.PI/5;               // 设置视角极限
+//        this.cameraControl.maxPolarAngle = 2/3 * Math.PI;
+//        this.cameraControl.enablePan = false;                       // 拒绝移动控制器中心
         this.zoomSpeed = 1.0;                                       // 缩放速度
         this.rotateSpeed = 1.0;                                     // 旋转速度
         this.cameraControl.target = new THREE.Vector3(0,2,0);     // 设置中心
@@ -105,7 +105,7 @@
         var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
         var cube = new THREE.Mesh( geometry, material );
         this.selected = cube;
-        this.scene.add( cube );
+        this.addObject(cube);
 
 
    },
@@ -156,12 +156,14 @@
     // 添加到数组中存储
     if(object !== undefined)
     {
-      this.mesh.push({
+      this.mesh[object.uuid]=
+      {
         mesh: object,
         materials: [object.materials],
         id:0
-      });             // 在mesh中添加纪录，顺便可以记录更换material的情况
+      };             // 在mesh中添加纪录，顺便可以记录更换material的情况
       this.scene.add( object );
+      this.selected = object;
     }
 
 	},
