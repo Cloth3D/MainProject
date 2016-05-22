@@ -47,7 +47,8 @@ left:100px;
 			放大  <input type="range" value="0" min="0" max="100" onchange="model.skeleton.bones[0].position.x = value/10;" /><br/>
 			放大	  <input type="range" value="0" min="0" max="100" onchange="scalemodel(value/50,value/50,value/50);" /><br/>
 			放大  <input type="range" value="0" min="0" max="100" onchange="model.skeleton.bones[0].scale.z = (value/100);" /><br/>
-			<button onclick = "play = !play;">测试</button>
+			<button onclick = "play = !play;">测试1</button>
+			<button onclick = "model.skeleton.pose();">测试2</button>
 			<script>
 			function scalemodel(x,y,z)
 			{
@@ -210,8 +211,9 @@ function addTrackball()		// 用来添加轨迹球控制器
 	// TrackballControls 设置一个轨迹球操作器
 	clock = new THREE.Clock();
 	cameraControls = new THREE.TrackballControls(camera,renderer.domElement);			// 定义相机控制器
-	cameraControls.target.set(0, 10/100, 0);													// 设置中心点坐标
+	cameraControls.target.set(0, 10/100, 0);								// 设置中心点坐标
 	cameraControls.zoomSpeed = 1.0;								// 设置缩放速度
+	// cameraControls.enable = false;
 	cameraControls.rotateSpeed = 1.0;
 	cameraControls.panSpeed = 1.0;
 	cameraControls.noPan = true;								// 不让移动
@@ -254,11 +256,11 @@ function loadjson()			// 读取一个JSON模型
 {
 	var loader = new THREE.JSONLoader();
 
-	loader.load('models/16test1.json', function (geometry, materials) {
+	loader.load('models/height.json', function (geometry, materials) {
 		//alert(geometry instanceof THREE.Geometry);				// 结论，此处是geometry类型的
 		//alert(geometry instanceof THREE.BufferGeometry);
-		
-// 		for (var i = 0; i < geometry.vertices.length; i++) 
+
+// 		for (var i = 0; i < geometry.vertices.length; i++)
 // 		{
 //                 vector = geometry.vertices[i];
 //                 var axis = new THREE.Vector3(0, 1, 0);
@@ -266,7 +268,7 @@ function loadjson()			// 读取一个JSON模型
 //                 geometry.vertices[i].applyAxisAngle(axis, angle);
 //                 geometry.vertices[i].multiplyScalar(0.01);
 //  		}
- 
+
 	    model = new THREE.SkinnedMesh(
 	    		geometry,
 	    		new THREE.MeshLambertMaterial({color:0xaaaaaa,
@@ -302,7 +304,7 @@ function render()
 		{
 			delta = clock.getDelta();							// 获取时间
 			mixer.update(  0.01*delta );
-			
+
 			document.getElementById('times').innerHTML = action.time;
 		}
 	if(mixer)
