@@ -3,16 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>展示台</title>
-<script type="text/javascript">
-try{
-    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-        alert("您正在手机端访问本页面!")
-    }else{
-        alert("您正在电脑端访问本页面!");
-    }
-}catch(e){}
-</script>
-
 <style>
 body {
 	margin: 0;
@@ -207,6 +197,16 @@ function addGrid()			// 添加网格
 }
 function load()				// 读取模型
 {
+	var manager = new THREE.LoadingManager();										// 设置管理器
+	var texture = new THREE.Texture();  
+	var loader = new THREE.ImageLoader( manager ); 									// 用来读取图片的 
+    loader.load( 'models/nakeBody/xz_Packed0_Diffuse.png', function ( image ) {  
+
+        texture.image = image;  
+        texture.needsUpdate = true;  
+
+    } );
+	
 	loader = new THREE.OBJLoader();
 	//alert("准备加载模型");
 	//load a resource
@@ -215,8 +215,8 @@ function load()				// 读取模型
 			color : 0xaaaaaa
 		});
 		loadedMesh.children.forEach(function(child) {
-			child.material = material;
-			child.geometry.computeFaceNormals();
+			child.material.map = texture;							// 将加载出来的贴图传递给child的材质
+			child.geometry.computeFaceNormals();					// 不计算这个就会很光滑
 			child.geometry.computeVertexNormals();
 		});
 		mesh = loadedMesh;

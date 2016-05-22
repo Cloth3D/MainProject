@@ -1,18 +1,9 @@
 <!DOCTYPE html>
+<!-- 本页面是用来测试手机端对模型的承受能力，点击按钮增加一个模型，测试在多少数量时会发生崩溃 -->
 <html>
 <head>
 <meta charset="UTF-8">
-<title>展示台</title>
-<script type="text/javascript">
-try{
-    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-        alert("您正在手机端访问本页面!")
-    }else{
-        alert("您正在电脑端访问本页面!");
-    }
-}catch(e){}
-</script>
-
+<title>尝试添加模型及贴图</title>
 <style>
 body {
 	margin: 0;
@@ -49,6 +40,9 @@ canvas {
 	<script src='js/TransformControls.js'>
 	//控制移动的框架
 	</script>
+	<script src='js/MTLLoader.js'>
+	//用来加载MTL及贴图
+	</script>
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
 	
@@ -62,6 +56,8 @@ canvas {
 	var objloader;					// objloader
 	var delta;						// 用来获取时间
 	var control;					// 测试移动插件
+	var gui;						// gui插件
+	var mod;
 	</script>
 <script type="text/javascript">
 function onWindowResize() //重置窗口大小
@@ -161,6 +157,31 @@ function addListener()		// 用来统一添加监听器
 }
 
 
+// 用来设置gui按钮
+function onGui()
+{
+	
+	var addnewmodel = function()
+	{
+		this.message = '点击添加新的模型';
+		this.x = 0.0;
+		this.y = 0.0;
+		this.z = 0.0;
+		this.add = function()				// 在指定位置添加新模型
+		{
+			load_new(this.x,this.y,this.z);
+		}
+	};
+	
+	mod = new addnewmodel();
+	gui = new dat.GUI();					// 新建GUI
+	gui.add(mod,'message');
+	gui.add(mod,'x');
+	gui.add(mod,'y');
+	gui.add(mod,'z');
+	gui.add(mod,'add');
+}
+
 function addTrackball()		// 用来添加轨迹球控制器
 {
 	// TrackballControls 设置一个轨迹球操作器
@@ -207,7 +228,45 @@ function addGrid()			// 添加网格
 }
 function load()				// 读取模型
 {
-	loader = new THREE.OBJLoader();
+	var manager = new THREE.LoadingManager();  
+    manager.onProgress = function ( item, loaded, total ) {  
+
+        console.log( item, loaded, total );  
+
+    };  
+    var texture = new THREE.Texture();  
+    var texture2 = new THREE.Texture();
+    
+    var onProgress = function ( xhr ) {  
+        if ( xhr.lengthComputable ) {  
+            var percentComplete = xhr.loaded / xhr.total * 100;  
+            console.log( Math.round(percentComplete, 2) + '% downloaded' );  
+        }  
+    };  
+
+    var onError = function ( xhr ) {  
+    };  
+
+
+    var loader = new THREE.ImageLoader( manager );  
+    loader.load( 'models/nakeBody/xz_Packed0_Diffuse.png', function ( image ) {  
+
+        texture.image = image;  
+        texture.needsUpdate = true;  
+
+    } ); 
+
+    loader.load( 'models/nakeBody/xz_Packed0_Specular.png', function ( image ) {  
+
+        texture2.image = image;  
+        texture2.needsUpdate = true;  
+
+    } );
+
+
+    // model  
+
+    loader = new THREE.OBJLoader();
 	//alert("准备加载模型");
 	//load a resource
 	loader.load('models/nakeBody/nakeBody.obj', function(loadedMesh) {
@@ -215,16 +274,70 @@ function load()				// 读取模型
 			color : 0xaaaaaa
 		});
 		loadedMesh.children.forEach(function(child) {
-			child.material = material;
-			child.geometry.computeFaceNormals();
-			child.geometry.computeVertexNormals();
+			child.material.map = texture;							// 将加载出来的贴图传递给child的材质
+			child.material.specularMap = texture2;
+			//child.geometry.computeFaceNormals();					// 不计算这个就会很光滑
+			//child.geometry.computeVertexNormals();
 		});
 		mesh = loadedMesh;
 		mesh.name = 'nakeBody';				// 尝试给模型添加名称
 		mesh.scale.set(0.1, 0.1, 0.1);
 		scene.add(mesh);	
 	});
-	//alert("模型加载完成");
+	//alert("模型加载完成"); 
+}
+
+function load_new(x, y, z)
+{
+	var mesh = null;
+
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setBaseUrl( "models/nakeBody/" );
+	mtlLoader.setPath( "models/nakeBody/" );
+	mtlLoader.load( 'nakeBody.mtl', function( materials ) {
+		
+// 		var texture1 = new THREE.Texture();
+// 		var texture2 = new THREE.Texture();
+		
+// 		var loader = new THREE.ImageLoader( new THREE.LoadingManager() ); // 用来读取图片的 
+// 	    loader.load( 'models/nakeBody/xz_Packed0_Diffuse.png', function ( image ) {  
+
+// 	        texture1.image = image;  
+// 	        texture1.needsUpdate = true;  
+
+// 	    } );
+// 	    loader.load( 'models/nakeBody/xz_Packed0_Specular.png', function ( image ) {  
+
+// 	        texture2.image = image;  
+// 	        texture2.needsUpdate = true;  
+
+// 	    } );
+	  var texture1 = materials.loadTexture("models/nakeBody/xz_Packed0_Diffuse.png");
+	  var texture2 = materials.loadTexture("models/nakeBody/xz_Packed0_Specular.png");
+  	  materials.preload();
+  	  var materiall = materials.create("xz:PackedMaterial0");
+  	  
+	  var objLoader = new THREE.OBJLoader();
+	  //objLoader.setMaterials( materials );
+	  objLoader.setPath( "models/nakeBody/" );
+	  objLoader.load( 'nakeBody.obj', function ( object) {
+
+		  object.children.forEach(function(child) {
+			    //child.material = materiall;
+				child.material.map = texture1;							// 将加载出来的贴图传递给child的材质
+				child.material.specularmap = texture2;
+// 				child.geometry.computeFaceNormals();					// 不计算这个就会很光滑
+// 				child.geometry.computeVertexNormals();
+			});
+	    mesh = object;
+	    mesh.scale.set(0.1,0.1,0.1);
+	    mesh.position.set(x,y,z);
+	    scene.add( mesh );
+
+	  } );
+
+	} );
+
 }
 
 function render() 
@@ -245,16 +358,24 @@ function animation()			// 动画
 	render();
 	cameraCtrl();										// 鼠标控制
 	//control.update();
+	scene.children.forEach(function(child)
+			{
+				child.rotation.y += 0.01;
+				child.rotation.z += 0.01;
+			});
+	
 }
 </script>
 <script type="text/javascript">
 function main()
 {
+	
 	init();					// 初始化窗口
+	onGui();
 	addListener()			// 添加监听器
 	addstats();				// 添加状态显示
 	addTrackball();			// 添加轨迹球控制器
-	load();					// 添加模型
+	load_new(0,0,0);					// 添加模型
 	addLight();				// 添加光线
 	addGrid();				// 添加网格
 	animation();			// 调用动画

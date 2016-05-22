@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>展示台</title>
+<title>测试能否使用JSON读取动画</title>
 <script type="text/javascript">
 try{
     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
@@ -49,6 +49,9 @@ canvas {
 	<script src='js/TransformControls.js'>
 	//控制移动的框架
 	</script>
+	<script src = 'js/SkeletonHelper.js'>
+	
+	</script>
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
 	
@@ -62,6 +65,7 @@ canvas {
 	var objloader;					// objloader
 	var delta;						// 用来获取时间
 	var control;					// 测试移动插件
+	var model,mixer,bonesClip;		// 动画部分
 	</script>
 <script type="text/javascript">
 function onWindowResize() //重置窗口大小
@@ -173,7 +177,7 @@ function addTrackball()		// 用来添加轨迹球控制器
 	cameraControls.noPan = true;								// 不让移动
 	cameraControls.dynamicDampingFactor = 0.5;					// 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
 	cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
-	cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
+	//cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
 }
 
 function addTransform()			// 添加移动帮助
@@ -205,6 +209,30 @@ function addGrid()			// 添加网格
 	gridHelper = new THREE.GridHelper(size, step);		// 添加一个网格助手
 	scene.add(gridHelper);
 }
+
+function loadjson()			// 读取一个JSON模型
+{
+	var loader = new THREE.JSONLoader();
+	
+	loader.load('models/testwalking.json', function (geometry, materials) {
+		//alert(geometry instanceof THREE.Geometry);				// 结论，此处是geometry类型的
+		//alert(geometry instanceof THREE.BufferGeometry);
+	    model = new THREE.SkinnedMesh(
+	    		geometry,
+	    		new THREE.MeshLambertMaterial({color:0xaaaaaa}));
+	    model.scale.set(5,5,5);
+	    scene.add(model);
+	    // alert("hh");
+	    model.visible = true;						// 测试能否导入骨架信息
+	    
+	    helper = new THREE.SkeletonHelper( model );
+		helper.material.linewidth = 10;
+		helper.visible = true;
+		scene.add( helper );
+
+	});
+}
+
 function load()				// 读取模型
 {
 	loader = new THREE.OBJLoader();
@@ -232,13 +260,18 @@ function render()
 	
 	renderer.render( scene, camera );					// 渲染相机和场景
 	stats.update();										// 更新
+	
+	
+  
 		
 }
+
 function cameraCtrl()
 {
 	delta = clock.getDelta();							// 获取时间
 	cameraControls.update(delta);						// 更新
 }
+
 function animation()			// 动画
 {
 	requestAnimationFrame( animation );					// 要求定时渲染
@@ -254,7 +287,8 @@ function main()
 	addListener()			// 添加监听器
 	addstats();				// 添加状态显示
 	addTrackball();			// 添加轨迹球控制器
-	load();					// 添加模型
+	//load();					// 添加模型
+	loadjson();				// 读取JSON模型
 	addLight();				// 添加光线
 	addGrid();				// 添加网格
 	animation();			// 调用动画

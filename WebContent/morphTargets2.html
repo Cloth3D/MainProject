@@ -2,15 +2,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>展示台</title>
+<title>用来学习morphtarget</title>
 <script type="text/javascript">
-try{
-    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-        alert("您正在手机端访问本页面!")
-    }else{
-        alert("您正在电脑端访问本页面!");
-    }
-}catch(e){}
+// try{
+//     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+//         alert("您正在手机端访问本页面!")
+//     }else{
+//         alert("您正在电脑端访问本页面!");
+//     }
+// }catch(e){}
 </script>
 
 <style>
@@ -23,9 +23,43 @@ canvas {
 	width: 100%;
 	height: 100%
 }
+
+#ctrl {
+				position: absolute;
+				top: 200px;
+				left: 0px;
+				width: 200px;
+				color: #555555;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				z-index:100;
+			}
+			
 </style>
 </head>
 <body>
+<div id="ctrl">
+			Use controls to change morph target influences:<br/>
+			最胖  <input type="range" value="0" min="0" max="100" onchange="morph(this.value,0);" /><br/>
+			臀大  <input type="range" value="0" min="0" max="100" onchange="morph(this.value,1);" /><br/>
+			胸大  <input type="range" value="0" min="0" max="100" onchange="morph(this.value,2);" /><br/>
+			腰粗  <input type="range" value="0" min="0" max="100" onchange="morph(this.value,3);" /><br/>
+			<script >
+			function morph(value,i)
+			{
+				mesh.traverse(function(child){
+					if(child instanceof THREE.Mesh)
+						{
+							//alert(child.morphTargetInfluences.length);
+							child.morphTargetInfluences[i] = value/100;
+							//alert('模型是mesh类型的');
+							//alert(child.geometry.morphTargets.length);
+						}
+				});
+			}
+			</script>
+</div>
 <div id = 'div1'>
 <canvas id='canvas' width=window.innerWidth height=window.innerHeight>
 你的浏览器不支持本应用
@@ -49,6 +83,7 @@ canvas {
 	<script src='js/TransformControls.js'>
 	//控制移动的框架
 	</script>
+	<script src = 'js/MTLLoader.js'></script>
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
 	
@@ -62,6 +97,7 @@ canvas {
 	var objloader;					// objloader
 	var delta;						// 用来获取时间
 	var control;					// 测试移动插件
+	var mesh;
 	</script>
 <script type="text/javascript">
 function onWindowResize() //重置窗口大小
@@ -222,9 +258,69 @@ function load()				// 读取模型
 		mesh = loadedMesh;
 		mesh.name = 'nakeBody';				// 尝试给模型添加名称
 		mesh.scale.set(0.1, 0.1, 0.1);
-		scene.add(mesh);	
+		scene.add(mesh);
+		mesh.updateMorphTargets();			// 更新
 	});
 	//alert("模型加载完成");
+}
+
+function load_new()
+{
+	  mesh = null;
+	
+  	  var objLoaderTarget = new THREE.OBJLoader();
+  	  var geo = [];
+  	  
+  	  objLoaderTarget.setPath('models/');
+  	  
+  	  objLoaderTarget.load('big.obj',function(object){		// 最胖的人体模型  
+  		 object.scale.set(0.1,0.1,0.1);
+  	     geo[0] = new Array();	// 为该位置创建新数组
+  		 object.traverse(function(child){		// 遍历
+  			 //alert(i++);
+  			 if(child instanceof THREE.Mesh)
+  				 {
+  				 	if(child.geometry instanceof THREE.BufferGeometry)		// 因为需要提取出来Vector3[] ,所以不能使用bufferGeometry
+  				 		{
+  				 		//child.scale.set(3,3,3);
+  				 		//child.scale.set(0.1,0.1,0.1);
+  				 		var geometry = new THREE.Geometry().fromBufferGeometry( child.geometry );		// 将bufferGeometry转化为Geometry
+  				 		geo[0].push(geometry.vertices);
+  				 		}
+  				 	//else	alert('fail geometry');
+  				 }
+  			 //else	alert('fail mesh');
+  		 }) ;
+  	  //alert(geo[0].length);
+  	  //alert(object.children.length);
+  		// alert(geo.length);			// 得到geo数组的长度
+  	  });		// objloader
+
+	  var objLoader = new THREE.OBJLoader();
+	  objLoader.setPath( "models/" );
+	  objLoader.load( 'fit.obj', function ( object) {
+		  var j = 0;									// 每个模型的序列
+		  mesh = new THREE.Group();						// 新建一个mesh
+		  object.traverse(function(child) {			    // 遍历
+			    if(child instanceof THREE.Mesh)			// 这么做的原因是原来的Mesh是用bufferGeometry生成的，缺少了一些属性，必须重新生成。
+			    	{
+						var geometry  = new THREE.Geometry().fromBufferGeometry(child.geometry);	// 将读取的Mesh转化为THREE.Geometry类型
+						for(var i = 0;i < geo.length; i++)
+						{
+							geometry.morphTargets.push({name:'fat',vertices:geo[i][j]});			// 将肥胖的坐标给添加进去
+						}
+						j++;			// 下一个模型
+						mesh.add(new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+							color:0x999999, morphTargets: true
+						})));	// add
+			    	}		// if
+			});				// traverse
+		// alert(mesh.children.length);
+	    mesh.scale.set(0.1,0.1,0.1);
+	    mesh.position.y = 0;
+	    scene.add( mesh );
+	  });		// OBJLoader
+
 }
 
 function render() 
@@ -234,11 +330,13 @@ function render()
 	stats.update();										// 更新
 		
 }
+
 function cameraCtrl()
 {
 	delta = clock.getDelta();							// 获取时间
 	cameraControls.update(delta);						// 更新
 }
+
 function animation()			// 动画
 {
 	requestAnimationFrame( animation );					// 要求定时渲染
@@ -246,6 +344,8 @@ function animation()			// 动画
 	cameraCtrl();										// 鼠标控制
 	//control.update();
 }
+
+
 </script>
 <script type="text/javascript">
 function main()
@@ -254,7 +354,7 @@ function main()
 	addListener()			// 添加监听器
 	addstats();				// 添加状态显示
 	addTrackball();			// 添加轨迹球控制器
-	load();					// 添加模型
+	load_new();					// 添加模型
 	addLight();				// 添加光线
 	addGrid();				// 添加网格
 	animation();			// 调用动画
