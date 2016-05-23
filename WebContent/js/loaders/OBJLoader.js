@@ -396,7 +396,7 @@ THREE.OBJLoader.prototype = {
 
 		console.timeEnd( 'OBJLoader' );
 
-		return container;
+		return container;	//返回的类型是THREE.Group
 
 	}
 

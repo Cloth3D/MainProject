@@ -1,2 +1,4 @@
-﻿# MainProject
-以下内容为我在eclipse中修改
+MainProject
+===========
+## 河海大学CG实验室
+*本科组开发应用试行工程*

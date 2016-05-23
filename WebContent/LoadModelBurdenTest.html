@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<!-- 本页面是用来测试手机端对模型的承受能力，点击按钮增加一个模型，测试在多少数量时会发生崩溃 -->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>尝试添加模型及贴图</title>
+<style>
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+canvas {
+	width: 100%;
+	height: 100%
+}
+</style>
+</head>
+<body>
+<div id = 'div1'>
+<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
+你的浏览器不支持本应用
+</canvas>
+</div>
+	<script src='js/dat.gui.js'>
+	//GUI框架
+	</script>
+	<script src='js/three.js'>
+	//three.js框架
+	</script>
+	<script src='js/stats.min.js'>
+	//显示帧数
+	</script>
+	<script src='js/TrackballControls.js'>
+	//鼠标控制
+	</script>
+	<script src='js/loaders/OBJLoader.js'>
+	//用来加载obj模型
+	</script>
+	<script src='js/MTLLoader.js'>
+	//用来加载MTL及贴图
+	</script>
+	<script type="text/javascript">
+	//这里用来存放一些全局变量
+	
+	var winWidth, winHeight;		// 画板的大小
+	var canvas, scene, camera;		// 画板 场景 相机
+	var renderer, stats;			// 渲染器及帧数显示器
+	var axes ;						// 坐标轴
+	var clock, cameraControls;		// 时钟和轨迹球控制器
+	var dtrectionalLight;			// 平行光线
+	var gridHelper;					// 网格助手
+	var objloader;					// objloader
+	var delta;						// 用来获取时间
+	var control;					// 测试移动插件
+	var gui;						// gui插件
+	var mod;
+	</script>
+<script type="text/javascript">
+function onWindowResize() //重置窗口大小
+{
+	camera.aspect = window.innerWidth / window.innerHeight;			// 重置相机比例
+	camera.updateProjectionMatrix();								//
+
+	renderer.setSize(window.innerWidth, window.innerHeight);		// 重置渲染的大小
+	
+	doucument.getElementById('canvas').width = window.innerWidth;	
+	doucument.getElementById('canvas').height = window.innerHeight;
+}
+
+function init()
+{
+	canvas=document.getElementById('canvas');					// 创建一个canvas
+	scene = new THREE.Scene();									// 创建一个scene
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );	// 创建相机
+	// 设置相机初始位置，使其正对着模型
+	camera.position.z = 20;
+	camera.position.x = 0;
+	camera.position.y = 10;
+	
+	renderer = new THREE.WebGLRenderer({canvas:document.getElementById('canvas'),
+		antialias:true,
+		precision:THREE.highp });					//创建一个渲染器
+	renderer.setSize( window.innerWidth, window.innerHeight );		//设置渲染器渲染范围
+	renderer.setClearColor(0xEEEEEE);
+}
+
+function addstats()		// 添加状态显示模块，在init之后执行
+{
+	stats = new Stats();									// 新建一个状态显示器
+	stats.setMode(0);										// 设置为默认显示fps
+	// 设置stats的位置s
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top	 = '0px';
+	document.body.appendChild(stats.domElement);			// 添加到页面中
+}
+
+function addListener()		// 用来统一添加监听器
+{
+	window.addEventListener('resize', onWindowResize, false);	// 添加监听器，用来监听窗口变化
+// 	window.addEventListener( 'keydown', function ( event ) {
+
+// 		switch ( event.keyCode ) {
+
+// 			case 81: // Q
+// 				control.setSpace( control.space === "local" ? "world" : "local" );
+// 				break;
+
+// 			case 17: // Ctrl
+// 				control.setTranslationSnap( 100 );
+// 				control.setRotationSnap( THREE.Math.degToRad( 15 ) );
+// 				break;
+
+// 			case 87: // W
+// 				control.setMode( "translate" );
+// 				break;
+
+// 			case 69: // E
+// 				control.setMode( "rotate" );
+// 				break;
+
+// 			case 82: // R
+// 				control.setMode( "scale" );
+// 				break;
+
+// 			case 187:
+// 			case 107: // +, =, num+
+// 				control.setSize( control.size + 0.1 );
+// 				break;
+
+// 			case 189:
+// 			case 109: // -, _, num-
+// 				control.setSize( Math.max( control.size - 0.1, 0.1 ) );
+// 				break;
+
+// 		}
+
+// 	});
+
+// 	window.addEventListener( 'keyup', function ( event ) {
+
+// 		switch ( event.keyCode ) {
+
+// 			case 17: // Ctrl
+// 				control.setTranslationSnap( null );
+// 				control.setRotationSnap( null );
+// 				break;
+
+// 		}
+
+// 	});
+
+}
+
+
+// 用来设置gui按钮
+function onGui()
+{
+	
+	var addnewmodel = function()
+	{
+		this.message = '点击添加新的模型';
+		this.x = 0.0;
+		this.y = 0.0;
+		this.z = 0.0;
+		this.add = function()				// 在指定位置添加新模型
+		{
+			load_new(this.x,this.y,this.z);
+		}
+	};
+	
+	mod = new addnewmodel();
+	gui = new dat.GUI();					// 新建GUI
+	gui.add(mod,'message');
+	gui.add(mod,'x');
+	gui.add(mod,'y');
+	gui.add(mod,'z');
+	gui.add(mod,'add');
+}
+
+function addTrackball()		// 用来添加轨迹球控制器
+{
+	// TrackballControls 设置一个轨迹球操作器
+	clock = new THREE.Clock();
+	cameraControls = new THREE.TrackballControls(camera,renderer.domElement);			// 定义相机控制器
+	cameraControls.target.set(0, 10, 0);													// 设置中心点坐标
+	cameraControls.zoomSpeed = 1.0;								// 设置缩放速度
+	cameraControls.rotateSpeed = 1.0;
+	cameraControls.panSpeed = 1.0;
+	cameraControls.noPan = true;								// 不让移动
+	cameraControls.dynamicDampingFactor = 0.5;					// 设置阻尼效果，可以改变鼠标拖动时操作的灵敏度
+	cameraControls.minDistance = 10.0;							// 设置最近距离，可以使相机不要过分的接近
+	cameraControls.maxDistance = 20.0;							// 设置最远距离，可以使相机不要过分的远离
+}
+
+function addTransform()			// 添加移动帮助
+{
+	control = new THREE.TransformControls( camera, renderer.domElement );	// 构造函数
+	//control.addEventListener( 'change', animation );						
+	
+	var geometry = new THREE.BoxGeometry( 200, 200, 200 );
+	var material = new THREE.MeshLambertMaterial( { Color: 0xff0000 } );
+	var mesh = new THREE.Mesh( geometry, material );
+	scene.add( mesh );
+
+	control.attach( mesh );
+	scene.add( control );
+}
+
+function addLight()			// 添加光线
+{
+	directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+	directionalLight.position.set(1,1, 1);						// 设置光线方向
+	//directionalLight.shadowCameraVisble = true;
+	scene.add(directionalLight);
+}
+
+function addGrid()			// 添加网格
+{
+	var size = 10;
+	var step = 0.5;
+	gridHelper = new THREE.GridHelper(size, step);		// 添加一个网格助手
+	scene.add(gridHelper);
+}
+function load()				// 读取模型
+{
+	var manager = new THREE.LoadingManager();  
+    manager.onProgress = function ( item, loaded, total ) {  
+
+        console.log( item, loaded, total );  
+
+    };  
+    var texture = new THREE.Texture();  
+    var texture2 = new THREE.Texture();
+    
+    var onProgress = function ( xhr ) {  
+        if ( xhr.lengthComputable ) {  
+            var percentComplete = xhr.loaded / xhr.total * 100;  
+            console.log( Math.round(percentComplete, 2) + '% downloaded' );  
+        }  
+    };  
+
+    var onError = function ( xhr ) {  
+    };  
+
+
+    var loader = new THREE.ImageLoader( manager );  
+    loader.load( 'models/nakeBody/xz_Packed0_Diffuse.png', function ( image ) {  
+
+        texture.image = image;  
+        texture.needsUpdate = true;  
+
+    } ); 
+
+    loader.load( 'models/nakeBody/xz_Packed0_Specular.png', function ( image ) {  
+
+        texture2.image = image;  
+        texture2.needsUpdate = true;  
+
+    } );
+
+
+    // model  
+
+    loader = new THREE.OBJLoader();
+	//alert("准备加载模型");
+	//load a resource
+	loader.load('models/nakeBody/nakeBody.obj', function(loadedMesh) {
+		var material = new THREE.MeshLambertMaterial({
+			color : 0xaaaaaa
+		});
+		loadedMesh.children.forEach(function(child) {
+			child.material.map = texture;							// 将加载出来的贴图传递给child的材质
+			child.material.specularMap = texture2;
+			//child.geometry.computeFaceNormals();					// 不计算这个就会很光滑
+			//child.geometry.computeVertexNormals();
+		});
+		mesh = loadedMesh;
+		mesh.name = 'nakeBody';				// 尝试给模型添加名称
+		mesh.scale.set(0.1, 0.1, 0.1);
+		scene.add(mesh);	
+	});
+	//alert("模型加载完成"); 
+}
+
+function load_new(x, y, z)
+{
+	var mesh = null;
+
+	var mtlLoader = new THREE.MTLLoader();
+	mtlLoader.setBaseUrl( "models/nakeBody/" );
+	mtlLoader.setPath( "models/nakeBody/" );
+	mtlLoader.load( 'nakeBody.mtl', function( materials ) {
+		
+// 		var texture1 = new THREE.Texture();
+// 		var texture2 = new THREE.Texture();
+		
+// 		var loader = new THREE.ImageLoader( new THREE.LoadingManager() ); // 用来读取图片的 
+// 	    loader.load( 'models/nakeBody/xz_Packed0_Diffuse.png', function ( image ) {  
+
+// 	        texture1.image = image;  
+// 	        texture1.needsUpdate = true;  
+
+// 	    } );
+// 	    loader.load( 'models/nakeBody/xz_Packed0_Specular.png', function ( image ) {  
+
+// 	        texture2.image = image;  
+// 	        texture2.needsUpdate = true;  
+
+// 	    } );
+	  var texture1 = materials.loadTexture("models/nakeBody/xz_Packed0_Diffuse.png");
+	  var texture2 = materials.loadTexture("models/nakeBody/xz_Packed0_Specular.png");
+  	  materials.preload();
+  	  var materiall = materials.create("xz:PackedMaterial0");
+  	  
+	  var objLoader = new THREE.OBJLoader();
+	  //objLoader.setMaterials( materials );
+	  objLoader.setPath( "models/nakeBody/" );
+	  objLoader.load( 'nakeBody.obj', function ( object) {
+
+		  object.children.forEach(function(child) {
+			    //child.material = materiall;
+				child.material.map = texture1;							// 将加载出来的贴图传递给child的材质
+				child.material.specularmap = texture2;
+// 				child.geometry.computeFaceNormals();					// 不计算这个就会很光滑
+// 				child.geometry.computeVertexNormals();
+			});
+	    mesh = object;
+	    mesh.scale.set(0.1,0.1,0.1);
+	    mesh.position.set(x,y,z);
+	    scene.add( mesh );
+
+	  } );
+
+	} );
+
+}
+
+function render() 
+{
+	
+	renderer.render( scene, camera );					// 渲染相机和场景
+	stats.update();										// 更新
+		
+}
+function cameraCtrl()
+{
+	delta = clock.getDelta();							// 获取时间
+	cameraControls.update(delta);						// 更新
+}
+function animation()			// 动画
+{
+	requestAnimationFrame( animation );					// 要求定时渲染
+	render();
+	cameraCtrl();										// 鼠标控制
+	//control.update();
+	scene.children.forEach(function(child)
+			{
+				child.rotation.y += 0.01;
+				child.rotation.z += 0.01;
+			});
+	
+}
+</script>
+<script type="text/javascript">
+function main()
+{
+	
+	init();					// 初始化窗口
+	onGui();
+	addListener()			// 添加监听器
+	addstats();				// 添加状态显示
+	addTrackball();			// 添加轨迹球控制器
+	load_new(0,0,0);					// 添加模型
+	addLight();				// 添加光线
+	addGrid();				// 添加网格
+	animation();			// 调用动画
+	//addTransform();			// 添加移动帮助
+	
+}
+main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
+</script>
+</body>
+</html>
