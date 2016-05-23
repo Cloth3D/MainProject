@@ -12,6 +12,7 @@
 
    this.scene = new THREE.Scene();            // 场景
    this.camera  = null;   // 相机
+   this.raycasting = null;
 
    this.counter_helper = 0;
    this.counter_geometry = 0;
@@ -45,7 +46,7 @@
    *	  } );
    */
 
-
+   this.objects = [];//存放场景中的所有mesh
 
  };
 
@@ -106,6 +107,7 @@
         var cube = new THREE.Mesh( geometry, material );
         this.selected = cube;
         this.addObject(cube);
+        this.objects.push(cube);
 
 
    },

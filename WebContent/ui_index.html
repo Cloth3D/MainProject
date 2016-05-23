@@ -23,66 +23,70 @@ canvas {
 	width: 100%;
 	height: 100%
 }
+
 #ctrl {
-				position: absolute;
-				top: 200px;
-				left: 0px;
-				width: 200px;
-				color: #555555;
-				padding: 5px;
-				font-family: Monospace;
-				font-size: 13px;
-				z-index:100;
-			}
+	position: absolute;
+	top: 200px;
+	left: 0px;
+	width: 200px;
+	color: #555555;
+	padding: 5px;
+	font-family: Monospace;
+	font-size: 13px;
+	z-index: 100;
+}
 </style>
 </head>
 <body>
-<div id="ctrl">
-			<button onclick = "fileInput.click();">读取模型</button><br>
-			<button onclick = "trans.work();">停止移动工具</button><br>
-			<button onclick = "addmaterial();">读取贴图测试</button>
-			
-</div>
-<div id = 'div1'>
-<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
+	<div id="ctrl">
+		<button onclick="fileInput.click();">读取模型</button>
+		<br>
+		<button onclick="trans.work();">停止移动工具</button>
+		<br>
+		<button onclick="addmaterial();">读取贴图测试</button>
+
+	</div>
+	<div id='div1'>
+		<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
 你的浏览器不支持本应用
 </canvas>
-</div>
+	</div>
 
 	<script src='js/dat.gui.js'>// GUI框架</script>
 	<script src='js/three.js'>// three.js框架</script>
 	<script src='js/stats.min.js'>// 显示帧数</script>
 	<script src='js/TrackballControls.js'>// 鼠标控制</script>
 
-	<script src = 'js/loaders/AMFLoader.js'></script>
-	<script src = 'js/loaders/AWDLoader.js'></script>
-	<script src = 'js/loaders/BabylonLoader.js'></script>
-	<script src = 'js/loaders/ColladaLoader.js'></script>
-	<script src = 'js/loaders/FBXLoader.js'></script>
-	<script src = 'js/loaders/KMZLoader.js'></script>
-	<script src = 'js/loaders/MD2Loader.js'></script>
-	<script src = 'js/loaders/MTLLoader.js'></script>
-	<script src = 'js/loaders/OBJLoader.js'></script>
-	<script src = 'js/loaders/PlayCanvasLoader.js'></script>
-	<script src = 'js/loaders/PLYLoader.js'></script>
-	<script src = 'js/loaders/STLLoader.js'></script>
-	<script src = 'js/loaders/UTF8Loader.js'></script>
-	<script src = 'js/loaders/VRMLLoader.js'></script>
-	<script src = 'js/loaders/VTKLoader.js'></script>
-	<script src = 'js/loaders/ctm/ctm.js'></script>
-	<script src = 'js/loaders/ctm/CTMLoader.js'></script>
-	<script src = 'js/loaders/ctm/lzma.js'></script>
+	<script src='js/loaders/AMFLoader.js'></script>
+	<script src='js/loaders/AWDLoader.js'></script>
+	<script src='js/loaders/BabylonLoader.js'></script>
+	<script src='js/loaders/ColladaLoader.js'></script>
+	<script src='js/loaders/FBXLoader.js'></script>
+	<script src='js/loaders/KMZLoader.js'></script>
+	<script src='js/loaders/MD2Loader.js'></script>
+	<script src='js/loaders/MTLLoader.js'></script>
+	<script src='js/loaders/OBJLoader.js'></script>
+	<script src='js/loaders/PlayCanvasLoader.js'></script>
+	<script src='js/loaders/PLYLoader.js'></script>
+	<script src='js/loaders/STLLoader.js'></script>
+	<script src='js/loaders/UTF8Loader.js'></script>
+	<script src='js/loaders/VRMLLoader.js'></script>
+	<script src='js/loaders/VTKLoader.js'></script>
+	<script src='js/loaders/ctm/ctm.js'></script>
+	<script src='js/loaders/ctm/CTMLoader.js'></script>
+	<script src='js/loaders/ctm/lzma.js'></script>
 
 	<script src='js/TransformControls.js'>// 控制移动的框架</script>
-	<script src = 'js/SkeletonHelper.js'>// 显示骨骼的帮助</script>
-	<script src = 'js/AnimationMixer.js'>// 动画</script>
-	<script src = 'js/custom/Show.js'>// 封装</script>
-	<script src = "js/OrbitControls.js">// 轨道控制器</script>
-  <script src = 'js/TransformControls.js'>// 移动控制器</script>
+	<script src='js/SkeletonHelper.js'>// 显示骨骼的帮助</script>
+	<script src='js/AnimationMixer.js'>// 动画</script>
+	<script src='js/custom/Show.js'>// 封装</script>
+	<script src="js/OrbitControls.js">// 轨道控制器</script>
+	<script src='js/TransformControls.js'>// 移动控制器</script>
 
-	<script src = 'js/custom/Loader.js'>// 用来加载模型文件</script>
-  <script src = 'js/custom/transform.js'>// 用来控制移动 </script>
-  <script src = 'js/custom/MaterialTools.js'>// 添加贴图工具</script>
+	<script src='js/custom/Loader.js'>// 用来加载模型文件</script>
+	<script src='js/custom/transform.js'>// 用来控制移动 </script>
+	<script src='js/custom/MaterialTools.js'>// 添加贴图工具</script>
+	<script src='js/custom/raycasting.js'>//添加点选功能，光线投射</script>
 
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
@@ -99,7 +103,7 @@ canvas {
   var trans;      // 移动控制器
 	</script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 function onWindowResize() //重置窗口大小
 {
 	show.onwindowresize(window.innerWidth,window.innerHeight);								// 将canvas区域设置的window.inner那么大
@@ -184,9 +188,14 @@ function transfor()
   trans.init(trans);
 }
 
+function addRayCasting(){
+  myRayCaster = new raycasting(show);
+  myRayCaster.init();
+}
+
 function main()
 {
-	init();					// 初始化窗口
+	init();					// 初始化窗口,创建show对象
 	addListener()			// 添加监听器
 	addstats();				// 添加状态显示
 
@@ -195,6 +204,7 @@ function main()
 	animation();			// 调用动画
 	addImport();
   	transfor();
+  	addRayCasting();			//点选功能
 
 }
 main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
