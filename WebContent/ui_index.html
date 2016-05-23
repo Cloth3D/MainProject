@@ -41,7 +41,8 @@ canvas {
 			<button onclick = "fileInput.click();">读取模型</button><br>
 			<button onclick = "trans.work();">停止移动工具</button><br>
 			<button onclick = "addmaterial();">读取贴图测试</button>
-			
+			<button onclick = "loadhumantest();">加载人体模型测试</button>
+
 </div>
 <div id = 'div1'>
 <canvas id='canvas' width=window.innerWidth height=window.innerHeight>
@@ -83,13 +84,14 @@ canvas {
 	<script src = 'js/custom/Loader.js'>// 用来加载模型文件</script>
   <script src = 'js/custom/transform.js'>// 用来控制移动 </script>
   <script src = 'js/custom/MaterialTools.js'>// 添加贴图工具</script>
+  <script src = 'js/custom/Human.js'>// 专门负责人体模型加载</script>
 
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
 	var show;						//封装
 
-	var canvas, scene, camera;		// 画板 场景 相机
-	var renderer, stats;			// 渲染器及帧数显示器
+	var canvas;		// 画板
+	var stats;			// 帧数显示器
 	var axes ;						// 坐标轴
 	var clock;		// 时钟和轨迹球控制器
 	var dtrectionalLight;			// 平行光线
@@ -146,7 +148,6 @@ function render()
 {
 
 	show.update();					// 渲染相机和场景
-	//cameraControls.update(); // required if controls.enableDamping = true, or if controls.autoRotate = true
 	stats.update();										// 更新
 	if(trans)
 		trans.update();
@@ -161,7 +162,7 @@ function animation()			// 动画
 
 function addmaterial()
 {
-	var tool = new MaterialTool();
+	var tool = new MaterialTool();             // 测试给show.selected添加一个纹理
 	tool.addMeshLambertMaterial(show.selected,
 			'models/model/model_Packed0_Diffuse.png',
 			'models/model/model_Packed0_Specular.png');
@@ -178,7 +179,15 @@ function addImport()
 	} );
 }
 
-function transfor()
+function loadhumantest()
+{
+  var human = new Human(show);
+  human.loadSkinnedMesh('models/height_body.json',
+		  "models/model_Packed0_Diffuse.png",
+		  "models/model_Packed0_Specular.png");
+}
+
+function transfor()                       // 添加使show.selected移动的控制器
 {
   trans = new transform(show);
   trans.init(trans);
@@ -194,7 +203,7 @@ function main()
 	addGrid();				// 添加网格
 	animation();			// 调用动画
 	addImport();
-  	transfor();
+  transfor();
 
 }
 main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
