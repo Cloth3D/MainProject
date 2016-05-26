@@ -101,11 +101,11 @@
         this.scene = new THREE.Scene();
 
         // 这个小正方形是用来测试的
-        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-        var cube = new THREE.Mesh( geometry, material );
-        this.selected = cube;
-        this.addObject(cube);
+        // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        // var cube = new THREE.Mesh( geometry, material );
+        // this.selected = cube;
+        // this.addObject(cube);
 
 
    },
@@ -164,9 +164,19 @@
       };             // 在mesh中添加纪录，顺便可以记录更换material的情况
       this.scene.add( object );
       this.selected = object;
+      console.log("模型已经添加到场景");
     }
 
 	},
+  addHelper:function(object)
+  {
+    if(object !== undefined)
+    {
+      this.helper[object.uuid] = object;
+      this.scene.add(object);
+      console.log("helper已经添加到了场景中");
+    }
+  },
 
    load:function(filename)
    {

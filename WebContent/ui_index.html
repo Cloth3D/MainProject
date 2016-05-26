@@ -38,6 +38,8 @@ canvas {
 </head>
 <body>
 <div id="ctrl">
+      身高:<input type="range" value="0" min="0" max="100" onchange="human1.adjustHeight(human1,value/100);human1.adjustHuman(human1);" /><br/>
+      肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFinger(human1,value/100);human1.adjustHuman(human1);" /><br/>
 			<button onclick = "fileInput.click();">读取模型</button><br>
 			<button onclick = "trans.work();">停止移动工具</button><br>
 			<button onclick = "addmaterial();">读取贴图测试</button>
@@ -99,6 +101,7 @@ canvas {
 	var helper;						// 显示骨骼的工具
 	var fileInput;			// 想办法进行文件输入
   var trans;      // 移动控制器
+  var human1;        // 人体模型
 	</script>
 
 <script type="text/javascript">
@@ -131,7 +134,7 @@ function addListener()		// 用来统一添加监听器
 
 function addLight()			// 添加光线
 {
-	directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+	directionalLight = new THREE.DirectionalLight(0xabfeff, 0.4);
 	directionalLight.position.set(1,1, 1);						// 设置光线方向
 	show.scene.add(directionalLight);
 }
@@ -151,6 +154,8 @@ function render()
 	stats.update();										// 更新
 	if(trans)
 		trans.update();
+	if(human1)
+		human1.update();
 
 }
 
@@ -181,11 +186,20 @@ function addImport()
 
 function loadhumantest()
 {
-  var human = new Human(show);
-  human.loadSkinnedMesh('models/height_body.json',
+  human1 = new Human(show);
+  human1.loadHuman(
+		  human1,
+		  'models/model.json',
+		  "models/height_eye_default1.json",
 		  "models/model_Packed0_Diffuse.png",
-		  "models/model_Packed0_Specular.png");
+		  "models/model_Packed0_Specular.png",
+		  "models/model_Packed0_Normal.png",
+		  "models/model_Packed0_Opacity.png",
+		  "models/BodyLightingMap.png"
+		  );
+  human1.init(human1);
 }
+
 
 function transfor()                       // 添加使show.selected移动的控制器
 {
