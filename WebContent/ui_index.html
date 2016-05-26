@@ -87,6 +87,7 @@ canvas {
   <script src = 'js/custom/transform.js'>// 用来控制移动 </script>
   <script src = 'js/custom/MaterialTools.js'>// 添加贴图工具</script>
   <script src = 'js/custom/Human.js'>// 专门负责人体模型加载</script>
+  <script src = 'js/custom/raycasting.js'>// 射线</script>
 
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
@@ -102,6 +103,8 @@ canvas {
 	var fileInput;			// 想办法进行文件输入
   var trans;      // 移动控制器
   var human1;        // 人体模型
+  var myRayCaster;    // 定义一个射线管理器
+
 	</script>
 
 <script type="text/javascript">
@@ -200,11 +203,15 @@ function loadhumantest()
   human1.init(human1);
 }
 
-
 function transfor()                       // 添加使show.selected移动的控制器
 {
   trans = new transform(show);
   trans.init(trans);
+}
+
+function addRayCasting(){                 // 通过射线实现点选功能
+  myRayCaster = new raycasting(show);
+  myRayCaster.init();
 }
 
 function main()
@@ -218,6 +225,7 @@ function main()
 	animation();			// 调用动画
 	addImport();
   transfor();
+  addRayCasting();			//点选功能
 
 }
 main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次

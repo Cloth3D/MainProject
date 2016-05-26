@@ -81,6 +81,12 @@
 
  update:function()        // 加在动画上
  {
+   if(show.selectNeedUpdate)
+   {
+     show.selectNeedUpdate = false;
+     if(this.stats === true)
+        this.control.attach(show.selected);
+   }
     this.control.update();
  },
 

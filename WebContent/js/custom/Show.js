@@ -20,18 +20,12 @@
    this.helper = [];                // 存贮场景中这类物品的数组
   //  this.geometry = [];              // 存储场景中这类物品的数组
   //  this.material = [];              // 存储场景中这类物品的数组
-   this.mesh = [];                  // 存储场景中这类物品的数组
-   /**
-   *  考虑每个元素为
-   * {
-   *  mesh:     THREE.Group / Mesh / SkinnedMesh
-   *  materials: [] 存放该mesh 的所有材质
-   *  id:        数字 表示当前用的是第几个material
-   * }
-   */
+   this.objects = [];                  // 存储场景中这类物品的数组
+
   //  this.group = [];                 // 一个模型有多个部分时
    this.light = [];                 // 光
    this.selected = null;            // 指向被选择的object
+   this.selectNeedUpdate = false;
 
    this.history = [];               // 之后用来存储历史纪录
    this.loader = null;              // 用来读取任意格式的模型, 结合fileInput使用
@@ -125,6 +119,11 @@
 
      	this.renderer.render( this.scene, this.camera );
       this.cameraControl.update();
+      //if(this.selectNeedUpdate )                                  // 交给相关的控件进行处理
+      {
+        // this.selectNeedUpdate = false;
+      }
+
    },
 
    add:function(object)
@@ -156,14 +155,10 @@
     // 添加到数组中存储
     if(object !== undefined)
     {
-      this.mesh[object.uuid]=
-      {
-        mesh: object,
-        materials: [object.materials],
-        id:0
-      };             // 在mesh中添加纪录，顺便可以记录更换material的情况
+      this.objects.push(object);
       this.scene.add( object );
       this.selected = object;
+      this.selectNeedUpdate = true;
       console.log("模型已经添加到场景");
     }
 
