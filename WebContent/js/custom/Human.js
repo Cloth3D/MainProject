@@ -426,7 +426,9 @@ init:function(hu)															// hu: 此类在new处的名称
 	{
 		hu.heightScale = scale;																// 这是hu记录体型的一个属性
 
-		hu.heightAdjust[0][0] = 0.01 +
+		hu.heightAdjust[0][0] = 0.01 + scale * hu.heightArray[0][0];
+		hu.heightAdjust[0][1] = 0.01 + scale * hu.heightArray[0][1];
+		hu.heightAdjust[0][2] = 0.01 + scale * hu.heightArray[0][2];
 
 		for(var i = 1; i < hu.heightArray.length; i++)
 		{
@@ -439,6 +441,11 @@ init:function(hu)															// hu: 此类在new处的名称
 	adjustFinger:function(hu, scale)
 	{
 		hu.fingerScale = scale;																	// 这是hu记录体型的一个属性
+
+		hu.fingerAdjust[0][0] = 0.01 + scale * hu.fingerArray[0][0];
+		hu.fingerAdjust[0][1] = 0.01 + scale * hu.fingerArray[0][1];
+		hu.fingerAdjust[0][2] = 0.01 + scale * hu.fingerArray[0][2];
+
 		for(var i = 1; i < hu.fingerArray.length; i++)
 		{
 				hu.fingerAdjust[i][0] = 1 + scale * hu.fingerArray[i][0];
@@ -449,6 +456,13 @@ init:function(hu)															// hu: 此类在new处的名称
 
 	adjustHuman:function(hu)															// hu是Human在new时的名字
 	{
+
+		hu.human.skeleton.bones[0].scale.set(
+			hu.fingerAdjust[0][0] * hu.heightAdjust[0][0] * 100,
+			hu.fingerAdjust[0][1] * hu.heightAdjust[0][1] * 100,
+			hu.fingerAdjust[0][2] * hu.heightAdjust[0][2] * 100
+		);		// 对所有节点的父节点特殊处理
+
 		for(var i = 1; i < hu.human.skeleton.bones.length; i++)
 		{
 			var tempBone = hu.human.skeleton.bones[i];
