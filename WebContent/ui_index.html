@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <title>测试能否使用JSON读取动画</title>
 <script type="text/javascript">
-try{
-    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-        console.log("您正在手机端访问本页面!")
-    }else{
-    	console.log("您正在电脑端访问本页面!");
-    }
-}catch(e){}
+	try {
+		if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+			console.log("您正在手机端访问本页面!")
+		} else {
+			console.log("您正在电脑端访问本页面!");
+		}
+	} catch (e) {
+	}
 </script>
 
 <style>
@@ -44,6 +45,7 @@ canvas {
 		<button onclick="trans.work();">停止移动工具</button>
 		<br>
 		<button onclick="addmaterial();">读取贴图测试</button>
+		<button onclick="undoTest();">撤销 测试</button>
 
 	</div>
 	<div id='div1'>
@@ -52,10 +54,21 @@ canvas {
 </canvas>
 	</div>
 
-	<script src='js/dat.gui.js'>// GUI框架</script>
-	<script src='js/three.js'>// three.js框架</script>
-	<script src='js/stats.min.js'>// 显示帧数</script>
-	<script src='js/TrackballControls.js'>// 鼠标控制</script>
+	<script src='js/dat.gui.js'>
+		// GUI框架
+	</script>
+	<script src='js/three.js'>
+		// three.js框架
+	</script>
+	<script src='js/stats.min.js'>
+		// 显示帧数
+	</script>
+	<script src='js/TrackballControls.js'>
+		// 鼠标控制
+	</script>
+	<script src='js/signals.min.js'>
+		//信号
+	</script>
 
 	<script src='js/loaders/AMFLoader.js'></script>
 	<script src='js/loaders/AWDLoader.js'></script>
@@ -76,138 +89,185 @@ canvas {
 	<script src='js/loaders/ctm/CTMLoader.js'></script>
 	<script src='js/loaders/ctm/lzma.js'></script>
 
-	<script src='js/TransformControls.js'>// 控制移动的框架</script>
-	<script src='js/SkeletonHelper.js'>// 显示骨骼的帮助</script>
-	<script src='js/AnimationMixer.js'>// 动画</script>
-	<script src='js/custom/Show.js'>// 封装</script>
-	<script src="js/OrbitControls.js">// 轨道控制器</script>
-	<script src='js/TransformControls.js'>// 移动控制器</script>
+	<script src='js/TransformControls.js'>
+		// 控制移动的框架
+	</script>
+	<script src='js/SkeletonHelper.js'>
+		// 显示骨骼的帮助
+	</script>
+	<script src='js/AnimationMixer.js'>
+		// 动画
+	</script>
+	<script src='js/custom/Show.js'>
+		// 封装
+	</script>
+	<script src="js/OrbitControls.js">
+		// 轨道控制器
+	</script>
+	<script src='js/TransformControls.js'>
+		// 移动控制器
+	</script>
 
-	<script src='js/custom/Loader.js'>// 用来加载模型文件</script>
-	<script src='js/custom/transform.js'>// 用来控制移动 </script>
-	<script src='js/custom/MaterialTools.js'>// 添加贴图工具</script>
-	<script src='js/custom/raycasting.js'>//添加点选功能，光线投射</script>
+	<script src='js/custom/Loader.js'>
+		// 用来加载模型文件
+	</script>
+	<script src='js/custom/transform.js'>
+		// 用来控制移动
+	</script>
+	<script src='js/custom/MaterialTools.js'>
+		// 添加贴图工具
+	</script>
+	<script src='js/custom/raycasting.js'>
+		//添加点选功能，光线投射
+	</script>
+	<script src='js/custom/History.js'></script>
+	<script src='js/custom/command.js'></script>
+	<script src='js/custom/commands/AddObjectCommand.js'></script>
 
 	<script type="text/javascript">
-	//这里用来存放一些全局变量
-	var show;						//封装
+		//这里用来存放一些全局变量
+		var show; //封装
 
-	var canvas, scene, camera;		// 画板 场景 相机
-	var renderer, stats;			// 渲染器及帧数显示器
-	var axes ;						// 坐标轴
-	var clock;		// 时钟和轨迹球控制器
-	var dtrectionalLight;			// 平行光线
-	var gridHelper;					// 网格助手
-	var helper;						// 显示骨骼的工具
-	var fileInput;			// 想办法进行文件输入
-  var trans;      // 移动控制器
+		var canvas, scene, camera; // 画板 场景 相机
+		var renderer, stats; // 渲染器及帧数显示器
+		var axes; // 坐标轴
+		var clock; // 时钟和轨迹球控制器
+		var dtrectionalLight; // 平行光线
+		var gridHelper; // 网格助手
+		var helper; // 显示骨骼的工具
+		var fileInput; // 想办法进行文件输入
+		var trans; // 移动控制器
+		
+		var timeout;//撤销恢复用到
 	</script>
 
 	<script type="text/javascript">
-function onWindowResize() //重置窗口大小
-{
-	show.onwindowresize(window.innerWidth,window.innerHeight);								// 将canvas区域设置的window.inner那么大
-}
+		function onWindowResize() //重置窗口大小
+		{
+			show.onwindowresize(window.innerWidth, window.innerHeight); // 将canvas区域设置的window.inner那么大
+		}
 
-function init()
-{
-	show = new Show();
-	show.init(window.innerWidth,window.innerHeight);
-}
+		function init() {
+			show = new Show();
+			show.init(window.innerWidth, window.innerHeight);
+		}
 
-function addstats()		// 添加状态显示模块，在init之后执行
-{
-	stats = new Stats();									// 新建一个状态显示器
-	stats.setMode(0);										// 设置为默认显示fps
-	// 设置stats的位置s
-	stats.domElement.style.position = 'absolute';
-	stats.domElement.style.left = '0px';
-	stats.domElement.style.top	 = '0px';
-	document.body.appendChild(stats.domElement);			// 添加到页面中
-}
+		function addstats() // 添加状态显示模块，在init之后执行
+		{
+			stats = new Stats(); // 新建一个状态显示器
+			stats.setMode(0); // 设置为默认显示fps
+			// 设置stats的位置s
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.left = '0px';
+			stats.domElement.style.top = '0px';
+			document.body.appendChild(stats.domElement); // 添加到页面中
+		}
 
-function addListener()		// 用来统一添加监听器
-{
-	window.addEventListener('resize', onWindowResize, false);	// 添加监听器，用来监听窗口变化
-}
+		function addListener() // 用来统一添加监听器
+		{
+			window.addEventListener('resize', onWindowResize, false); // 添加监听器，用来监听窗口变化
+		}
 
-function addLight()			// 添加光线
-{
-	directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-	directionalLight.position.set(1,1, 1);						// 设置光线方向
-	show.scene.add(directionalLight);
-}
+		function addLight() // 添加光线
+		{
+			directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+			directionalLight.position.set(1, 1, 1); // 设置光线方向
+			show.scene.add(directionalLight);
+		}
 
-function addGrid()			// 添加网格
-{
-	var size = 10;
-	var step = 0.5;
-	gridHelper = new THREE.GridHelper(size, step);		// 添加一个网格助手
-	show.scene.add(gridHelper);
-}
+		function addGrid() // 添加网格
+		{
+			var size = 10;
+			var step = 0.5;
+			gridHelper = new THREE.GridHelper(size, step); // 添加一个网格助手
+			show.scene.add(gridHelper);
+		}
 
-function render()
-{
+		function render() {
 
-	show.update();					// 渲染相机和场景
-	//cameraControls.update(); // required if controls.enableDamping = true, or if controls.autoRotate = true
-	stats.update();										// 更新
-	if(trans)
-		trans.update();
+			show.update(); // 渲染相机和场景
+			//cameraControls.update(); // required if controls.enableDamping = true, or if controls.autoRotate = true
+			stats.update(); // 更新
+			if (trans)
+				trans.update();
 
-}
+		}
 
-function animation()			// 动画
-{
-	requestAnimationFrame( animation );					// 要求定时渲染
-	render();
-}
+		function animation() // 动画
+		{
+			requestAnimationFrame(animation); // 要求定时渲染
+			render();
+		}
 
-function addmaterial()
-{
-	var tool = new MaterialTool();
-	tool.addMeshLambertMaterial(show.selected,
-			'models/model/model_Packed0_Diffuse.png',
-			'models/model/model_Packed0_Specular.png');
-}
+		function addmaterial() {
+			var tool = new MaterialTool();
+			tool.addMeshLambertMaterial(show.selected,
+					'models/model/model_Packed0_Diffuse.png',
+					'models/model/model_Packed0_Specular.png');
+		}
 
-function addImport()
-{
-	fileInput = document.createElement( 'input' );
-	fileInput.type = 'file';
-	fileInput.addEventListener( 'change', function ( event ) {
+		function addImport() {
+			fileInput = document.createElement('input');
+			fileInput.type = 'file';
+			fileInput.addEventListener('change', function(event) {
 
-		show.loader.loadFile( fileInput.files[ 0 ] );
+				show.loader.loadFile(fileInput.files[0]);
 
-	} );
-}
+			});
+		}
 
-function transfor()
-{
-  trans = new transform(show);
-  trans.init(trans);
-}
+		function transfor() {
+			trans = new transform(show);
+			trans.init(trans);
+		}
 
-function addRayCasting(){
-  myRayCaster = new raycasting(show);
-  myRayCaster.init();
-}
+		function addRayCasting() {
+			myRayCaster = new raycasting(show);
+			myRayCaster.init();
+		}
 
-function main()
-{
-	init();					// 初始化窗口,创建show对象
-	addListener()			// 添加监听器
-	addstats();				// 添加状态显示
+		//撤销恢复
+		function undoTest(){
+			show.myHistory.undo();
+			show.update();
+		}
+		
 
-	addLight();				// 添加光线
-	addGrid();				// 添加网格
-	animation();			// 调用动画
-	addImport();
-  	transfor();
-  	addRayCasting();			//点选功能
+		function saveState(scene) {
+			clearTimeout(timeout);
+			timeout = setTimeout(function() {
+				show.signals.savingStarted.dispatch();
+				timeout = setTimeout(function() {
+					//show.storage.set(show.toJSON());
+					show.signals.savingFinished.dispatch();
+				}, 100);
+			}, 1000);
+		};
 
-}
-main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
-</script>
+		function addUndoRedo(){
+			var signals = show.signals;
+			alert("addUndoRedo");
+			signals.objectAdded.add(saveState);
+		}
+		
+
+		function main() {
+			init(); // 初始化窗口,创建show对象
+			addListener() // 添加监听器
+			addstats(); // 添加状态显示
+
+			addLight(); // 添加光线
+			addGrid(); // 添加网格
+			animation(); // 调用动画
+			addImport();
+			transfor();
+			addRayCasting(); //点选功能
+			
+			saveState(scene);//撤销恢复
+			addUndoRedo();
+
+		}
+		main(); //为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
+	</script>
 </body>
 </html>

@@ -269,7 +269,7 @@ var Loader = function ( show ) {
 					object.name = filename;
 
 					show.addObject(object);
-					// editor.execute( new AddObjectCommand( object ) );
+					show.execute( new AddObjectCommand( object ) );
 
 				}, false );
 				reader.readAsText( file );
