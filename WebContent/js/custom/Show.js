@@ -176,6 +176,12 @@
    load:function(filename)
    {
       this.loader.loadFile(filename);
+   },
+
+   removeObject:function(show, object)                    // show是当前类在全局中的名称
+   {
+      show.scene.remove(object);
+      // 把它从本地数组中删除
    }
 
  };

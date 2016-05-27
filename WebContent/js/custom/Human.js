@@ -5,16 +5,20 @@
 
 var Human = function(show)
 {
-	this.material = null;						// 存放人体贴图
+	this.material = null;						// 存放人体贴图，人体与眼睛共用一个材质
 
 	this.mixer = null;							// 用来播放动画
 
 	this.human = null;							// body
 	this.eyes = null;								// 眼球和人体是分开的
+	this.hair = null;								// 人的头发
+
 	this.upcloth = null;						// 上衣
 	this.trousers = null;						// 裤子
 	this.glasses = null;						// 眼镜
 	this.shoes = null;							// 鞋
+
+	this.group = new THREE.Group();			// 因为衣服和人是一起的，如果移动应该一起移动，所以要加在一个group里
 
 	this.skeletonhelper = null;			// 骨架显示
 	this.skeleton = null;
@@ -27,7 +31,6 @@ var Human = function(show)
 	this.fingerArray = [];					// 存放体型缩放比例的数组
 	this.fingerAdjust = [];					// 调节后的体型影响值
 
-	this.RSS = [];									// real skeleton scale 真实的骨骼缩放值，等于 heightAdjust * fingerAdjust
 	this.skeletonNeedUpdate = false;	// 如果一直监视的话，消耗会很大，所以只有调节的时候需要更新
 
 
@@ -77,7 +80,8 @@ Human.prototype = {
 
 				eyes = new THREE.SkinnedMesh(geometry, hu.material);		// 用眼睛的geometry和共用的材质新建眼球
 				eyes.bind(hu.human.skeleton, eyes.matrixWorld);		// 将眼镜的mesh绑定身体的骨架
-				show.addObject(eyes);
+				//show.addObject(eyes);
+				hu.group.add(eyes);
 				hu.eyes = eyes;
 				console.log("添加了眼球");
 
@@ -152,7 +156,8 @@ Human.prototype = {
 
 													skinnedMesh = new THREE.SkinnedMesh(geometry,hu.material);
 													skinnedMesh.scale.set( 1, 1, 1 );
-													show.addObject( skinnedMesh );					// 添加到场景中
+													hu.group.add(skinnedMesh);											// 添加到group()
+													//show.addObject( skinnedMesh );					// 添加到场景中
 													hu.human = skinnedMesh;
 
 													loadEyes(url_eye);										// 添加眼镜
@@ -170,7 +175,8 @@ Human.prototype = {
 			{
 				skinnedMesh = new THREE.SkinnedMesh(geometry,materials);
 				skinnedMesh.scale.set( 1, 1, 1 );
-				show.addObject( skinnedMesh );					// 添加到场景中
+				//show.addObject( skinnedMesh );					// 添加到场景中
+				hu.group.add(skinnedMesh);											// 添加到group
 				loadEyes(url_eye);
 				addSkeletonHelper(skinnedMesh);
 			}
@@ -179,15 +185,129 @@ Human.prototype = {
 		},onProgress,onError);					// load human
 	},
 
-	addSkeletonHelper:function()
+	loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+	/**
+	* 参数说明:
+	* hu: 此类在全局中的名称
+	* type: 字符串，为衣服类型 "upcloth", "trousers" , "glasses", "shoes", "hair"
+	* url_cloth: 衣服路径
+	* url_diffuse: diffuse贴图路径
+	* url_specular: specular贴图的路径
+	* url_normal: normal贴图路径
+	* url_Opacity: alpha贴图路径
+	* url_light: light贴图路径
+	*/
 	{
-		this.skeletonhelper = new THREE.SkeletonHelper(this.human);
-		this.skeletonhelper.linewidth = 10;
-		this.skeletonhelper.visible = false;
-		show.addObject(this.skeletonhelper);
+		var material = new THREE.MeshPhongMaterial({		// 测试不同步加载的显示效果
+			specular:0xffffff,
+			skinning:true
+		});
+
+		var diffuse = new THREE.Texture();	// 读取diffuse贴图
+		var specular = new THREE.Texture();		// 读取specular贴图
+		var normal = new THREE.Texture();			// 读取normal贴图
+		var opacity = new THREE.Texture();		// 读取opacity贴图
+		var light = new THREE.Texture();			// 读取光照贴图
+
+		var loader1 = new THREE.ImageLoader();			// 新建用来读diffuse
+		var loader2 = new THREE.ImageLoader();		// 读取specular
+		var loader3 = new THREE.ImageLoader();		// 读取normal
+		var loader4 = new THREE.ImageLoader();		// 读取opacity
+		var loader5 = new THREE.ImageLoader();		// 读取light贴图
+
+		var onProgress = function ( xhr ) {		// 用来调试读取进度
+			if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round(percentComplete, 2) + '% downloaded' );
+				}
+		};
+
+		var onError = function ( xhr ) {		// 读取错误时执行
+			console.log("图片加载错误");
+		};
+
+		loader1.load( url_diffuse, function ( image ) {		// 读取diffuse贴图
+
+				diffuse.image = image;
+				diffuse.needsUpdate = true;
+				material.map = diffuse;												// 将贴图加载在材质上
+
+				console.log("diffuse贴图加载完成");
+
+		} ,onProgress,onError);			// load diffuse
+
+		loader2.load( url_specular, function ( image ) {		// 读取specular贴图
+
+				specular.image = image;
+				specular.needsUpdate = true;
+				material.specularMap = specular;
+
+				console.log("specular贴图加载完成");
+
+		} ,onProgress,onError);			// load specular
+
+		loader3.load( url_normal, function ( image ) {		// 读取normal贴图
+
+				normal.image = image;
+				normal.needsUpdate = true;
+				material.normalMap = normal;
+
+				console.log("normal贴图加载完成");
+
+		} ,onProgress,onError);			// load normal
+
+		loader4.load( url_Opacity, function ( image ) {		// 读取opacity贴图
+
+				opacity.image = image;
+				opacity.needsUpdate = true;
+				material.alphaMap = opacity;
+
+				console.log("opacity贴图加载完成");
+
+		} ,onProgress,onError);			// load opacity
+
+		loader5.load( url_light, function ( image ) {		// 读取light贴图
+
+				light.image = image;
+				light.needsUpdate = true;
+				material.lightMap = light;
+
+				console.log("light贴图加载完成");
+
+		} ,onProgress,onError);			// load light
+
+		var jsonloader = new THREE.JSONLoader();
+		var cloth = null;
+		jsonloader.load( url_cloth, function ( geometry, materials ) {				// 加载衣服模型，使用上面加载的衣服
+
+			cloth = new THREE.SkinnedMesh(geometry, material);		//	新建衣服模型
+			cloth.bind(hu.human.skeleton, cloth.matrixWorld);			// 将人体模型的骨架绑定在衣服上
+			hu.group.add(cloth);
+
+			console.log("添加了衣服模型");
+
+		},onProgress,onError);						// load eyes
+
+
+		switch(type)     // 分成四类模型问题讨论
+		{
+			case 'upcloth':
+			hu.upcloth = cloth;
+			break;
+			case 'trousers':
+			hu.trousers = cloth;
+			break;
+			case 'glasses':
+			hu.glasses = cloth;
+			break;
+			case 'shoes':
+			hu.shoes = cloth;
+			break;
+			case 'shoes':
+			hu.hair = cloth;
+			break;
+		};
 	},
-
-
 
 	addMixer:function()
 	{
@@ -325,73 +445,73 @@ init:function(hu)															// hu: 此类在new处的名称
 	var initFingerArray = function(hu)
 	{
 		hu.fingerArray = [
-											[0.013291,0.013291,0.01],
-			                [1,1,1],
-			                [1,0.999999,0.999999],
-			                [1,1,1],
-			                [0.845961,0.845961,1],
-			                [0.984578,0.984578,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1.30085,0.709779],
-			                [0.999999,1,1],
-			                [0.767177,0.810557,1],
-			                [1,1,0.999999],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [0.999999,1,0.999999],
-			                [1,1,1],
-			                [1,0.999999,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,0.999999,1],
-			                [1,1,1],
-			                [0.999999,0.999999,1],
-			                [1,1,1],
-			                [1,0.999999,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1.30085,0.709779],
-			                [1,1,1],
-			                [0.767177,0.810558,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,0.999999,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,1],
-			                [1,1,0.999999],
-			                [1,1,1],
-			                [1.0229,1.02292,1],
-			                [1,1,0.999999],
-			                [0.717236,1,0.717236],
-			                [1,1,1],
-			                [1,1,1],
-			                [1.0229,1.02298,1],
-			                [1,1,1],
-			                [0.717236,1,0.717236],
-			                [1.04986,1,1.04986],
-			                [1,1,1]
+			[0.013069,0.014969,0.01],
+			[0.883266,0.883266,1],
+			[1.02974,1.02974,0.999999],
+			[0.868215,0.868215,1],
+			[0.961995,0.858893,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1.07371,1.31937,1],
+			[0.724358,0.774627,1],
+			[1,1,1],
+			[1,1,0.999999],
+			[1,1,1],
+			[1,0.999999,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,0.999999],
+			[1,1,1],
+			[1,0.999999,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,0.999999,1],
+			[1,1,1],
+			[0.999999,1,1],
+			[1,1,1],
+			[1,0.999999,1],
+			[1,1,1],
+			[1,1,1],
+			[1.0737,1.31937,1],
+			[0.724359,0.774627,1],
+			[1,1,0.999999],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,0.999999,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[1,1,1],
+			[0.984572,0.984597,1],
+			[0.844192,0.844192,0.999999],
+			[0.853929,1,0.732373],
+			[1,1,1],
+			[1,1,1],
+			[0.984572,0.98465,1],
+			[0.844192,0.844192,0.999999],
+			[0.853929,1,0.732373],
+			[1,1,1],
+			[1,1,1]
 		];
 		console.log("fingerArray的长度", hu.fingerArray.length );
 
@@ -419,6 +539,7 @@ init:function(hu)															// hu: 此类在new处的名称
 
 	initHeightArray(hu);
 	initFingerArray(hu);
+	show.addObject(hu.group);
 },
 
 
