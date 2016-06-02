@@ -42,8 +42,11 @@ canvas {
       肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFinger(human1,value/100);human1.adjustHuman(human1);" /><br/>
 			<button onclick = "fileInput.click();">读取模型</button><br>
 			<button onclick = "trans.work();">停止移动工具</button><br>
-			<button onclick = "addmaterial();">读取贴图测试</button>
-			<button onclick = "loadhumantest();">加载人体模型测试</button>
+			<button onclick = "addmaterial();">读取贴图测试</button><br>
+			<button onclick = "loadhumantest();">加载人体模型测试</button><br>
+			<button onclick = "loadUpCloth();">穿上衣测试</button><br>
+			<button onclick = "human1.human.material.needsUpdate = true;">刷新材质测试</button>
+			
 
 </div>
 <div id = 'div1'>
@@ -137,7 +140,8 @@ function addListener()		// 用来统一添加监听器
 
 function addLight()			// 添加光线
 {
-	directionalLight = new THREE.DirectionalLight(0xabfeff, 0.4);
+	//directionalLight = new THREE.DirectionalLight(0xabfeff, 0.4);
+	directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
 	directionalLight.position.set(1,1, 1);						// 设置光线方向
 	show.scene.add(directionalLight);
 }
@@ -159,6 +163,8 @@ function render()
 		trans.update();
 	if(human1)
 		human1.update();
+	if(myRayCaster)
+		myRayCaster.update(myRayCaster);
 
 }
 
@@ -190,17 +196,91 @@ function addImport()
 function loadhumantest()
 {
   human1 = new Human(show);
-  human1.loadHuman(
+  human1.load(
 		  human1,
-		  'models/model.json',
-		  "models/height_eye_default1.json",
+		  'models/catwalk_walk.fbx.json',
+		  "models/thin_eyes.json",
 		  "models/model_Packed0_Diffuse.png",
 		  "models/model_Packed0_Specular.png",
 		  "models/model_Packed0_Normal.png",
 		  "models/model_Packed0_Opacity.png",
 		  "models/BodyLightingMap.png"
 		  );
+
+// human1.loadHU(
+// 		  human1,
+// 		  'models/cloth1/test1.json',
+// 		  "models/cloth1/cloth1_Packed0_Diffuse.png",
+// 		  "models/cloth1/cloth1_Packed0_Specular.png",
+// 		  "models/cloth1/cloth1_Packed0_Normal.png",
+// 		  "models/cloth1/cloth1_Packed0_Opacity.png"
+// 		  );
+		  
+// human1.loadHU(
+// 		  human1,
+// 		  'models/model_test.json',
+// 		  "models/cloth1/cloth1_Packed0_Diffuse.png",
+// 		  "models/cloth1/cloth1_Packed0_Specular.png",
+// 		  "models/cloth1/cloth1_Packed0_Normal.png",
+// 		  "models/cloth1/cloth1_Packed0_Opacity.png",
+// 		  "models/BodyLightingMap.png"
+// 		  );
   human1.init(human1);
+
+  
+}
+
+function loadUpCloth()
+{
+	human1.loadCloth(									// 上衣
+			human1,
+			'upcloth',
+			'models/cloth1/upcloth2.json',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Gloss.png'
+			
+			);
+	
+	human1.loadCloth(									// 头发
+			human1,
+			'hair',
+			'models/cloth1/hair2.json',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Gloss.png'
+			
+			);
+	
+	human1.loadCloth(									// 下装
+			human1,
+			'trousers',
+			'models/cloth1/trousers2.json',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Gloss.png'
+			
+			);
+	
+	human1.loadCloth(									// 鞋
+			human1,
+			'shoes',
+			'models/cloth1/shoes2.json',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
+			'models/cloth1/cloth1fbm/cloth1_Packed0_Gloss.png'
+			
+			);
+	
+
 }
 
 function transfor()                       // 添加使show.selected移动的控制器
