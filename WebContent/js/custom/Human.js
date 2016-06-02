@@ -8,6 +8,8 @@ var Human = function(show)
 	this.material = null;						// 存放人体贴图，人体与眼睛共用一个材质
 
 	this.mixer = null;							// 用来播放动画
+	this._clock = null;							// 如果新建了播放动画的工具，就初始化一个时钟
+	this.clipaction = null;					// 动作播放控制器
 
 	this.human = null;							// body
 	this.eyes = null;								// 眼球和人体是分开的
@@ -471,18 +473,20 @@ Human.prototype = {
 
 	},				// loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 
-	addMixer:function()					// 加载动画
+	addMixer:function(hu)					// 加载动画
 	{
-		if(this.human ===null)	return;															// 在人体构建之前不能使用此函数
-		this.mixer = new THREE.AnimationMixer( this.human );
-		this.mixer.clipAction(this.human.geometry.animations[0]).play();
+		if(hu.human ===null)	return;															// 在人体构建之前不能使用此函数
+		hu.mixer = new THREE.AnimationMixer( hu.human );
+		hu.clipaction =  hu.mixer.clipAction(hu.human.geometry.animations[0]);
+
+		hu._clock = new THREE.Clock;															// 新建时钟
 	},			// addMixer:function()
 
-	update:function(clock)																										// 将需要update的函数放在这里
+	update:function()																										// 将需要update的函数放在这里
 	{
 			if(this.mixer !== null)										// 如果定义了mixer
 			{
-				this.update(clock.getDelta());					// 动画需要播放
+				this.mixer.update(this._clock.getDelta());					// 动画需要播放
 			}
 			if(this.skeletonhelper !== null)
 			{

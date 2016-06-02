@@ -45,7 +45,10 @@ canvas {
 			<button onclick = "addmaterial();">读取贴图测试</button><br>
 			<button onclick = "loadhumantest();">加载人体模型测试</button><br>
 			<button onclick = "loadUpCloth();">穿上衣测试</button><br>
-			<button onclick = "human1.human.material.needsUpdate = true;">刷新材质测试</button>
+			<button onclick = "human1.human.material.needsUpdate = true;">刷新材质测试</button><br>
+			<button onclick = "playAni();">播放动画</button><br>
+			<button onclick = "stopAni();">停止动画</button><br>
+			<button onclick = "resetAni();">重置动画</button><br>
 			
 
 </div>
@@ -225,7 +228,7 @@ function loadhumantest()
 // 		  "models/cloth1/cloth1_Packed0_Opacity.png",
 // 		  "models/BodyLightingMap.png"
 // 		  );
-  human1.init(human1);
+  human1.init(human1);						// 添加到场景中
 
   
 }
@@ -292,6 +295,23 @@ function transfor()                       // 添加使show.selected移动的控�
 function addRayCasting(){                 // 通过射线实现点选功能
   myRayCaster = new raycasting(show);
   myRayCaster.init();
+}
+
+function playAni()
+{
+	if(human1.mixer === null) human1.addMixer(human1);
+	human1.clipaction.play();
+	human1.play
+}
+
+function stopAni()
+{
+	human1.clipaction.stop();
+}
+
+function resetAni()
+{
+	human1.clipaction.reset();
 }
 
 function main()
