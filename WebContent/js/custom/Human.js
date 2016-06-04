@@ -157,13 +157,29 @@ Human.prototype = {
 
 		} ,onProgress,onError);			// load light
 
+		var addSkeletonHelper = function(model)							// 用来添加骨架显示
+		{
+			hu.skeletonhelper = new THREE.SkeletonHelper(model);
+			hu.skeletonhelper.linewidth = 10;
+			hu.skeletonhelper.visible = false;
+			show.addHelper(hu.skeletonhelper);
+		};
+
 		loadHuman.load(url_body, function ( geometry, materials ) {				// 加载身体模型
 
 			human = new THREE.SkinnedMesh(geometry, mater);		//	新建衣服模型
+
+			if(hu.skeletonhelper === null) addSkeletonHelper(human);				// 如果骨架助手不存在
 			if(eyes !== null)																				// 谁先加载好用谁的骨架
+			{
+				human.skeleton = hu.eyes.skeleton;
 				human.bind(hu.eyes.skeleton, human.matrixWorld);			// 使用眼睛的骨架
+			}
 			else if(eyelashes !== null)
+			{
+				human.skeleton = hu.eyelashes.skeleton;
 				human.bind(hu.eyelashes.skeleton, human.matrixWorld);
+			}
 
 			hu.group.add(human);																		// 将人体添加到group中,即添加到场景中
 			hu.human = human;
@@ -176,10 +192,17 @@ Human.prototype = {
 
 			eyes = new THREE.SkinnedMesh(geometry, mater);						//	新建眼睛模型
 
+			if(hu.skeletonhelper === null) addSkeletonHelper(eyes);				// 如果骨架助手不存在
 			if(human !== null)																				// 谁先加载好用谁的骨架
+			{
+				eyes.skeleton = hu.human.skeleton;
 				eyes.bind(hu.human.skeleton, eyes.matrixWorld);					// 使用人体的骨架
+			}
 			else if(eyelashes !== null)
+			{
+				eyes.skeleton = hu.eyelashes.skeleton;
 				eyes.bind(hu.eyelashes.skeleton, eyes.matrixWorld);
+			}
 
 			hu.group.add(eyes);
 			hu.eyes = eyes;
@@ -191,16 +214,22 @@ Human.prototype = {
 		loadEyelashes.load(url_eyelashes, function( geometry, materials ){
 			eyelashes = new THREE.SkinnedMesh(geometry,mater);		// 新建睫毛模型
 
+			if(hu.skeletonhelper === null) addSkeletonHelper(eyelashes);				// 如果骨架助手不存在
 			if(human !== null)
+			{
+				eyelashes.skeleton = hu.human.skeleton;
 				eyelashes.bind(hu.human.skeleton, eyelashes.matrixWorld);
+			}
 			else if(eyes !== null)
+			{
+				eyelashes.skeleton = hu.eyes.skeleton;
 				eyelashes.bind(hu.eyes.skeleton, eyelashes.matrixWorld);
+			}
 
 				hu.group.add(eyelashes);
 				hu.eyelashes = eyelashes;
 
 		},onProgress, onError);					// load eyelashes
-
 
 
 
@@ -508,15 +537,16 @@ Human.prototype = {
 		hu._clock = new THREE.Clock;															// 新建时钟
 	},			// addMixer:function()
 
-	update:function()																										// 将需要update的函数放在这里
+	update:function(hu)																										// 将需要update的函数放在这里
 	{
-			if(this.mixer !== null)										// 如果定义了mixer
+			if(hu.mixer !== null)										// 如果定义了mixer
 			{
-				this.mixer.update(this._clock.getDelta());					// 动画需要播放
+				hu.mixer.update(hu._clock.getDelta());					// 动画需要播放
 			}
-			if(this.skeletonhelper !== null)
+			if(hu.skeletonhelper)
 			{
-				this.skeletonhelper.update();							// 骨架需要更新
+				//console.log("骨架刷新了");
+				hu.skeletonhelper.update();							// 骨架需要更新
 			}
 	},
 

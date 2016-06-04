@@ -165,7 +165,7 @@ function render()
 	if(trans)
 		trans.update();
 	if(human1)
-		human1.update();
+		human1.update(human1);
 	if(myRayCaster)
 		myRayCaster.update(myRayCaster);
 
@@ -199,18 +199,32 @@ function addImport()
 function loadhumantest()
 {
   human1 = new Human(show);
+//   human1.load(
+// 		  human1,
+// 		  'models/thin_body.json',
+// 		  "models/thin_eyes.json",
+// 		  'models/catwalk_eyelashes.json',
+// 		  "models/model_Packed0_Diffuse.png",
+// 		  "models/model_Packed0_Specular.png",
+// 		  "models/model_Packed0_Normal.png",
+// 		  "models/model_Packed0_Opacity.png",
+// 		  //"models/female1_Packed0_Opacity.png",
+// 		  "models/BodyLightingMap.png"
+// 		  );
+
   human1.load(
 		  human1,
-		  'models/catwalk_walk.fbx.json',
-		  "models/thin_eyes.json",
-		  'models/eyelashes.json',
+		  'models/catwalk_body.json',
+		  "models/catwalk_eyes.json",
+		  'models/catwalk_eyelashes.json',
 		  "models/model_Packed0_Diffuse.png",
 		  "models/model_Packed0_Specular.png",
 		  "models/model_Packed0_Normal.png",
-		  //"models/model_Packed0_Opacity.png",
-		  "models/female1_Packed0_Opacity.png",
+		  "models/model_Packed0_Opacity.png",
+		  //"models/female1_Packed0_Opacity.png",
 		  "models/BodyLightingMap.png"
 		  );
+
 
 // human1.loadHU(
 // 		  human1,
