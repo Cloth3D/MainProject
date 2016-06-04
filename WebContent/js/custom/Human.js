@@ -13,6 +13,8 @@ var Human = function(show)
 
 	this.human = null;							// body
 	this.eyes = null;								// 眼球和人体是分开的
+	this.eyelashes = null;					// 睫毛，因为有透明贴图，所以睫毛的效果可以留下
+
 	this.hair = null;								// 人的头发
 
 	this.upcloth = null;						// 上衣
@@ -44,7 +46,7 @@ Human.prototype = {
 	{
 	},
 
-	load:function(hu, url_body, url_eye,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 	{
 		/**
 		*	采用不同步的方式加载贴图，速度会快些，但可能会出现贴图加载完成前模型显示效果不佳的现象
@@ -52,6 +54,7 @@ Human.prototype = {
 		* hu: Human类在new处的名称
 		* url_body: body的url
 		* url_eye: eyede的url
+		* url_eyelashes: 睫毛的url
 		* url_diffuse: diffuset贴图的地址
 		*	url_specular: specular的贴图地址
 		*	url_normal: normal的贴图地址
@@ -64,6 +67,7 @@ Human.prototype = {
 		var opacity = new THREE.Texture();		// 读取opacity贴图
 		var light = new THREE.Texture();			// 读取光照贴图
 
+
 		var loader1 = new THREE.ImageLoader();			// 新建用来读diffuse
 		var loader2 = new THREE.ImageLoader();		// 读取specular
 		var loader3 = new THREE.ImageLoader();		// 读取normal
@@ -72,12 +76,16 @@ Human.prototype = {
 
 		var eyes = null;													// 眼睛的模型
 		var human = null;													// 身体的模型
+		var eyelashes = null;											// 睫毛的模型
+
 		var loadEyes = new THREE.JSONLoader();			// 加载眼睛
-		var loadHuman = new THREE.JSONLoader();	// 加载身体
+		var loadHuman = new THREE.JSONLoader();			// 加载身体
+		var loadEyelashes = new THREE.JSONLoader();	// 加载睫毛
 
 		var mater = new THREE.MeshPhongMaterial({		// 测试不同步加载的显示效果
 			specular:0xffffff,
-			skinning:true
+			skinning:true,
+			alphaTest:0.5
 		});
 
 		hu.material = mater;
@@ -154,6 +162,8 @@ Human.prototype = {
 			human = new THREE.SkinnedMesh(geometry, mater);		//	新建衣服模型
 			if(eyes !== null)																				// 谁先加载好用谁的骨架
 				human.bind(hu.eyes.skeleton, human.matrixWorld);			// 使用眼睛的骨架
+			else if(eyelashes !== null)
+				human.bind(hu.eyelashes.skeleton, human.matrixWorld);
 
 			hu.group.add(human);																		// 将人体添加到group中,即添加到场景中
 			hu.human = human;
@@ -164,10 +174,12 @@ Human.prototype = {
 
 		loadEyes.load(url_eye, function ( geometry, materials ) {				// 加载眼睛模型
 
-			eyes = new THREE.SkinnedMesh(geometry, mater);		//	新建衣服模型
+			eyes = new THREE.SkinnedMesh(geometry, mater);						//	新建眼睛模型
 
 			if(human !== null)																				// 谁先加载好用谁的骨架
 				eyes.bind(hu.human.skeleton, eyes.matrixWorld);					// 使用人体的骨架
+			else if(eyelashes !== null)
+				eyes.bind(hu.eyelashes.skeleton, eyes.matrixWorld);
 
 			hu.group.add(eyes);
 			hu.eyes = eyes;
@@ -176,10 +188,23 @@ Human.prototype = {
 
 		}, onProgress, onError);				// load human
 
+		loadEyelashes.load(url_eyelashes, function( geometry, materials ){
+			eyelashes = new THREE.SkinnedMesh(geometry,mater);		// 新建睫毛模型
+
+			if(human !== null)
+				eyelashes.bind(hu.human.skeleton, eyelashes.matrixWorld);
+			else if(eyes !== null)
+				eyelashes.bind(hu.eyes.skeleton, eyelashes.matrixWorld);
+
+				hu.group.add(eyelashes);
+				hu.eyelashes = eyelashes;
+
+		},onProgress, onError);					// load eyelashes
 
 
 
-	},			// load:function(hu, url_body, url_eye,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+
+	},			// 	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 
 	loadHuman:function(hu, url_body, url_eye,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 	/**
@@ -338,7 +363,8 @@ Human.prototype = {
 	{
 		var mater = new THREE.MeshPhongMaterial({		// 测试不同步加载的显示效果
 			specular:0xffffff,
-			skinning:true
+			skinning:true,
+			alphaTest:0.5
 		});
 
 		var diffuse = new THREE.Texture();	// 读取diffuse贴图

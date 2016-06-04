@@ -4,9 +4,18 @@
  */
 var MaterialTool = function(show)
 {
-	this.object;				// 当前选中的物体
+	this.object = null;				// 当前选中的物体
 
 };
-MaterialTool.prototype = {
 
+MaterialTool.prototype = {
+	changeMap:function(str_type, url_newMap)
+	{
+
+	},				// changeMap:funciton()
+
+	changeSelect:function(object)
+	{
+			this.object = object;
+	}					// changeSelect:function(object)
 };
