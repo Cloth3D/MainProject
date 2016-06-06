@@ -28,15 +28,15 @@
 
      ctx.drawImage(tex1.image, 0, 0);   // 将图片1放在canvas上
      var img1 = ctx.getImageData(0, 0,
-       2047, 2047);    // 转化为ImageData
+       cs.width, cs.height);    // 转化为ImageData
 
      ctx.drawImage(tex2.image, 0, 0);   // 将图片2放在canvas
      var img2 = ctx.getImageData(0, 0,
-       2047, 2047);    // 转化为ImageData
+       cs.width, cs.height);    // 转化为ImageData
 
      var tex = ctx.createImageData(2048, 2048);     // 新建一个新的ImageData
 
-     for(var i = 0; i < img1.data.length; i += 4)     // 求并的关键操作
+     for(var i = 0; i < tex.data.length; i = i + 4)     // 求并的关键操作
      {
         if(img1.data[i + 3] == 0 )  // 如果该点是透明
         {
@@ -44,24 +44,29 @@
           tex.data[i + 1] = 0;       // G 绿
           tex.data[i + 2] = 0;       // B 蓝
           tex.data[i + 3] = 0;       // A 透明
+
           continue;
         }
 
-       if(img1.data[i + 0] == 0 || img2.data[i + 0] == 0)
+       if(img1.data[i + 0] == 0 || img2.data[i + 0] == 0)     // 因为黑色部分RGB必定全部为0
        {
          tex.data[i + 0] = 0;       // R 红
          tex.data[i + 1] = 0;       // G 绿
          tex.data[i + 2] = 0;       // B 蓝
          tex.data[i + 3] = 255;       // A 透明
+
+         continue;
        }
-       else {
-         tex.data[i + 0] = 255;       // R 红
-         tex.data[i + 1] = 255;       // G 绿
-         tex.data[i + 2] = 255;       // B 蓝
+       else {     // 其余部分颜色取两图平均值
+         tex.data[i + 0] = (img1.data[i + 0] + img2.data[i + 0]) / 2;       // R 红
+         tex.data[i + 1] = (img1.data[i + 1] + img2.data[i + 1]) / 2;       // G 绿
+         tex.data[i + 2] = (img1.data[i + 2] + img2.data[i + 2]) / 2;       // B 蓝
          tex.data[i + 3] = 255;       // A 透明
+
+         continue;
        }
 
-     }      // for(var i = 0; i < img1.data.length; i += 4)
+     }      // for(var i = 0; i < tex.data.length; i += 4)
 
      ctx.putImageData(tex, 0, 0);       // 将图片放入canvas
     //  var image = new Image();
