@@ -21,6 +21,7 @@
   //  this.geometry = [];              // 存储场景中这类物品的数组
   //  this.material = [];              // 存储场景中这类物品的数组
    this.objects = [];                  // 存储场景中这类物品的数组
+
    this.raycasting  = null;           // 射线控制器
 
   //  this.group = [];                 // 一个模型有多个部分时
@@ -166,7 +167,7 @@
     	  	this.raycasting.needUpdate = true;
     	  	console.log("updateRay");
     	  }
-        
+
 
       console.log("模型已经添加到场景",object);
     }

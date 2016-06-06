@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试合并透明贴图</title>
+
+<script src='js/three.js'>// three.js框架</script>
+<script src='js/custom/MergeAlphaMap.js'></script>
+</head>
+<body id = "body">
+<canvas id = "canvas" width = '2048' height = '2048'> 你的浏览器不支持canvas</canvas>
+<button onclick = "merge();">合并</button>
+<script>
+var mam = new MergeAlphaMap();			// 合并图片工具
+var tex1 = new THREE.Texture();			// 图1
+var tex2 = new THREE.Texture();		
+
+var loader1 = new THREE.ImageLoader();	// 加载图片工具
+var loader2 = new THREE.ImageLoader();
+
+loader1.load("textures/cloth1.png", function(image){
+	tex1.image = image;
+	tex1.needsUpdate = true;
+	
+	document.getElementById("body").appendChild(image);
+});
+
+loader2.load('textures/cloth2.png', function(image){
+	tex2.image = image;
+	tex2.needsUpdate = true;
+	
+	document.getElementById("body").appendChild(image);
+});
+
+function merge()
+{
+	var nTex = mam.merge(tex1, tex2);
+	document.getElementById("body").appendChild(nTex.image);
+}
+</script>
+</body>
+</html>
