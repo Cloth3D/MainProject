@@ -94,6 +94,7 @@ canvas {
   <script src = 'js/custom/MaterialTools.js'>// 添加贴图工具</script>
   <script src = 'js/custom/Human.js'>// 专门负责人体模型加载</script>
   <script src = 'js/custom/raycasting.js'>// 射线</script>
+  <script src = 'js/custom/MergeAlphaMap.js'></script>
 
 	<script type="text/javascript">
 	//这里用来存放一些全局变量
@@ -220,8 +221,8 @@ function loadhumantest()
 		  "models/model_Packed0_Diffuse.png",
 		  "models/model_Packed0_Specular.png",
 		  "models/model_Packed0_Normal.png",
-		  //"models/model_Packed0_Opacity.png",
-		  "models/female1_Packed0_Opacity.png",
+		  "models/model_Packed0_Opacity.png",
+		 // "models/female1_Packed0_Opacity.png",
 		  "models/BodyLightingMap.png"
 		  );
 
@@ -259,7 +260,8 @@ function loadUpCloth()
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png'
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
+			'models/cloth5/cloth5fbm/cloth5top.png'
 			
 			);
 	
@@ -283,7 +285,8 @@ function loadUpCloth()
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png'
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
+			'models/cloth5/cloth5fbm/cloth5bottom.png'
 			
 			);
 	
@@ -295,7 +298,8 @@ function loadUpCloth()
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
 			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png'
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
+			'models/cloth5/cloth5fbm/cloth5shoes.png'
 			
 			);
 	

@@ -6,6 +6,9 @@
 var Human = function(show)
 {
 	this.material = null;						// 存放人体贴图，人体与眼睛共用一个材质
+	this.alpha = null;							// 人体最初的透明贴图
+	this.clothAlpha = [];						// 存放先存衣服的透明贴图 上衣 裤子 鞋子 最多三张贴图。
+	// this.clothAlpha['upcloth'] , ['trousers'] , ['shoes']  等等
 
 	this.mixer = null;							// 用来播放动画
 	this._clock = null;							// 如果新建了播放动画的工具，就初始化一个时钟
@@ -41,10 +44,6 @@ var Human = function(show)
 };				// var Human = function(show)
 
 Human.prototype = {
-
-	loadMaterial:function(url_diffuse, url_specular)
-	{
-	},
 
 	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 	{
@@ -103,7 +102,7 @@ Human.prototype = {
 
 		loader1.load( url_diffuse, function ( image ) {		// 读取diffuse贴图
 
-				diffuse.image = image;
+				diffuse.image = image;											// 加载贴图
 				diffuse.needsUpdate = true;
 
 				mater.map = diffuse;												// 将贴图加载在材质上
@@ -115,9 +114,10 @@ Human.prototype = {
 
 		loader2.load( url_specular, function ( image ) {		// 读取specular贴图
 
-				specular.image = image;
+				specular.image = image;													// 加载贴图
 				specular.needsUpdate = true;
-				mater.specularMap = specular;
+
+				mater.specularMap = specular;										// 将贴图附加给材质
 				mater.needsUpdate = true;
 
 				console.log("specular贴图加载完成");
@@ -126,9 +126,10 @@ Human.prototype = {
 
 		loader3.load( url_normal, function ( image ) {		// 读取normal贴图
 
-				normal.image = image;
+				normal.image = image;													// 加载贴图
 				normal.needsUpdate = true;
-				mater.normalMap = normal;
+
+				mater.normalMap = normal;											// 将贴图附加给材质
 				mater.needsUpdate = true;
 
 				console.log("normal贴图加载完成");
@@ -137,9 +138,12 @@ Human.prototype = {
 
 		loader4.load( url_Opacity, function ( image ) {		// 读取opacity贴图
 
-				opacity.image = image;
+				opacity.image = image;						// 加载贴图
 				opacity.needsUpdate = true;
-				mater.alphaMap = opacity;
+
+				hu.alpha = opacity;		// 将人体最初的透明贴图初始化
+
+				mater.alphaMap = opacity;					// 将贴图追加给材质
 				mater.needsUpdate = true;
 
 				console.log("opacity贴图加载完成");
@@ -148,9 +152,10 @@ Human.prototype = {
 
 		loader5.load( url_light, function ( image ) {		// 读取light贴图
 
-				light.image = image;
+				light.image = image;												// 加载贴图
 				light.needsUpdate = true;
-				mater.lightMap = light;
+
+				mater.lightMap = light;											// 将贴图附加给材质
 				mater.needsUpdate = true;
 
 				console.log("light贴图加载完成");
@@ -235,7 +240,203 @@ Human.prototype = {
 
 	},			// 	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 
-	loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+	loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light, url_human_alpha)
+	/**
+	* 采用不同步的方式加载贴图和模型
+	* 参数说明:
+	* hu: 此类在全局中的名称
+	* type: 字符串，为衣服类型 "upcloth", "trousers" , "glasses", "shoes", "hair"
+	* url_cloth: 衣服路径
+	* url_diffuse: diffuse贴图路径
+	* url_specular: specular贴图的路径
+	* url_normal: normal贴图路径
+	* url_Opacity: alpha贴图路径
+	* url_light: light贴图路径
+	* url_human_alpha:	用来与人体的贴图合并，形成新的透明贴图
+	*/
+	{
+		var mater = new THREE.MeshPhongMaterial({		// 测试不同步加载的显示效果
+			specular:0xffffff,
+			skinning:true,
+			alphaTest:0.5
+		});
+
+		var diffuse = new THREE.Texture();	// 读取diffuse贴图
+		var specular = new THREE.Texture();		// 读取specular贴图
+		var normal = new THREE.Texture();			// 读取normal贴图
+		var opacity = new THREE.Texture();		// 读取opacity贴图
+		var light = new THREE.Texture();			// 读取光照贴图
+
+		var human_alpha = new THREE.Texture();		// 用来存放新加载的透明贴图
+
+		var loader1 = new THREE.ImageLoader();		// 读取diffuse
+		var loader2 = new THREE.ImageLoader();		// 读取specular
+		var loader3 = new THREE.ImageLoader();		// 读取normal
+		var loader4 = new THREE.ImageLoader();		// 读取opacity
+		var loader5 = new THREE.ImageLoader();		// 读取light贴图
+		var loader6 = new THREE.ImageLoader();		// 读取人体的透明贴图
+
+		var onProgress = function ( xhr ) {		// 用来调试读取进度
+			if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round(percentComplete, 2) + '% downloaded' );
+				}
+		};
+
+		var onError = function ( xhr ) {		// 读取错误时执行
+			console.log("图片加载错误");
+		};
+
+		var addCloth = function(hu, type){
+
+			switch(type)     // 分成几类模型问题讨论
+			{
+				case 'upcloth':
+				if(hu.upcloth != null)	hu.group.remove(hu.upcloth);
+				hu.upcloth = cloth;
+				console.log('添加上衣');
+				break;
+
+				case 'trousers':
+				if(hu.trousers != null)	hu.group.remove(hu.trousers);
+				hu.trousers = cloth;
+				console.log('添加裤子');
+				break;
+
+				case 'glasses':
+				if(hu.glasses != null)	hu.group.remove(hu.glasses);
+				hu.glasses = cloth;
+				console.log('添加眼镜');
+				break;
+
+				case 'shoes':
+				if(hu.shoes != null)	hu.group.remove(hu.shoes);
+				hu.shoes = cloth;
+				console.log('添加鞋子');
+				break;
+
+				case 'hair':
+				if(hu.hair != null)	hu.group.remove(hu.hair);
+				hu.hair = cloth;
+				console.log('添加头发');
+				break;
+
+				default:
+				console.log("未有匹配项");
+			};
+
+		};
+
+		var editAlphaMap = function()												// 因为异步加载的关系，必须等到透明贴图加载完成后再调用这个函数
+		{
+			switch(type)     // 分成几类模型问题讨论
+			{
+				case 'upcloth':
+				hu.clothAlpha["upcloth"]	=	human_alpha;				// 将透明贴图保存
+				hu.mergeAlpha(hu);																// 调用合并贴图函数
+				console.log('合成上衣贴图');
+				break;
+
+				case 'trousers':
+				hu.clothAlpha['trousers'] = human_alpha;				// 将透明贴图保存
+				hu.mergeAlpha(hu);																// 调用合并贴图函数
+				console.log('合成裤子贴图');
+				break;
+
+				case 'shoes':
+				hu.clothAlpha['shoes'] = human_alpha;							// 将透明贴图保存
+				hu.mergeAlpha(hu);																	// 调用合并贴图函数
+				console.log('添加鞋子');
+				break;
+
+				default:
+				console.log("未有匹配项");
+			};
+		};
+
+		loader1.load( url_diffuse, function ( image ) {		// 读取diffuse贴图
+
+				diffuse.image = image;
+				diffuse.needsUpdate = true;
+
+				mater.map = diffuse;												// 将贴图加载在材质上
+				mater.needsUpdate = true;
+
+				console.log("diffuse贴图加载完成");
+
+		} ,onProgress,onError);			// load diffuse
+
+		loader2.load( url_specular, function ( image ) {		// 读取specular贴图
+
+				specular.image = image;
+				specular.needsUpdate = true;
+				mater.specularMap = specular;
+				mater.needsUpdate = true;
+
+				console.log("specular贴图加载完成");
+
+		} ,onProgress,onError);			// load specular
+
+		loader3.load( url_normal, function ( image ) {		// 读取normal贴图
+
+				normal.image = image;
+				normal.needsUpdate = true;
+				mater.normalMap = normal;
+				mater.needsUpdate = true;
+
+				console.log("normal贴图加载完成");
+
+		} ,onProgress,onError);			// load normal
+
+		loader4.load( url_Opacity, function ( image ) {		// 读取opacity贴图
+
+				opacity.image = image;
+				opacity.needsUpdate = true;
+				mater.alphaMap = opacity;
+				mater.needsUpdate = true;
+
+				console.log("opacity贴图加载完成");
+
+		} ,onProgress,onError);			// load opacity
+
+		loader5.load( url_light, function ( image ) {		// 读取light贴图
+
+				light.image = image;
+				light.needsUpdate = true;
+				mater.lightMap = light;
+				mater.needsUpdate = true;
+
+				console.log("light贴图加载完成");
+
+		} ,onProgress,onError);			// load light
+
+		loader6.load( url_human_alpha, function ( image ) {		// 读取human_alpha贴图
+
+				human_alpha.image = image;
+				human_alpha.needsUpdate = true;
+				editAlphaMap();														// 贴图加载完成，开始合成贴图
+				console.log("human_alpha贴图加载完成");
+
+		} ,onProgress,onError);			// load normal
+
+		var jsonloader = new THREE.JSONLoader();
+		var cloth = null;
+		jsonloader.load( url_cloth, function ( geometry, materials ) {				// 加载衣服模型，使用上面加载的衣服
+
+			cloth = new THREE.SkinnedMesh(geometry, mater);		//	新建衣服模型
+			cloth.bind(hu.human.skeleton, cloth.matrixWorld);			// 将人体模型的骨架绑定在衣服上
+			hu.group.add(cloth);
+			addCloth(hu, type);
+
+			console.log("添加了衣服模型");
+
+		},onProgress,onError);						// load eyes
+
+
+
+	},				// loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+
+	loadCloth_backup:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 	/**
 	* 采用不同步的方式加载贴图和模型
 	* 参数说明:
@@ -681,7 +882,24 @@ init:function(hu)															// hu: 此类在new处的名称
 			// 	hu.heightAdjust[i][2]
 			// );
 		}
-	}				// adjustHuman:function(hu)
+	},				// adjustHuman:function(hu)
+
+	mergeAlpha:function(hu)
+	{
+		var tex = null;
+		var tool = new MergeAlphaMap();
+		tex = hu.alpha;
+		if(hu.clothAlpha['upcloth'])														// 如果添加了贴图,就将贴图合并，生成新的贴图
+			tex = tool.merge(tex, hu.clothAlpha['upcloth']);
+		if(hu.clothAlpha['trousers'])
+			tex = tool.merge(tex, hu.clothAlpha['trousers']);
+		if(hu.clothAlpha['shoes'])
+			tex = tool.merge(tex, hu.clothAlpha['shoes']);
+
+		hu.material.alphaMap = tex;															// 合成后的贴图附加在human材质上
+		hu.material.needsUpdate = true;
+
+	},				// mergeAlpha:function()
 
 
 }
