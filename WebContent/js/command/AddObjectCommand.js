@@ -27,39 +27,17 @@ AddObjectCommand.prototype = {
 
 	execute: function () {
 
-		this.editor.addObject( this.object );
-		this.editor.select( this.object );
+		this.show.addObject( this.object );
+		//this.show.select( this.object );
 
 	},
 
 	undo: function () {
 
-		this.editor.removeObject( this.object );
-		this.editor.deselect();
-
-	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-		output.object = this.object.toJSON();
-
-		return output;
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.editor.objectByUuid( json.object.object.uuid );
-
-		if ( this.object === undefined ) {
-
-			var loader = new THREE.ObjectLoader();
-			this.object = loader.parse( json.object );
-
-		}
+		this.show.removeObject( this.show, this.object );
+		//this.editor.deselect();
+		this.show.selected = null;
+		this.show.selectNeedUpdate = true;
 
 	}
 

@@ -820,7 +820,9 @@ init:function(hu)															// hu: 此类在new处的名称
 
 	initHeightArray(hu);					// 初始化高度的变形数组
 	initFingerArray(hu);					// 初始化肥胖的变形数组
-	show.addObject(hu.group);
+
+	//show.addObject(hu.group);			// 原始作法，加入撤销恢复功能后会丢弃这种做法
+	show.execute(new AddObjectCommand(hu.group));
 },			// init:function(hu)
 
 

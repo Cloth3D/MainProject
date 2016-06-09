@@ -9,7 +9,7 @@
  * @constructor
  */
 
-var Command = function ( editorRef ) {
+var Command = function ( showRef ) {
 
 	this.id = - 1;
 	this.inMemory = false;
@@ -17,31 +17,10 @@ var Command = function ( editorRef ) {
 	this.type = '';
 	this.name = '';
 
-	if ( editorRef !== undefined ) {
+	if ( showRef !== undefined ) {
 
-		Command.editor = editorRef;
+		Command.show = showRef;																	// 静态类成员变量
 
 	}
-	this.editor = Command.editor;
-
-
-};
-
-Command.prototype.toJSON = function () {
-
-	var output = {};
-	output.type = this.type;
-	output.id = this.id;
-	output.name = this.name;
-	return output;
-
-};
-
-Command.prototype.fromJSON = function ( json ) {
-
-	this.inMemory = true;
-	this.type = json.type;
-	this.id = json.id;
-	this.name = json.name;
-
+	this.show = Command.show;
 };

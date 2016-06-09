@@ -41,7 +41,6 @@ SetRotationCommand.prototype = {
 
 		this.object.rotation.copy( this.newRotation );
 		this.object.updateMatrixWorld( true );
-		this.editor.signals.objectChanged.dispatch( this.object );
 
 	},
 
@@ -49,7 +48,6 @@ SetRotationCommand.prototype = {
 
 		this.object.rotation.copy( this.oldRotation );
 		this.object.updateMatrixWorld( true );
-		this.editor.signals.objectChanged.dispatch( this.object );
 
 	},
 
@@ -58,27 +56,5 @@ SetRotationCommand.prototype = {
 		this.newRotation.copy( command.newRotation );
 
 	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-
-		output.objectUuid = this.object.uuid;
-		output.oldRotation = this.oldRotation.toArray();
-		output.newRotation = this.newRotation.toArray();
-
-		return output;
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.editor.objectByUuid( json.objectUuid );
-		this.oldRotation = new THREE.Euler().fromArray( json.oldRotation );
-		this.newRotation = new THREE.Euler().fromArray( json.newRotation );
-
-	}
 
 };

@@ -40,44 +40,19 @@ SetPositionCommand.prototype = {
 
 		this.object.position.copy( this.newPosition );
 		this.object.updateMatrixWorld( true );
-		this.editor.signals.objectChanged.dispatch( this.object );
-
+		
 	},
 
 	undo: function () {
 
 		this.object.position.copy( this.oldPosition );
 		this.object.updateMatrixWorld( true );
-		this.editor.signals.objectChanged.dispatch( this.object );
 
 	},
 
 	update: function ( command ) {
 
 		this.newPosition.copy( command.newPosition );
-
 	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-
-		output.objectUuid = this.object.uuid;
-		output.oldPosition = this.oldPosition.toArray();
-		output.newPosition = this.newPosition.toArray();
-
-		return output;
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.editor.objectByUuid( json.objectUuid );
-		this.oldPosition = new THREE.Vector3().fromArray( json.oldPosition );
-		this.newPosition = new THREE.Vector3().fromArray( json.newPosition );
-
-	}
 
 };

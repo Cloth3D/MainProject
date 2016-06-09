@@ -9,7 +9,7 @@ var MaterialTool = function(show)
 };
 
 MaterialTool.prototype = {
-	changeMap:function(mt, str_type, url_newMap)
+	changeMap:function(mt, str_type, url_newMap)						// mt 代指MaterialTool
 	{
 		var texture = new THREE.Texture();						// 储存图片
 		var loader = new THREE.ImageLoader();			// 加载图片
@@ -73,5 +73,5 @@ MaterialTool.prototype = {
 			this.object = object;
 	}					// changeSelect:function(object)
 
-	
+
 };

@@ -41,7 +41,6 @@ SetScaleCommand.prototype = {
 
 		this.object.scale.copy( this.newScale );
 		this.object.updateMatrixWorld( true );
-		this.editor.signals.objectChanged.dispatch( this.object );
 
 	},
 
@@ -49,7 +48,6 @@ SetScaleCommand.prototype = {
 
 		this.object.scale.copy( this.oldScale );
 		this.object.updateMatrixWorld( true );
-		this.editor.signals.objectChanged.dispatch( this.object );
 
 	},
 
@@ -58,27 +56,5 @@ SetScaleCommand.prototype = {
 		this.newScale.copy( command.newScale );
 
 	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-
-		output.objectUuid = this.object.uuid;
-		output.oldScale = this.oldScale.toArray();
-		output.newScale = this.newScale.toArray();
-
-		return output;
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.editor.objectByUuid( json.objectUuid );
-		this.oldScale = new THREE.Vector3().fromArray( json.oldScale );
-		this.newScale = new THREE.Vector3().fromArray( json.newScale );
-
-	}
 
 };

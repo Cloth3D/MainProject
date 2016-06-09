@@ -17,7 +17,7 @@
    this.counter_geometry = 0;
    this.counter_material = 0;
 
-   this.helper = [];                // 存贮场景中这类物品的数组
+   this.helper = [];                // 存贮场景中这类物品的数组s
   //  this.geometry = [];              // 存储场景中这类物品的数组
   //  this.material = [];              // 存储场景中这类物品的数组
    this.objects = [];                  // 存储场景中这类物品的数组
@@ -29,7 +29,7 @@
    this.selected = null;            // 指向被选择的object
    this.selectNeedUpdate = false;
 
-   this.history = [];               // 之后用来存储历史纪录
+   this.history = new History(this);               // 之后用来存储历史纪录
    this.loader = null;              // 用来读取任意格式的模型, 结合fileInput使用
    /**
    *  	fileInput = document.createElement( 'input' );
@@ -114,7 +114,7 @@
      document.getElementById('canvas').width = windth;
      document.getElementById('canvas').height = height;
 
-   },
+   },     // onwindowresize:function(windth, height)
 
    update:function()                                                // 用来渲染场景
    {
@@ -126,7 +126,7 @@
         // this.selectNeedUpdate = false;
       }
 
-   },
+   },     // update:function()
 
    add:function(object)
    {
@@ -140,7 +140,7 @@
       }
 
     this.scene.add(object);
-  },
+  },      // add:function(object)
 
   addObject: function ( object ) {
 
@@ -172,7 +172,8 @@
       console.log("模型已经添加到场景",object);
     }
 
-	},
+	},     // addObject: function ( object )
+
   addHelper:function(object)
   {
     if(object !== undefined)
@@ -181,17 +182,68 @@
       this.scene.add(object);
       console.log("helper已经添加到了场景中");
     }
-  },
+  },        // addHelper:function(object)
 
    load:function(filename)
    {
       this.loader.loadFile(filename);
-   },
+   },   // load:function(filename)
 
    removeObject:function(show, object)                    // show是当前类在全局中的名称
    {
-      show.scene.remove(object);
-      // 把它从本地数组中删除
-   }
+     if(object == null) return;                           // 如果模型不存在，就不去移除
+     show.scene.remove(object);
+     var pos = show.objects.indexOf(object);
+     if(pos >= 0)
+        show.objects.splice(pos, 1);      // 删除数组中间某个元素
+   },       // removeObject:function(show, object)
+
+   removeSelected:function(show)                        // show代指当前场景
+   {
+     show.removeObject(show, show.selected);
+     show.selected = null;
+     show.selectNeedUpdate = true;
+   },   // removeSelected:function()
+
+   execute: function ( cmd, optionalName )
+   {
+
+		   this.history.execute( cmd, optionalName );
+
+   },     // execute: function ( cmd, optionalName )
+
+   undo:function()
+   {
+      this.history.undo();
+   },   // undo:function()
+
+   redo:function()
+   {
+      this.history.redo();
+   },   // redo:function()
+
+   select:function(object)
+   {
+      this.selected = object;     // 暂且默认这个模型是场景内的
+   },       // select:function(object)
+
+   isIncluded:function(object)                // 未测试
+   {
+     for(var i = 0 ; i < this.objects.length; i++)
+     {
+       if (this.objects[i] == object)
+        return true;
+        if(this.objects[i] instanceof THREE.Group )  // 如果是group，要判断每个元素
+        {
+          for(var j = 0; j <this.objects[i].children.length; j++)
+          {
+            if (this.objects[i].children[j] == object)
+             return true;
+          }     // for(var j = 0; j <this.objects[i].children.length; j++)
+        }     // if(this.objects[i] instanceof THREE.Group )
+     }      // for(var i = 0 ; i < this.objects.length; i++)
+     return false;
+
+   },       // isIncluded:function(object)
 
  };
