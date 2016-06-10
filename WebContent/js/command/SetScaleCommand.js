@@ -41,6 +41,7 @@ SetScaleCommand.prototype = {
 
 		this.object.scale.copy( this.newScale );
 		this.object.updateMatrixWorld( true );
+		this.show.signals.objectChanged.dispatch( this.object );
 
 	},
 
@@ -48,6 +49,7 @@ SetScaleCommand.prototype = {
 
 		this.object.scale.copy( this.oldScale );
 		this.object.updateMatrixWorld( true );
+		this.show.signals.objectChanged.dispatch( this.object );
 
 	},
 

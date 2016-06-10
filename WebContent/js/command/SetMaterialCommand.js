@@ -27,14 +27,14 @@ SetMaterialCommand.prototype = {
 	execute: function () {
 
 		this.object.material = this.newMaterial;
-		this.editor.signals.materialChanged.dispatch( this.newMaterial );
+		this.show.signals.materialChanged.dispatch( this.newMaterial );
 
 	},
 
 	undo: function () {
 
 		this.object.material = this.oldMaterial;
-		this.editor.signals.materialChanged.dispatch( this.oldMaterial );
+		this.show.signals.materialChanged.dispatch( this.oldMaterial );
 
 	},
 
@@ -54,7 +54,7 @@ SetMaterialCommand.prototype = {
 
 		Command.prototype.fromJSON.call( this, json );
 
-		this.object = this.editor.objectByUuid( json.objectUuid );
+		this.object = this.show.objectByUuid( json.objectUuid );
 		this.oldMaterial = parseMaterial( json.oldMaterial );
 		this.newMaterial = parseMaterial( json.newMaterial );
 

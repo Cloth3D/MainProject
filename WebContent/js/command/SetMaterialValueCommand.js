@@ -31,7 +31,7 @@ SetMaterialValueCommand.prototype = {
 
 		this.object.material[ this.attributeName ] = this.newValue;
 		this.object.material.needsUpdate = true;
-		this.editor.signals.materialChanged.dispatch( this.object.material );
+		this.show.signals.materialChanged.dispatch( this.object.material );
 
 	},
 
@@ -39,7 +39,7 @@ SetMaterialValueCommand.prototype = {
 
 		this.object.material[ this.attributeName ] = this.oldValue;
 		this.object.material.needsUpdate = true;
-		this.editor.signals.materialChanged.dispatch( this.object.material );
+		this.show.signals.materialChanged.dispatch( this.object.material );
 
 	},
 
@@ -69,7 +69,7 @@ SetMaterialValueCommand.prototype = {
 		this.attributeName = json.attributeName;
 		this.oldValue = json.oldValue;
 		this.newValue = json.newValue;
-		this.object = this.editor.objectByUuid( json.objectUuid );
+		this.object = this.show.objectByUuid( json.objectUuid );
 
 	}
 

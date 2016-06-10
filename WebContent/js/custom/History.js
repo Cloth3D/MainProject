@@ -137,7 +137,7 @@ History.prototype = {
 
 		return cmd;
 
-	}
+	},
 
 	clear: function () {
 

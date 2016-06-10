@@ -30,14 +30,14 @@ SetMaterialColorCommand.prototype = {
 	execute: function () {
 
 		this.object.material[ this.attributeName ].setHex( this.newValue );
-		this.editor.signals.materialChanged.dispatch( this.object.material );
+		this.show.signals.materialChanged.dispatch( this.object.material );
 
 	},
 
 	undo: function () {
 
 		this.object.material[ this.attributeName ].setHex( this.oldValue );
-		this.editor.signals.materialChanged.dispatch( this.object.material );
+		this.show.signals.materialChanged.dispatch( this.object.material );
 
 	},
 
@@ -64,7 +64,7 @@ SetMaterialColorCommand.prototype = {
 
 		Command.prototype.fromJSON.call( this, json );
 
-		this.object = this.editor.objectByUuid( json.objectUuid );
+		this.object = this.show.objectByUuid( json.objectUuid );
 		this.attributeName = json.attributeName;
 		this.oldValue = json.oldValue;
 		this.newValue = json.newValue;

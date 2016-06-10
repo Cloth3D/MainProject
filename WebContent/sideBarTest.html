@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试侧边栏</title>
+<style>
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+canvas {
+	width: 100%;
+	height: 100%
+}
+#ctrl {
+				position: absolute;
+				top: 200px;
+				left: 0px;
+				width: 200px;
+				color: #555555;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				z-index:100;
+			}
+</style>
+<link href="css/main.css" rel="stylesheet" />
+<link id="theme" href="css/light.css" rel="stylesheet" />
+
+<script src = 'js/custom/Sidebar.js'></script>
+<script src = 'js/custom/Sidebar.Material.js'></script>
+<script src = 'js/custom/Sidebar.Object.js'></script>
+<script src = 'js/signals.min.js'></script>
+
+<script src = 'js/ui.js'></script>
+<script src = 'js/ui.three.js'></script>
+
+<script src='js/dat.gui.js'>// GUI框架</script>
+	<script src='js/three.js'>// three.js框架</script>
+	<script src='js/stats.min.js'>// 显示帧数</script>
+	<script src='js/TrackballControls.js'>// 鼠标控制</script>
+
+	<script src = 'js/loaders/AMFLoader.js'></script>
+	<script src = 'js/loaders/AWDLoader.js'></script>
+	<script src = 'js/loaders/BabylonLoader.js'></script>
+	<script src = 'js/loaders/ColladaLoader.js'></script>
+	<script src = 'js/loaders/FBXLoader.js'></script>
+	<script src = 'js/loaders/KMZLoader.js'></script>
+	<script src = 'js/loaders/MD2Loader.js'></script>
+	<script src = 'js/loaders/MTLLoader.js'></script>
+	<script src = 'js/loaders/OBJLoader.js'></script>
+	<script src = 'js/loaders/PlayCanvasLoader.js'></script>
+	<script src = 'js/loaders/PLYLoader.js'></script>
+	<script src = 'js/loaders/STLLoader.js'></script>
+	<script src = 'js/loaders/UTF8Loader.js'></script>
+	<script src = 'js/loaders/VRMLLoader.js'></script>
+	<script src = 'js/loaders/VTKLoader.js'></script>
+	<script src = 'js/loaders/ctm/ctm.js'></script>
+	<script src = 'js/loaders/ctm/CTMLoader.js'></script>
+	<script src = 'js/loaders/ctm/lzma.js'></script>
+
+	<script src='js/TransformControls.js'>// 控制移动的框架</script>
+	<script src = 'js/SkeletonHelper.js'>// 显示骨骼的帮助</script>
+	<script src = 'js/AnimationMixer.js'>// 动画</script>
+	<script src = 'js/custom/Show.js'>// 封装</script>
+	<script src = "js/OrbitControls.js">// 轨道控制器</script>
+  	<script src = 'js/TransformControls.js'>// 移动控制器</script>
+
+	<script src = 'js/custom/Loader.js'>// 用来加载模型文件</script>
+  	<script src = 'js/custom/transform.js'>// 用来控制移动 </script>
+  	<script src = 'js/custom/MaterialTools.js'>// 添加贴图工具</script>
+  	<script src = 'js/custom/Human.js'>// 专门负责人体模型加载</script>
+  	<script src = 'js/custom/raycasting.js'>// 射线</script>
+  	<script src = 'js/custom/MergeAlphaMap.js'>// 合并贴图</script>
+
+  	<script src = 'js/command/Command.js'>// cmd</script>
+  	<script src = 'js/custom/History.js'>// 历史队列</script>
+  	<script src = 'js/command/AddObjectCommand.js'>// 添加模型cmd</script>
+  	<script src = 'js/command/RemoveObjectCommand.js'>// 移除模型cmd</script>
+  	<script src = 'js/command/SetPositionCommand.js'>// 移动位置</script>
+  	<script src = 'js/command/SetRotationCommand.js'>// 旋转</script>
+  	<script src = 'js/command/SetScaleCommand.js'>// 缩放值</script>
+  	<script src = 'js/command/SetMaterialColorCommand.js'>// 设置材质颜色</script>
+  	<script src = 'js/command/SetMaterialCommand.js'>// 替换新材质</script>
+  	<script src = 'js/command/SetMaterialMapCommand.js'>// 设置贴图</script>
+  	<script src = 'js/command/SetMaterialValueCommand.js'>// 设置材质参数</script>
+  	<script src = 'js/command/SetValueCommand.js'>// 设置值</script>
+  	<script sec = 'js/command/SetColorCommand.js'>// 设置颜色</script>
+
+</head>
+<body>
+
+<div id="ctrl">
+      身高:<input type="range" value="0" min="0" max="100" onchange="human1.adjustHeight(human1,value/100);human1.adjustHuman(human1);" /><br/>
+      肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFinger(human1,value/100);human1.adjustHuman(human1);" /><br/>
+			<button onclick = "fileInput.click();">读取模型</button><br>
+			<button onclick = "show.execute(new RemoveObjectCommand(show.selected));">移除选中模型</button>
+			<button onclick = "trans.work();">停止移动工具</button><br>
+			<button onclick = "addmaterial();">读取贴图测试</button><br>
+			<button onclick = "loadhumantest();">加载人体模型测试</button><br>
+			<button onclick = "loadUpCloth();">穿上衣测试</button><br>
+			<button onclick = "human1.human.material.needsUpdate = true;">刷新材质测试</button><br>
+			<button onclick = "playAni();">播放动画</button><br>
+			<button onclick = "stopAni();">停止动画</button><br>
+			<button onclick = "resetAni();">重置动画</button><br>
+			<button onclick = "show.undo();">撤销</button>
+			<button onclick = "show.redo();">恢复</button>
+
+
+</div>
+<div id = 'div1'>
+<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
+你的浏览器不支持本应用
+</canvas>
+</div>
+
+<script type="text/javascript">
+	//这里用来存放一些全局变量
+	var show;						//封装
+	var sidebar;					// 侧边栏
+	var canvas;		// 画板
+	var stats;			// 帧数显示器
+	var axes ;						// 坐标轴
+	var clock;		// 时钟和轨迹球控制器
+	var dtrectionalLight;			// 平行光线
+	var gridHelper;					// 网格助手
+	var helper;						// 显示骨骼的工具
+	var fileInput;			// 想办法进行文件输入
+  var trans;      // 移动控制器
+  var human1;        // 人体模型
+  var myRayCaster;    // 定义一个射线管理器
+
+	</script>
+
+<script type="text/javascript">
+function onWindowResize() //重置窗口大小
+{
+	show.onwindowresize(window.innerWidth,window.innerHeight);								// 将canvas区域设置的window.inner那么大
+}
+
+function init()
+{
+	show = new Show();
+	show.init(window.innerWidth,window.innerHeight);
+	
+	sidebar = new Sidebar(show);
+	document.body.appendChild( sidebar.dom );
+}
+
+function addstats()		// 添加状态显示模块，在init之后执行
+{
+	stats = new Stats();									// 新建一个状态显示器
+	stats.setMode(0);										// 设置为默认显示fps
+	// 设置stats的位置s
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top	 = '0px';
+	document.body.appendChild(stats.domElement);			// 添加到页面中
+}
+
+function addListener()		// 用来统一添加监听器
+{
+	window.addEventListener('resize', onWindowResize, false);	// 添加监听器，用来监听窗口变化
+}
+
+function addLight()			// 添加光线
+{
+	//directionalLight = new THREE.DirectionalLight(0xabfeff, 0.4);
+	directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+	directionalLight.position.set(1,1, 1);						// 设置光线方向
+	show.scene.add(directionalLight);
+}
+
+function addGrid()			// 添加网格
+{
+	var size = 10;
+	var step = 0.5;
+	gridHelper = new THREE.GridHelper(size, step);		// 添加一个网格助手
+	show.scene.add(gridHelper);
+}
+
+function render()
+{
+
+	show.update();					// 渲染相机和场景
+	stats.update();										// 更新
+	if(trans)
+		trans.update();
+	if(human1)
+		human1.update(human1);
+	if(myRayCaster)
+		myRayCaster.update(myRayCaster);
+
+}
+
+function animation()			// 动画
+{
+	requestAnimationFrame( animation );					// 要求定时渲染
+	render();
+}
+
+function addmaterial()
+{
+	var tool = new MaterialTool();             // 测试给show.selected添加一个纹理
+	tool.addMeshLambertMaterial(show.selected,
+			'models/model/model_Packed0_Diffuse.png',
+			'models/model/model_Packed0_Specular.png');
+}
+
+function addImport()
+{
+	fileInput = document.createElement( 'input' );
+	fileInput.type = 'file';
+	fileInput.addEventListener( 'change', function ( event ) {
+
+		show.loader.loadFile( fileInput.files[ 0 ] );
+
+	} );
+}
+
+function loadhumantest()
+{
+  human1 = new Human(show);
+//   human1.load(
+// 		  human1,
+// 		  'models/thin_body.json',
+// 		  "models/thin_eyes.json",
+// 		  'models/catwalk_eyelashes.json',
+// 		  "models/model_Packed0_Diffuse.png",
+// 		  "models/model_Packed0_Specular.png",
+// 		  "models/model_Packed0_Normal.png",
+// 		  "models/model_Packed0_Opacity.png",
+// 		  //"models/female1_Packed0_Opacity.png",
+// 		  "models/BodyLightingMap.png"
+// 		  );
+
+  human1.load(
+		  human1,
+		  'models/catwalk_body.json',
+		  "models/catwalk_eyes.json",
+		  'models/catwalk_eyelashes.json',
+		  "models/model_Packed0_Diffuse.png",
+		  "models/model_Packed0_Specular.png",
+		  "models/model_Packed0_Normal.png",
+		  "models/model_Packed0_Opacity.png",
+		 // "models/female1_Packed0_Opacity.png",
+		  "models/BodyLightingMap.png"
+		  );
+
+
+// human1.loadHU(
+// 		  human1,
+// 		  'models/cloth1/test1.json',
+// 		  "models/cloth1/cloth1_Packed0_Diffuse.png",
+// 		  "models/cloth1/cloth1_Packed0_Specular.png",
+// 		  "models/cloth1/cloth1_Packed0_Normal.png",
+// 		  "models/cloth1/cloth1_Packed0_Opacity.png"
+// 		  );
+
+// human1.loadHU(
+// 		  human1,
+// 		  'models/model_test.json',
+// 		  "models/cloth1/cloth1_Packed0_Diffuse.png",
+// 		  "models/cloth1/cloth1_Packed0_Specular.png",
+// 		  "models/cloth1/cloth1_Packed0_Normal.png",
+// 		  "models/cloth1/cloth1_Packed0_Opacity.png",
+// 		  "models/BodyLightingMap.png"
+// 		  );
+  human1.init(human1);						// 添加到场景中
+
+
+}
+
+function loadUpCloth()
+{
+	human1.loadCloth(									// 上衣
+			human1,
+			'upcloth',
+			'models/cloth5/upcloth5.json',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
+			'models/cloth5/cloth5fbm/cloth5top.png'
+
+			);
+
+	human1.loadCloth(									// 头发
+			human1,
+			'hair',
+			'models/cloth5/hair5.json',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png'
+
+			);
+
+	human1.loadCloth(									// 下装
+			human1,
+			'trousers',
+			'models/cloth5/trousers5.json',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
+			'models/cloth5/cloth5fbm/cloth5bottom.png'
+
+			);
+
+	human1.loadCloth(									// 鞋
+			human1,
+			'shoes',
+			'models/cloth5/shoes5.json',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
+			'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
+			'models/cloth5/cloth5fbm/cloth5shoes.png'
+
+			);
+
+
+}
+
+function transfor()                       // 添加使show.selected移动的控制器
+{
+  trans = new transform(show);
+  trans.init(trans);
+}
+
+function addRayCasting(){                 // 通过射线实现点选功能
+  myRayCaster = new raycasting(show);
+  myRayCaster.init();
+}
+
+function playAni()
+{
+	if(human1.mixer === null) human1.addMixer(human1);
+	human1.clipaction.play();
+	human1.play
+}
+
+function stopAni()
+{
+	human1.clipaction.stop();
+}
+
+function resetAni()
+{
+	human1.clipaction.reset();
+}
+
+function main()
+{
+	init();					// 初始化窗口
+	addListener()			// 添加监听器
+	addstats();				// 添加状态显示
+
+	addLight();				// 添加光线
+	addGrid();				// 添加网格
+	animation();			// 调用动画
+	addImport();
+  transfor();
+  addRayCasting();			//点选功能
+
+}
+main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
+</script>
+
+
+</body>
+</html>

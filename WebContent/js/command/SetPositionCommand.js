@@ -40,14 +40,14 @@ SetPositionCommand.prototype = {
 
 		this.object.position.copy( this.newPosition );
 		this.object.updateMatrixWorld( true );
-		
+		this.show.signals.objectChanged.dispatch( this.object );
 	},
 
 	undo: function () {
 
 		this.object.position.copy( this.oldPosition );
 		this.object.updateMatrixWorld( true );
-
+		this.show.signals.objectChanged.dispatch( this.object );
 	},
 
 	update: function ( command ) {

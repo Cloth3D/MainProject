@@ -29,7 +29,7 @@ SetMaterialMapCommand.prototype = {
 
 		this.object.material[ this.mapName ] = this.newMap;
 		this.object.material.needsUpdate = true;
-		this.editor.signals.materialChanged.dispatch( this.object.material );
+		this.show.signals.materialChanged.dispatch( this.object.material );
 
 	},
 
@@ -37,7 +37,7 @@ SetMaterialMapCommand.prototype = {
 
 		this.object.material[ this.mapName ] = this.oldMap;
 		this.object.material.needsUpdate = true;
-		this.editor.signals.materialChanged.dispatch( this.object.material );
+		this.show.signals.materialChanged.dispatch( this.object.material );
 
 	},
 
@@ -99,7 +99,7 @@ SetMaterialMapCommand.prototype = {
 
 		Command.prototype.fromJSON.call( this, json );
 
-		this.object = this.editor.objectByUuid( json.objectUuid );
+		this.object = this.show.objectByUuid( json.objectUuid );
 		this.mapName = json.mapName;
 		this.oldMap = parseTexture( json.oldMap );
 		this.newMap = parseTexture( json.newMap );

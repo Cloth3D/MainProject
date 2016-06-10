@@ -41,6 +41,7 @@ SetRotationCommand.prototype = {
 
 		this.object.rotation.copy( this.newRotation );
 		this.object.updateMatrixWorld( true );
+		this.show.signals.objectChanged.dispatch( this.object );
 
 	},
 
@@ -48,6 +49,7 @@ SetRotationCommand.prototype = {
 
 		this.object.rotation.copy( this.oldRotation );
 		this.object.updateMatrixWorld( true );
+		this.show.signals.objectChanged.dispatch( this.object );
 
 	},
 

@@ -3,6 +3,9 @@
  */
  var Show = function()    // 建立一个类，容括了render , scene 等东西
  {
+
+   var SIGNALS = signals;
+
    this.name = "Show";
 
    this.renderer = null;                      // 初始化时进行赋值
@@ -40,6 +43,14 @@
    *
    *	  } );
    */
+
+   this.signals = {                         // 事件监听器
+      objectSelected: new SIGNALS.Signal(),
+      objectChanged: new SIGNALS.Signal(),
+      materialChanged: new SIGNALS.Signal(),
+      refreshSidebarObject3D: new SIGNALS.Signal()
+
+   };
 
 
 
@@ -121,6 +132,7 @@
 
      	this.renderer.render( this.scene, this.camera );
       this.cameraControl.update();
+
       //if(this.selectNeedUpdate )                                  // 交给相关的控件进行处理
       {
         // this.selectNeedUpdate = false;
@@ -160,6 +172,8 @@
       this.objects.push(object);
       this.scene.add( object );
       this.selected = object;
+
+      this.signals.objectSelected.dispatch(object);         // 发布选择物体信号
 
       this.selectNeedUpdate = true;
       if(this.raycasting !== null)                               // 如果定义了raycaster

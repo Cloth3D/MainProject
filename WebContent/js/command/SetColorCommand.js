@@ -30,44 +30,20 @@ SetColorCommand.prototype = {
 	execute: function () {
 
 		this.object[ this.attributeName ].setHex( this.newValue );
-		this.editor.signals.objectChanged.dispatch( this.object );
+		this.show.signals.objectChanged.dispatch( this.object );
 
 	},
 
 	undo: function () {
 
 		this.object[ this.attributeName ].setHex( this.oldValue );
-		this.editor.signals.objectChanged.dispatch( this.object );
+		this.show.signals.objectChanged.dispatch( this.object );
 
 	},
 
 	update: function ( cmd ) {
 
 		this.newValue = cmd.newValue;
-
-	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-
-		output.objectUuid = this.object.uuid;
-		output.attributeName = this.attributeName;
-		output.oldValue = this.oldValue;
-		output.newValue = this.newValue;
-
-		return output;
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.editor.objectByUuid( json.objectUuid );
-		this.attributeName = json.attributeName;
-		this.oldValue = json.oldValue;
-		this.newValue = json.newValue;
 
 	}
 

@@ -50,17 +50,16 @@ raycasting.prototype = {
 				if (show.raycasting.raycaster.intersected != intersections[0].object) {
 					// alert("color");
 					 show.raycasting.intersected = intersections[0].object;
-					// show.raycasting.intersected.material.color
-					// 		.setHex('#FFFFFF');//将物体颜色设置成黑色
-					/*if ( show.raycasting.raycaster.intersected )
-						show.raycasting.raycaster.intersected.material.color.setHex( '#EEEEEE' );*/
+
 					 if(intersections[0].object.parent instanceof THREE.Group)
 						 {
-						 show.selected = intersections[0].object.parent;
+						 		show.selected = intersections[0].object.parent;
+
+								show.signals.objectSelected.dispatch(show.selected);				// 发布选中物体信号
 						 }
 					 else
 						 show.selected = intersections[0].object;								// 选中物体
-						
+
 					 show.selectNeedUpdate = true;
 				}
 
@@ -100,7 +99,7 @@ raycasting.prototype = {
 //	 {
 //	 	if(ray.addRayCaster)											// 如果开启射线功能才去执行其他的更新操作
 //	 	{
-//	
+//
 //	 		if(ray.needUpdate)																											// 如果需要更新
 //	 		{
 //	 			ray.needUpdate = false;
@@ -121,8 +120,8 @@ raycasting.prototype = {
 //	 				}
 //	 			}		// 	for(var i = 0; i < show.objects.length; i++)
 //	 		}		// if(ray.needUpdate)
-//	
+//
 //	 	}		// if(ray.addRayCaster)
-//	
+//
 //	 }					// update : fucntion(ray)
 };
