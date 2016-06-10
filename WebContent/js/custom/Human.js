@@ -5,6 +5,8 @@
 
 var Human = function(show)
 {
+	this.show = show;
+
 	this.material = null;						// 存放人体贴图，人体与眼睛共用一个材质
 	this.alpha = null;							// 人体最初的透明贴图
 	this.clothAlpha = [];						// 存放先存衣服的透明贴图 上衣 裤子 鞋子 最多三张贴图。
@@ -239,6 +241,10 @@ Human.prototype = {
 
 
 	},			// 	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+	CMDLoadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light, url_human_alpha)
+	{
+		this.show.execute(new SetClothCommand(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light, url_human_alpha));
+	},
 
 	loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light, url_human_alpha)
 	/**
@@ -843,7 +849,7 @@ init:function(hu)															// hu: 此类在new处的名称
 		}
 	},			// adjustHeight:function(hu, scale)
 
-	adjustFinger:function(hu, scale)
+	adjustFigure:function(hu, scale)
 	//	用于调整肥胖度， scale 的范围0-1.0 , 尽量控制数值小一点
 	{
 		hu.fingerScale = scale;																	// 这是hu记录体型的一个属性
@@ -858,7 +864,7 @@ init:function(hu)															// hu: 此类在new处的名称
 				hu.fingerAdjust[i][1] = 1 + scale * hu.fingerArray[i][1];
 				hu.fingerAdjust[i][2] = 1 + scale * hu.fingerArray[i][2];
 		}
-	},			// adjustFinger:function(hu, scale)
+	},			// adjustFigure:function(hu, scale)
 
 	adjustHuman:function(hu)															// hu是Human在new时的名字
 	//	调用这个函数才会把调整过的体型体现出来

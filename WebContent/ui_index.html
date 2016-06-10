@@ -39,7 +39,7 @@ canvas {
 <body>
 <div id="ctrl">
       身高:<input type="range" value="0" min="0" max="100" onchange="human1.adjustHeight(human1,value/100);human1.adjustHuman(human1);" /><br/>
-      肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFinger(human1,value/100);human1.adjustHuman(human1);" /><br/>
+      肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFigure(human1,value/100);human1.adjustHuman(human1);" /><br/>
 			<button onclick = "fileInput.click();">读取模型</button><br>
 			<button onclick = "show.execute(new RemoveObjectCommand(show.selected));">移除选中模型</button>
 			<button onclick = "trans.work();">停止移动工具</button><br>

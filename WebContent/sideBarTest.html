@@ -86,14 +86,17 @@ canvas {
   	<script src = 'js/command/SetMaterialMapCommand.js'>// 设置贴图</script>
   	<script src = 'js/command/SetMaterialValueCommand.js'>// 设置材质参数</script>
   	<script src = 'js/command/SetValueCommand.js'>// 设置值</script>
-  	<script sec = 'js/command/SetColorCommand.js'>// 设置颜色</script>
+  	<script src = 'js/command/SetColorCommand.js'>// 设置颜色</script>
+  	
+  	<script src = 'js/command/SetClothCommand.js'>// 穿衣服</script>
+  	<script src = 'js/command/SetFigureCommand.js'>// 体型变化</script>
 
 </head>
 <body>
 
 <div id="ctrl">
-      身高:<input type="range" value="0" min="0" max="100" onchange="human1.adjustHeight(human1,value/100);human1.adjustHuman(human1);" /><br/>
-      肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFinger(human1,value/100);human1.adjustHuman(human1);" /><br/>
+      身高:<input type="range" value="0" min="0" max="100" onchange="show.execute(new SetFigureCommand(human1, value/100, 'height'));" /><br/>
+      肥胖:<input type="range" value="0" min="0" max="100" onchange="show.execute(new SetFigureCommand(human1, value/100, 'figure'));" /><br/>
 			<button onclick = "fileInput.click();">读取模型</button><br>
 			<button onclick = "show.execute(new RemoveObjectCommand(show.selected));">移除选中模型</button>
 			<button onclick = "trans.work();">停止移动工具</button><br>
@@ -274,7 +277,7 @@ function loadhumantest()
 
 function loadUpCloth()
 {
-	human1.loadCloth(									// 上衣
+	human1.CMDLoadCloth(									// 上衣
 			human1,
 			'upcloth',
 			'models/cloth5/upcloth5.json',
@@ -287,7 +290,7 @@ function loadUpCloth()
 
 			);
 
-	human1.loadCloth(									// 头发
+	human1.CMDLoadCloth(									// 头发
 			human1,
 			'hair',
 			'models/cloth5/hair5.json',
@@ -299,7 +302,7 @@ function loadUpCloth()
 
 			);
 
-	human1.loadCloth(									// 下装
+	human1.CMDLoadCloth(									// 下装
 			human1,
 			'trousers',
 			'models/cloth5/trousers5.json',
@@ -312,7 +315,7 @@ function loadUpCloth()
 
 			);
 
-	human1.loadCloth(									// 鞋
+	human1.CMDLoadCloth(									// 鞋
 			human1,
 			'shoes',
 			'models/cloth5/shoes5.json',
