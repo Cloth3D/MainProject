@@ -257,18 +257,7 @@ function loadjson()			// 读取一个JSON模型
 	var loader = new THREE.JSONLoader();
 
 	loader.load('models/height.json', function (geometry, materials) {
-		//alert(geometry instanceof THREE.Geometry);				// 结论，此处是geometry类型的
-		//alert(geometry instanceof THREE.BufferGeometry);
-
-// 		for (var i = 0; i < geometry.vertices.length; i++)
-// 		{
-//                 vector = geometry.vertices[i];
-//                 var axis = new THREE.Vector3(0, 1, 0);
-//                 var angle = Math.PI / 2;
-//                 geometry.vertices[i].applyAxisAngle(axis, angle);
-//                 geometry.vertices[i].multiplyScalar(0.01);
-//  		}
-
+		console.log("模型加载完成.");
 	    model = new THREE.SkinnedMesh(
 	    		geometry,
 	    		new THREE.MeshLambertMaterial({color:0xaaaaaa,
@@ -292,6 +281,7 @@ function loadjson()			// 读取一个JSON模型
 			action.play();
 		}
 	});
+	console.log("这条函数在加载模型后面");
 
 }
 

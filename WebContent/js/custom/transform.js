@@ -72,6 +72,61 @@
      }
 
    });
+
+  //  trans.control.addEventListener( 'change', function () {
+	// 	var object = trans.control.object;
+	// 	if ( object !== undefined ) {
+	// 		// selectionBox.update( object );
+	// 		// if ( editor.helpers[ object.id ] !== undefined ) {
+	// 		// 	editor.helpers[ object.id ].update();
+	// 		// }
+	// 		//signals.refreshSidebarObject3D.dispatch( object );
+	// 	}
+	// 	//render();
+	// } );
+
+  var objectPositionOnDown = null;
+	var objectRotationOnDown = null;
+	var objectScaleOnDown = null;
+
+	trans.control.addEventListener( 'mouseDown', function () {
+		var object = trans.control.object;
+
+		objectPositionOnDown = object.position.clone();
+		objectRotationOnDown = object.rotation.clone();
+		objectScaleOnDown = object.scale.clone();
+
+		show.cameraControl.enabled = false;
+
+	} );
+
+	trans.control.addEventListener( 'mouseUp', function () {
+		var object = trans.control.object;
+		if ( object !== null ) {
+			switch ( trans.control.getMode() ) {
+
+				case 'translate':
+					if ( ! objectPositionOnDown.equals( object.position ) ) {
+						show.execute( new SetPositionCommand( object, object.position, objectPositionOnDown ) );
+					}
+					break;
+
+				case 'rotate':
+					if ( ! objectRotationOnDown.equals( object.rotation ) ) {
+						show.execute( new SetRotationCommand( object, object.rotation, objectRotationOnDown ) );
+					}
+					break;
+
+				case 'scale':
+					if ( ! objectScaleOnDown.equals( object.scale ) ) {
+						show.execute( new SetScaleCommand( object, object.scale, objectScaleOnDown ) );
+					}
+					break;
+			}          // switch ( trans.control.getMode() )
+		}   // if ( object !== null )
+		show.cameraControl.enabled = true;
+	} );   // 	trans.control.addEventListener
+
  },
 
  selectTarget:function(mesh)
@@ -81,6 +136,22 @@
 
  update:function()        // 加在动画上
  {
+   if(show.selectNeedUpdate)
+   {
+     show.selectNeedUpdate = false;
+     if(this.stats === true)
+     {
+       if(show.selected !=null)               // 因为,可能会因为撤销
+       {
+          this.control.attach(show.selected);
+       }
+       else {
+         this.control.detach();
+       }
+
+     }      // if(this.stats === true)
+
+   }      // if(show.selectNeedUpdate)
     this.control.update();
  },
 

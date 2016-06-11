@@ -4,56 +4,74 @@
  */
 var MaterialTool = function(show)
 {
+	this.object = null;				// 当前选中的物体
 
 };
+
 MaterialTool.prototype = {
-
-	addMeshLambertMaterial:function(object, url_diffuse, url_specular )
+	changeMap:function(mt, str_type, url_newMap)						// mt 代指MaterialTool
 	{
-			var temp = show.mesh[object.uuid];
+		var texture = new THREE.Texture();						// 储存图片
+		var loader = new THREE.ImageLoader();			// 加载图片
 
-			var diffuse = new THREE.Texture();	// 读取diffuse贴图
-			var specular = new THREE.Texture();		// 读取normal贴图
+		var onProgress = function ( xhr ) {		// 用来调试读取进度
+			if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loaded / xhr.total * 100;
+					console.log( Math.round(percentComplete, 2) + '% downloaded' );
+				}
+		};
 
-    	var onProgress = function ( xhr ) {		// 用来调试读取进度
-        if ( xhr.lengthComputable ) {
-            var percentComplete = xhr.loaded / xhr.total * 100;
-            console.log( Math.round(percentComplete, 2) + '% downloaded' );
-        	}
-    	};
-    	var onError = function ( xhr ) {		// 读取错误时执行
-				console.log("图片加载错误");
-    	};
+		var onError = function ( xhr ) {		// 读取错误时执行
+			console.log("图片加载错误");
+		};
 
-    	var loader = new THREE.ImageLoader();			// 新建用来读取图片
-    	loader.load( url_diffuse, function ( image ) {		// 读取diffuse贴图
 
-        diffuse.image = image;
-        diffuse.needsUpdate = true;
-
-    	} ,onProgress,onError);
-    	console.log("diffuse加载完成");
-		loader.load( url_specular, function ( image ) {		// 读取normal贴图
-
-        specular.image = image;
-        specular.needsUpdate = true;
-
-    	} ,onProgress,onError);
-		console.log("specular加载完成");
-
-			var material_new = new THREE.MeshLambertMaterial({
-				color:0xffffff,
-				map:diffuse,
-				specularMap:specular,
-				shading:THREE.SmoothShading
-			});
-
-			temp.materials.push(material_new);		// 将material塞入
-
-			for(var i = 0 ;i < object.children.length; i++)
+		var change = function(mt, str_type, texture)
+		{
+			switch(str_type)
 			{
-				object.children[i].material = material_new;
-			}
+				case "map":							// 纹理贴图
+					mt.object.material.map = texture;
+				break;
 
-	}
+				case "specularMap":			// 反射贴图
+					mt.object.material.specularMap = texture;
+				break;
+
+				case "normalMap":				// 法相贴图
+					mt.object.material.normalMap = texture;
+				break;
+
+				case "alphaMap":				// 透明贴图
+					mt.object.material.alphaMap = texture;
+				break;
+
+				case "lightMap":				// 光照贴图
+					mt.object.material.lightMap = texture;
+				break;
+
+				default:console.log("不支持当前贴图更换");
+
+			};
+			mt.object.material.needsUpdate = true;
+		};
+
+		loader.load(url_newMap, function(image){
+
+			texture.image = image;
+			texture.needsUpdate = true;
+
+			change(mt, str_type, texture);		// 调用函数更换贴图
+
+		}, onProgress, onError);			// load newMap
+
+
+	},				// changeMap:funciton()
+
+	changeSelect:function(object)
+	{
+			this.object = object;
+	}					// changeSelect:function(object)
+
+
 };

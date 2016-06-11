@@ -33,8 +33,8 @@ var Loader = function ( show ) {
 					var loader = new THREE.AMFLoader();
 					var amfobject = loader.parse( event.target.result );
 
-					// editor.execute( new AddObjectCommand( amfobject ) );
-					show.addObject(amfobject);
+					show.execute( new AddObjectCommand( amfobject ) );
+					//show.addObject(amfobject);
 				}, false );
 				reader.readAsArrayBuffer( file );
 
@@ -88,8 +88,8 @@ var Loader = function ( show ) {
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
 
-					// editor.execute( new AddObjectCommand( mesh ) );
-					show.addObject(mesh);									// 添加到show中
+					show.execute( new AddObjectCommand( mesh ) );
+					//show.addObject(mesh);									// 添加到show中
 
 				}, false );
 				reader.readAsText( file );
@@ -116,8 +116,8 @@ var Loader = function ( show ) {
 						var mesh = new THREE.Mesh( geometry, material );
 						mesh.name = filename;
 
-						// editor.execute( new AddObjectCommand( mesh ) );
-						show.addObject(mesh);
+						show.execute( new AddObjectCommand( mesh ) );
+						//show.addObject(mesh);
 
 					} );
 
@@ -137,8 +137,8 @@ var Loader = function ( show ) {
 
 					collada.scene.name = filename;
 
-					// editor.execute( new AddObjectCommand( collada.scene ) );
-					show.addObject(collada.scene);
+					show.execute( new AddObjectCommand( collada.scene ) );
+					//show.addObject(collada.scene);
 
 				}, false );
 				reader.readAsText( file );
@@ -154,8 +154,8 @@ var Loader = function ( show ) {
 					var loader = new THREE.FBXLoader();
 					var object = loader.parse( contents );
 
-					// editor.execute( new AddObjectCommand( object ) );
-					show.addObject(object);
+					show.execute( new AddObjectCommand( object ) );
+					//show.addObject(object);
 
 				}, false );
 				reader.readAsText( file );
@@ -228,8 +228,8 @@ var Loader = function ( show ) {
 
 					collada.scene.name = filename;
 
-					// editor.execute( new AddObjectCommand( collada.scene ) );
-					show.addObject(collada.scene);
+					show.execute( new AddObjectCommand( collada.scene ) );
+					//show.addObject(collada.scene);
 
 				}, false );
 				reader.readAsArrayBuffer( file );
@@ -252,8 +252,8 @@ var Loader = function ( show ) {
 					mesh.mixer = new THREE.AnimationMixer( mesh );
 					mesh.name = filename;
 
-					// editor.execute( new AddObjectCommand( mesh ) );
-					show.addObject(mesh);
+					show.execute( new AddObjectCommand( mesh ) );
+					//show.addObject(mesh);
 				}, false );
 				reader.readAsArrayBuffer( file );
 
@@ -268,8 +268,8 @@ var Loader = function ( show ) {
 					var object = new THREE.OBJLoader().parse( contents );
 					object.name = filename;
 
-					show.addObject(object);
-					// editor.execute( new AddObjectCommand( object ) );
+					//show.addObject(object);
+					show.execute( new AddObjectCommand( object ) );
 
 				}, false );
 				reader.readAsText( file );
@@ -286,8 +286,8 @@ var Loader = function ( show ) {
 					var loader = new THREE.PlayCanvasLoader();
 					var object = loader.parse( json );
 
-					// editor.execute( new AddObjectCommand( object ) );
-					show.addObject(object);
+					show.execute( new AddObjectCommand( object ) );
+					//show.addObject(object);
 
 				}, false );
 				reader.readAsText( file );
@@ -309,8 +309,8 @@ var Loader = function ( show ) {
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
 
-					// editor.execute( new AddObjectCommand( mesh ) );
-					show.addObject(mesh);
+					show.execute( new AddObjectCommand( mesh ) );
+					//show.addObject(mesh);
 
 				}, false );
 				reader.readAsText( file );
@@ -332,8 +332,8 @@ var Loader = function ( show ) {
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
 
-					// editor.execute( new AddObjectCommand( mesh ) );
-					show.addObject(mesh);
+					show.execute( new AddObjectCommand( mesh ) );
+					//show.addObject(mesh);
 
 				}, false );
 
@@ -384,8 +384,8 @@ var Loader = function ( show ) {
 					var mesh = new THREE.Mesh( geometry, material );
 					mesh.name = filename;
 
-					// editor.execute( new AddObjectCommand( mesh ) );
-					show.addObject(mesh);
+					show.execute( new AddObjectCommand( mesh ) );
+					//show.addObject(mesh);
 
 				}, false );
 				reader.readAsText( file );
@@ -446,8 +446,8 @@ var Loader = function ( show ) {
 
 				var mesh = new THREE.Mesh( result );
 
-				// editor.execute( new AddObjectCommand( mesh ) );
-				show.addObject(mesh);
+				show.execute( new AddObjectCommand( mesh ) );
+				//show.addObject(mesh);
 
 				break;
 
@@ -496,8 +496,8 @@ var Loader = function ( show ) {
 
 				mesh.name = filename;
 
-				// editor.execute( new AddObjectCommand( mesh ) );
-				show.addObject(mesh);
+				show.execute( new AddObjectCommand( mesh ) );
+				//show.addObject(mesh);
 
 				break;
 

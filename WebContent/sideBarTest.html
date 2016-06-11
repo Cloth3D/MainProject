@@ -2,17 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>测试能否使用JSON读取动画</title>
-<script type="text/javascript">
-try{
-    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
-        console.log("您正在手机端访问本页面!")
-    }else{
-    	console.log("您正在电脑端访问本页面!");
-    }
-}catch(e){}
-</script>
-
+<title>测试侧边栏</title>
 <style>
 body {
 	margin: 0;
@@ -35,33 +25,18 @@ canvas {
 				z-index:100;
 			}
 </style>
-</head>
-<body>
-<div id="ctrl">
-      身高:<input type="range" value="0" min="0" max="100" onchange="human1.adjustHeight(human1,value/100);human1.adjustHuman(human1);" /><br/>
-      肥胖:<input type="range" value="0" min="0" max="100" onchange="human1.adjustFigure(human1,value/100);human1.adjustHuman(human1);" /><br/>
-			<button onclick = "fileInput.click();">读取模型</button><br>
-			<button onclick = "show.execute(new RemoveObjectCommand(show.selected));">移除选中模型</button>
-			<button onclick = "trans.work();">停止移动工具</button><br>
-			<button onclick = "addmaterial();">读取贴图测试</button><br>
-			<button onclick = "loadhumantest();">加载人体模型测试</button><br>
-			<button onclick = "loadUpCloth();">穿上衣测试</button><br>
-			<button onclick = "human1.human.material.needsUpdate = true;">刷新材质测试</button><br>
-			<button onclick = "playAni();">播放动画</button><br>
-			<button onclick = "stopAni();">停止动画</button><br>
-			<button onclick = "resetAni();">重置动画</button><br>
-			<button onclick = "show.undo();">撤销</button>
-			<button onclick = "show.redo();">恢复</button>
+<link href="css/main.css" rel="stylesheet" />
+<link id="theme" href="css/light.css" rel="stylesheet" />
 
+<script src = 'js/custom/Sidebar.js'></script>
+<script src = 'js/custom/Sidebar.Material.js'></script>
+<script src = 'js/custom/Sidebar.Object.js'></script>
+<script src = 'js/signals.min.js'></script>
 
-</div>
-<div id = 'div1'>
-<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
-你的浏览器不支持本应用
-</canvas>
-</div>
+<script src = 'js/ui.js'></script>
+<script src = 'js/ui.three.js'></script>
 
-	<script src='js/dat.gui.js'>// GUI框架</script>
+<script src='js/dat.gui.js'>// GUI框架</script>
 	<script src='js/three.js'>// three.js框架</script>
 	<script src='js/stats.min.js'>// 显示帧数</script>
 	<script src='js/TrackballControls.js'>// 鼠标控制</script>
@@ -106,11 +81,47 @@ canvas {
   	<script src = 'js/command/SetPositionCommand.js'>// 移动位置</script>
   	<script src = 'js/command/SetRotationCommand.js'>// 旋转</script>
   	<script src = 'js/command/SetScaleCommand.js'>// 缩放值</script>
+  	<script src = 'js/command/SetMaterialColorCommand.js'>// 设置材质颜色</script>
+  	<script src = 'js/command/SetMaterialCommand.js'>// 替换新材质</script>
+  	<script src = 'js/command/SetMaterialMapCommand.js'>// 设置贴图</script>
+  	<script src = 'js/command/SetMaterialValueCommand.js'>// 设置材质参数</script>
+  	<script src = 'js/command/SetValueCommand.js'>// 设置值</script>
+  	<script src = 'js/command/SetColorCommand.js'>// 设置颜色</script>
+  	
+  	<script src = 'js/command/SetClothCommand.js'>// 穿衣服</script>
+  	<script src = 'js/command/SetFigureCommand.js'>// 体型变化</script>
 
-	<script type="text/javascript">
+</head>
+<body>
+
+<div id="ctrl">
+      身高:<input type="range" value="0" min="0" max="100" onchange="show.execute(new SetFigureCommand(human1, value/100, 'height'));" /><br/>
+      肥胖:<input type="range" value="0" min="0" max="100" onchange="show.execute(new SetFigureCommand(human1, value/100, 'figure'));" /><br/>
+			<button onclick = "fileInput.click();">读取模型</button><br>
+			<button onclick = "show.execute(new RemoveObjectCommand(show.selected));">移除选中模型</button>
+			<button onclick = "trans.work();">停止移动工具</button><br>
+			<button onclick = "addmaterial();">读取贴图测试</button><br>
+			<button onclick = "loadhumantest();">加载人体模型测试</button><br>
+			<button onclick = "loadUpCloth();">穿上衣测试</button><br>
+			<button onclick = "human1.human.material.needsUpdate = true;">刷新材质测试</button><br>
+			<button onclick = "playAni();">播放动画</button><br>
+			<button onclick = "stopAni();">停止动画</button><br>
+			<button onclick = "resetAni();">重置动画</button><br>
+			<button onclick = "show.undo();">撤销</button>
+			<button onclick = "show.redo();">恢复</button>
+
+
+</div>
+<div id = 'div1'>
+<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
+你的浏览器不支持本应用
+</canvas>
+</div>
+
+<script type="text/javascript">
 	//这里用来存放一些全局变量
 	var show;						//封装
-
+	var sidebar;					// 侧边栏
 	var canvas;		// 画板
 	var stats;			// 帧数显示器
 	var axes ;						// 坐标轴
@@ -135,6 +146,9 @@ function init()
 {
 	show = new Show();
 	show.init(window.innerWidth,window.innerHeight);
+	
+	sidebar = new Sidebar(show);
+	document.body.appendChild( sidebar.dom );
 }
 
 function addstats()		// 添加状态显示模块，在init之后执行
@@ -263,7 +277,7 @@ function loadhumantest()
 
 function loadUpCloth()
 {
-	human1.loadCloth(									// 上衣
+	human1.CMDLoadCloth(									// 上衣
 			human1,
 			'upcloth',
 			'models/cloth5/upcloth5.json',
@@ -276,7 +290,7 @@ function loadUpCloth()
 
 			);
 
-	human1.loadCloth(									// 头发
+	human1.CMDLoadCloth(									// 头发
 			human1,
 			'hair',
 			'models/cloth5/hair5.json',
@@ -288,7 +302,7 @@ function loadUpCloth()
 
 			);
 
-	human1.loadCloth(									// 下装
+	human1.CMDLoadCloth(									// 下装
 			human1,
 			'trousers',
 			'models/cloth5/trousers5.json',
@@ -301,7 +315,7 @@ function loadUpCloth()
 
 			);
 
-	human1.loadCloth(									// 鞋
+	human1.CMDLoadCloth(									// 鞋
 			human1,
 			'shoes',
 			'models/cloth5/shoes5.json',
@@ -361,5 +375,7 @@ function main()
 }
 main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
 </script>
+
+
 </body>
 </html>
