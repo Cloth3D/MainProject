@@ -27,97 +27,42 @@ SetMaterialMapCommand.prototype = {
 
 	execute: function () {
 
-		this.object.material[ this.mapName ] = this.newMap;
-		this.object.material.needsUpdate = true;
-		this.show.signals.materialChanged.dispatch( this.object.material );
+		if(this.object.parent instanceof THREE.Group)
+		{
+			var objArray = this.object.parent.children;
+			for(var i = 0; i < objArray.length; i++)
+			{
+				objArray[i].material[ this.mapName ] = this.newMap;
+				objArray[i].material.needsUpdate = true;
+			}
+
+			this.show.signals.materialChanged.dispatch( this.object.material );
+		}
+		else {
+			this.object.material[ this.mapName ] = this.newMap;
+			this.object.material.needsUpdate = true;
+			this.show.signals.materialChanged.dispatch( this.object.material );
+		}
 
 	},
 
 	undo: function () {
 
-		this.object.material[ this.mapName ] = this.oldMap;
-		this.object.material.needsUpdate = true;
-		this.show.signals.materialChanged.dispatch( this.object.material );
-
-	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-
-		output.objectUuid = this.object.uuid;
-		output.mapName = this.mapName;
-		output.newMap = serializeMap( this.newMap );
-		output.oldMap = serializeMap( this.oldMap );
-
-		return output;
-
-		// serializes a map (THREE.Texture)
-
-		function serializeMap ( map ) {
-
-			if ( map === null || map === undefined ) return null;
-
-			var meta = {
-				geometries: {},
-				materials: {},
-				textures: {},
-				images: {}
-			};
-
-			var json = map.toJSON( meta );
-			var images = extractFromCache( meta.images );
-			if ( images.length > 0 ) json.images = images;
-			json.sourceFile = map.sourceFile;
-
-			return json;
-
-		}
-
-		// Note: The function 'extractFromCache' is copied from Object3D.toJSON()
-
-		// extract data from the cache hash
-		// remove metadata on each item
-		// and return as array
-		function extractFromCache ( cache ) {
-
-			var values = [];
-			for ( var key in cache ) {
-
-				var data = cache[ key ];
-				delete data.metadata;
-				values.push( data );
-
+		if(this.object.parent instanceof THREE.Group)
+		{
+			var objArray = this.object.parent.children;
+			for(var i = 0; i < objArray.length; i++)
+			{
+				objArray[i].material[ this.mapName ] = this.oldMap;
+				objArray[i].material.needsUpdate = true;
 			}
-			return values;
 
+			this.show.signals.materialChanged.dispatch( this.object.material );
 		}
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.show.objectByUuid( json.objectUuid );
-		this.mapName = json.mapName;
-		this.oldMap = parseTexture( json.oldMap );
-		this.newMap = parseTexture( json.newMap );
-
-		function parseTexture ( json ) {
-
-			var map = null;
-			if ( json !== null ) {
-
-				var loader = new THREE.ObjectLoader();
-				var images = loader.parseImages( json.images );
-				var textures  = loader.parseTextures( [ json ], images );
-				map = textures[ json.uuid ];
-				map.sourceFile = json.sourceFile;
-
-			}
-			return map;
-
+		else {
+			this.object.material[ this.mapName ] = this.oldMap;
+			this.object.material.needsUpdate = true;
+			this.show.signals.materialChanged.dispatch( this.object.material );
 		}
 
 	}

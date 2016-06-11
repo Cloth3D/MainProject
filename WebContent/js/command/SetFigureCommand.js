@@ -12,6 +12,8 @@
   * scaleType: 对应的缩放类型: 'height', 'figure'
   */
  {
+   Command.call(this);
+
    this.human = human;
    this.type = 'SetFigureCommand';
    this.name = '体型操作';

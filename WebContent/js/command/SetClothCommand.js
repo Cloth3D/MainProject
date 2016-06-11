@@ -260,7 +260,7 @@ SetClothCommand.prototype = {
 
       console.log("添加了衣服模型");
 
-    },onProgress,onError);						// load eyes
+    },onProgress,onError);						// load cloth
 
   },				// loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light)
 

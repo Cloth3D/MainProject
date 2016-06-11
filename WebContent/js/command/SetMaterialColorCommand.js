@@ -29,15 +29,39 @@ SetMaterialColorCommand.prototype = {
 
 	execute: function () {
 
-		this.object.material[ this.attributeName ].setHex( this.newValue );
-		this.show.signals.materialChanged.dispatch( this.object.material );
+		if(this.object.parent instanceof THREE.Group)
+		{
+			var objArray = this.object.parent.children;
+			for(var i = 0; i < objArray.length; i++)
+			{
+				objArray[i].material[ this.attributeName ].setHex( this.newValue );
+			}
+
+			this.show.signals.materialChanged.dispatch( this.object.material );
+		}
+		else {
+			this.object.material[ this.attributeName ].setHex( this.newValue );
+			this.show.signals.materialChanged.dispatch( this.object.material );
+		}
 
 	},
 
 	undo: function () {
 
-		this.object.material[ this.attributeName ].setHex( this.oldValue );
-		this.show.signals.materialChanged.dispatch( this.object.material );
+		if(this.object.parent instanceof THREE.Group)
+		{
+			var objArray = this.object.parent.children;
+			for(var i = 0; i < objArray.length; i++)
+			{
+				objArray[i].material[ this.attributeName ].setHex( this.oldValue );
+			}
+
+			this.show.signals.materialChanged.dispatch( this.object.material );
+		}
+		else {
+			this.object.material[ this.attributeName ].setHex( this.oldValue );
+			this.show.signals.materialChanged.dispatch( this.object.material );
+		}
 
 	},
 
