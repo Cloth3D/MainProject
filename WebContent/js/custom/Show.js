@@ -83,9 +83,9 @@
         this.camera  = new  THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
         if(camera_position === undefined)
         {
-          this.camera.position.x = 5;
-          this.camera.position.y = 5;
-          this.camera.position.z = 5;
+          this.camera.position.x = 0.03;
+          this.camera.position.y = 0.9;
+          this.camera.position.z = 1.7;
         }
         else {
           this.camera.position = camera_position;
@@ -93,15 +93,15 @@
 
         // 定义相机控制器
         this.cameraControl = new THREE.OrbitControls(this.camera, this.renderer.domElement);	//创建控制器
-//        this.cameraControl.enable = true;                           // 是否开启控制器, 在一些操作时需要关闭控制器，操作结束后再打开 , 貌似有buffergeometry
-//        this.cameraControl.minDistance = 5.0;                      // 设置最远最近
-//        this.cameraControl.maxDistance = 200.0;
-//        this.cameraControl.minPolarAngle = Math.PI/5;               // 设置视角极限
-//        this.cameraControl.maxPolarAngle = 2/3 * Math.PI;
-//        this.cameraControl.enablePan = false;                       // 拒绝移动控制器中心
+        this.cameraControl.enable = true;                           // 是否开启控制器, 在一些操作时需要关闭控制器，操作结束后再打开 , 貌似有buffergeometry
+        this.cameraControl.minDistance = 1.0;                      // 设置最远最近
+        this.cameraControl.maxDistance = 15.0;
+        this.cameraControl.minPolarAngle = Math.PI/5;               // 设置视角极限
+        this.cameraControl.maxPolarAngle = 2/3 * Math.PI;
+        this.cameraControl.enablePan = true;                       // 拒绝移动控制器中心
         this.zoomSpeed = 1.0;                                       // 缩放速度
         this.rotateSpeed = 1.0;                                     // 旋转速度
-        this.cameraControl.target = new THREE.Vector3(0,2,0);     // 设置中心
+        this.cameraControl.target = new THREE.Vector3(0,0.8,0);     // 设置中心
 
 
      if(this.scene  === null)

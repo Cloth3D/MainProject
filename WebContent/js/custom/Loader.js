@@ -260,6 +260,7 @@ var Loader = function ( show ) {
 				break;
 
 			case 'obj':
+			case 'w3d':
 
 				reader.addEventListener( 'load', function ( event ) {
 
