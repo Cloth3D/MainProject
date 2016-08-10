@@ -33,4 +33,5 @@ local.properties
 *.obj
 *.png
 *.mtl
+*.jpg
 /WebContent/models/

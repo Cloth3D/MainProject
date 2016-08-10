@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<title>您的好友向你分享了该试衣</title>
+</head>
+<body>
+<Script language="javascript">   
+function GetRequest() {   
+   var url = location.search; //获取url中"?"符后的字串   
+   var theRequest = new Object();   
+   if (url.indexOf("?") != -1) {   
+      var str = url.substr(1);   
+      strs = str.split("&");   
+      for(var i = 0; i < strs.length; i ++) {   
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);   
+      }   
+   }   
+   return theRequest;   
+}   
+// 使用方法：
+// var Request = new Object();
+// Request = GetRequest();
+// var 参数1,参数2,参数3,参数N;
+// 参数1 = Request[''参数1''];
+// 参数2 = Request[''参数2''];
+// 参数3 = Request[''参数3''];
+// 参数N = Request[''参数N''];
+
+</script>
+
+</body>
+</html>

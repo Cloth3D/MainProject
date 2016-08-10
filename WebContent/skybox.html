@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>skybox demo</title>
+
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background-color: rgb(200,200,200);
+				margin: 0px;
+				overflow: hidden;
+			}
+			a {
+				color: #ffffff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+
+		<script src="js/three.js"></script>
+		<script src='js/OrbitControls.js'></script>
+
+		<script>
+
+			// init 3D stuff
+
+			function makeSkybox( urls, size ) {
+				var skyboxCubemap = new THREE.CubeTextureLoader().load( urls );
+				skyboxCubemap.format = THREE.RGBFormat;
+
+				var skyboxShader = THREE.ShaderLib['cube'];
+				skyboxShader.uniforms['tCube'].value = skyboxCubemap;
+				console.log('执行了添加天空盒子语句');
+				
+				return new THREE.Mesh(
+					new THREE.BoxGeometry( size, size, size ),
+					new THREE.ShaderMaterial({
+						fragmentShader : skyboxShader.fragmentShader, 
+						vertexShader : skyboxShader.vertexShader,
+						uniforms : skyboxShader.uniforms, 
+						depthWrite : false, 
+						side : THREE.BackSide
+					})
+				);
+			}
+
+			renderer = new THREE.WebGLRenderer();
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 9000 );		// 因为天空盒子是一个很大的box所以相机的视野长度要大于盒子的边长
+			camera.position.x = 1;
+			camera.position.y = 1;
+			camera.position.z = 1;
+			
+			var cameraControl = new THREE.OrbitControls( camera, renderer.domElement );	//创建控制器
+			cameraControl.target = new THREE.Vector3(0,0,0);     // 设置中心
+			clock = new THREE.Clock();
+			
+			var scene = new THREE.Scene();
+
+			scene.add( camera );
+
+			scene.add( makeSkybox( [
+				'textures/skybox/px.jpg', // right
+				'textures/skybox/nx.jpg', // left
+				'textures/skybox/py.jpg', // top
+				'textures/skybox/ny.jpg', // bottom
+				'textures/skybox/pz.jpg', // back
+				'textures/skybox/nz.jpg'  // front
+			], 8000 ));
+			
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+
+			var gameViewportSize = function() { return {
+				width: window.innerWidth, height: window.innerHeight
+			}};
+			
+			var viewport = gameViewportSize();
+			camera.aspect = viewport.width / viewport.height;
+			camera.updateProjectionMatrix();
+			
+			function animate() {
+				var delta = clock.getDelta();
+				requestAnimationFrame( animate );
+				cameraControl.update(delta);
+				renderer.render( scene, camera );
+
+			}
+			
+			
+			var resize = function() {
+				var viewport = gameViewportSize();
+				renderer.setSize( viewport.width, viewport.height );
+				camera.aspect = viewport.width / viewport.height;
+				camera.updateProjectionMatrix();
+			};
+			
+			animate();
+		</script>
+	</body>
+</html>
