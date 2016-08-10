@@ -47,7 +47,7 @@ var Human = function(show)
 
 Human.prototype = {
 
-	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light)
+	load:function(hu, url_body, url_eye, url_eyelashes,  url_diffuse, url_specular, url_normal, url_Opacity, url_light, onload)
 	{
 		/**
 		*	采用不同步的方式加载贴图，速度会快些，但可能会出现贴图加载完成前模型显示效果不佳的现象
@@ -61,6 +61,7 @@ Human.prototype = {
 		*	url_normal: normal的贴图地址
 		*	url_Opacity: opacity的贴图地址
 		* url_light: light贴图的地址
+		* onload: 加载完成后执行的函数
 		*/
 		var diffuse = new THREE.Texture();	// 读取diffuse贴图
 		var specular = new THREE.Texture();		// 读取specular贴图
@@ -190,7 +191,15 @@ Human.prototype = {
 
 			hu.group.add(human);																		// 将人体添加到group中,即添加到场景中
 			hu.human = human;
-
+			
+			if(onload != undefined)
+				{
+				console.log("执行onload",onload);
+				if(onload instanceof signals.Signal)
+					onload.dispatch();
+				}
+			
+			
 			console.log("添加了人体body模型");
 
 		}, onProgress, onError);				// load human

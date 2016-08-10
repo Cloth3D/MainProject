@@ -27,10 +27,12 @@
    switch (scaleType) {
      case 'height':
      this.lastScale = this.human.heightScale;
+     this.type = 'SetFigureCommandHeight';
      break;
 
      case 'figure':
      this.lastScale = this.human.fingerScale;
+     this.type = 'SetFigureCommandFigure';
      break;
 
      default:
