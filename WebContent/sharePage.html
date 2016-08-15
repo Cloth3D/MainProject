@@ -69,6 +69,8 @@ canvas {
   	
   	<script src = 'js/command/SetClothCommand.js'>// 穿衣服</script>
   	<script src = 'js/command/SetFigureCommand.js'>// 体型变化</script>
+  	
+  	<script src = 'js/custom/XMLReader.js'></script>
 
 </head>
 
@@ -141,6 +143,8 @@ function GetRequest() {
 		 }
 	 console.log('startRequest已经执行');
 	 
+	 var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
+	 
 	 var top = undefined,
 	 hair = undefined,
 	 bottom = undefined,
@@ -149,23 +153,90 @@ function GetRequest() {
 	 if(Request['top'] != undefined)
 		 {
 		 // 穿上衣的代码
+		 var cloth_url = getModelURL(xmlDoc, Request['top'], 'top');	// 获得某件衣服模型
+		 var cloth_opacity = getModelOpacityURL(xmlDoc, Request['top'], 'top');
+		 var cloth_mat = getMatURL(xmlDoc, Request['top']);
+		 human1.CMDLoadCloth(									// 上衣
+					human1,
+					'upcloth',
+					cloth_url,
+					cloth_mat.diffuse,
+					cloth_mat.specular,
+					cloth_mat.normal,
+					cloth_mat.opacity,
+					cloth_mat.lighting,
+					cloth_opacity
+					);
 		 }
 	 if(Request['hair'] != undefined)
 		 {
 		 // 戴发型的代码
+		 var cloth_url = getModelURL(xmlDoc, Request['hair'], 'hair');	// 获得某件衣服模型
+		 var cloth_mat = getMatURL(xmlDoc, Request['hair']);
+		 human1.CMDLoadCloth(									// 上衣
+					human1,
+					'hair',
+					cloth_url,
+					cloth_mat.diffuse,
+					cloth_mat.specular,
+					cloth_mat.normal,
+					cloth_mat.opacity,
+					cloth_mat.lighting
+					);
 		 }
 	 if(Request['bottom'] != undefined)
 		 {
 		 // 穿下装的代码
+		 var cloth_url = getModelURL(xmlDoc, Request['bottom'], 'bottom');	// 获得某件衣服模型
+		 var cloth_opacity = getModelOpacityURL(xmlDoc, Request['bottom'], 'bottom');
+		 var cloth_mat = getMatURL(xmlDoc, Request['bottom']);
+		 human1.CMDLoadCloth(									// 上衣
+					human1,
+					'trousers',
+					cloth_url,
+					cloth_mat.diffuse,
+					cloth_mat.specular,
+					cloth_mat.normal,
+					cloth_mat.opacity,
+					cloth_mat.lighting,
+					cloth_opacity
+					);
 		 }
 	 if(Request['eyewear'] != undefined)
 		 {
 		 // 戴眼镜的代码
+		 var cloth_url = getModelURL(xmlDoc, Request['eyewear'], 'eyewear');	// 获得某件衣服模型
+		 var cloth_mat = getMatURL(xmlDoc, Request['eyewear']);
+		 human1.CMDLoadCloth(									// 上衣
+					human1,
+					'glasses',
+					cloth_url,
+					cloth_mat.diffuse,
+					cloth_mat.specular,
+					cloth_mat.normal,
+					cloth_mat.opacity,
+					cloth_mat.lighting
+					);
 		 }
 	 if(Request['shoes'] != undefined)
 		 {
 		 // 穿鞋子的代码
+		 var cloth_url = getModelURL(xmlDoc, Request['shoes'], 'shoes');	// 获得某件衣服模型
+		 var cloth_opacity = getModelOpacityURL(xmlDoc, Request['shoes'], 'shoes');
+		 var cloth_mat = getMatURL(xmlDoc, Request['shoes']);
+		 human1.CMDLoadCloth(									// 上衣
+					human1,
+					'shoes',
+					cloth_url,
+					cloth_mat.diffuse,
+					cloth_mat.specular,
+					cloth_mat.normal,
+					cloth_mat.opacity,
+					cloth_mat.lighting,
+					cloth_opacity
+					);
 		 }
+	 human1.group.visible = true;
 	 
 }
 
@@ -260,6 +331,7 @@ function loadhumantest()
 		  "models/BodyLightingMap.png",
 		  startReq
 		  );
+  human1.group.visible = false;				// 先让人体不可见
   human1.init(human1);						// 添加到场景中
   
 

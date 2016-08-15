@@ -2,112 +2,112 @@
 <recipe>
 	<cloth1>
 		<top>
-			<opacity>models/cloth1/cloth1fbm/cloth1top.png</opacity>
+			<opacity>models/cloth1/cloth1fbm/cloth1top_1024.png</opacity>
 			<data>models/cloth1/upcloth.json</data></top>
 		<bottom>
-			<opacity>models/cloth1/cloth1fbm/cloth1bottom.png</opacity>
+			<opacity>models/cloth1/cloth1fbm/cloth1bottom_1024.png</opacity>
 			<data>models/cloth1/trousers.json</data></bottom>
 		<hair>
 			<data>models/cloth1/hair.json</data></hair>
 		<eyewear>
 			<data>models/cloth1/glasses.json</data></eyewear>
 		<shoes>
-			<opacity>models/cloth1/cloth1fbm/cloth1shoes.png</opacity>
+			<opacity>models/cloth1/cloth1fbm/cloth1shoes_1024.png</opacity>
 			<data>models/cloth1/shoes.json</data></shoes>
 		<map>
-			<diffuse>models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png</diffuse>
-			<specular>models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png</specular>
-			<normal>models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png</normal>
-			<opacity>models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png</opacity>
-			<lighting>models/cloth1/cloth1fbm/cloth1_LightingMap.png</lighting>
+			<diffuse>models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse_1024.png</diffuse>
+			<specular>models/cloth1/cloth1fbm/cloth1_Packed0_Specular_1024.png</specular>
+			<normal>models/cloth1/cloth1fbm/cloth1_Packed0_Normal_1024.png</normal>
+			<opacity>models/cloth1/cloth1fbm/cloth1_Packed0_Opacity_1024.png</opacity>
+			<lighting>models/cloth1/cloth1fbm/BodyLightingMap_1024.png</lighting>
 		</map>
 	</cloth1>
 	<cloth2>
 		<top>
-			<opacity></opacity>
-			<data></data></top>
+			<opacity>models/cloth2/cloth2fbm/cloth2top_1024.png</opacity>
+			<data>models/cloth2/upcloth.json</data></top>
 		<bottom>
-			<opacity></opacity>
-			<data></data></bottom>
+			<opacity>models/cloth2/cloth2fbm/cloth2bottom_1024.png</opacity>
+			<data>models/cloth2/bottom.json</data></bottom>
 		<hair>
-			<data></data></hair>
+			<data>models/cloth2/hair.json</data></hair>
 		<eyewear>
-			<data></data></eyewear>
+			<data>models/cloth2/glasses.json</data></eyewear>
 		<shoes>
-			<opacity></opacity>
-			<data></data></shoes>
+			<opacity>models/cloth2/cloth2fbm/cloth2shoes_1024.png</opacity>
+			<data>models/cloth2/shoes.json</data></shoes>
 		<map>
-			<diffuse></diffuse>
-			<specular></specular>
-			<normal></normal>
-			<opacity></opacity>
-			<lighting></lighting>
+			<diffuse>models/cloth2/cloth2fbm/cloth2_Packed0_Diffuse_1024.png</diffuse>
+			<specular>models/cloth2/cloth2fbm/cloth2_Packed0_Specular_1024.png</specular>
+			<normal>models/cloth2/cloth2fbm/cloth2_Packed0_Normal_1024.png</normal>
+			<opacity>models/cloth2/cloth2fbm/cloth2_Packed0_Opacity_1024.png</opacity>
+			<lighting>models/cloth2/cloth2fbm/cloth2_LightingMap_1024.png</lighting>
 		</map>
 	</cloth2>
 	<cloth3>
 		<top>
-			<opacity></opacity>
-			<data></data></top>
+			<opacity>models/cloth3/cloth3fbm/cloth3top_1024.png</opacity>
+			<data>models/cloth3/upcloth.json</data></top>
 		<bottom>
-			<opacity></opacity>
-			<data></data></bottom>
+			<opacity>models/cloth3/cloth3fbm/cloth3bottom_1024.png</opacity>
+			<data>models/cloth3/bottom.json</data></bottom>
 		<hair>
-			<data></data></hair>
+			<data>models/cloth3/hair.json</data></hair>
 		<eyewear>
-			<data></data></eyewear>
+			<data>models/cloth3/glasses.json</data></eyewear>
 		<shoes>
-			<opacity></opacity>
-			<data></data></shoes>
+			<opacity>models/cloth3/cloth3fbm/cloth3shoes_1024.png</opacity>
+			<data>models/cloth3/shoes.json</data></shoes>
 		<map>
-			<diffuse></diffuse>
-			<specular></specular>
-			<normal></normal>
-			<opacity></opacity>
-			<lighting></lighting>
+			<diffuse>models/cloth3/cloth3fbm/cloth3_Packed0_Diffuse_1024.png</diffuse>
+			<specular>models/cloth3/cloth3fbm/cloth3_Packed0_Specular_1024.png</specular>
+			<normal>models/cloth3/cloth3fbm/cloth3_Packed0_Normal_1024.png</normal>
+			<opacity>models/cloth3/cloth3fbm/cloth3_Packed0_Opacity_1024.png</opacity>
+			<lighting>models/cloth3/cloth3fbm/Cloth3_LightingMap_1024.png</lighting>
 		</map>
 	</cloth3>
 	<cloth4>
 		<top>
-			<opacity></opacity>
-			<data></data></top>
+			<opacity>models/cloth4/cloth4fbm/cloth4dress_1024.png</opacity>
+			<data>models/cloth4/upcloth.json</data></top>
 		<bottom>
 			<opacity></opacity>
 			<data></data></bottom>
 		<hair>
-			<data></data></hair>
+			<data>models/cloth4/hair.json</data></hair>
 		<eyewear>
 			<data></data></eyewear>
 		<shoes>
-			<opacity></opacity>
-			<data></data></shoes>
+			<opacity>models/cloth4/cloth4fbm/cloth4shoes_1024.png</opacity>
+			<data>models/cloth4/shoes.json</data></shoes>
 		<map>
-			<diffuse></diffuse>
-			<specular></specular>
-			<normal></normal>
-			<opacity></opacity>
-			<lighting></lighting>
+			<diffuse>models/cloth4/cloth4fbm/cloth4_Packed0_Diffuse_1024.png</diffuse>
+			<specular>models/cloth4/cloth4fbm/cloth4_Packed0_Specular_1024.png</specular>
+			<normal>models/cloth4/cloth4fbm/cloth4_Packed0_Normal_1024.png</normal>
+			<opacity>models/cloth4/cloth4fbm/cloth4_Packed0_Opacity_1024.png</opacity>
+			<lighting>models/cloth4/cloth4fbm/Cloth4_LightingMap_1024.png</lighting>
 		</map>
 	</cloth4>
 	<cloth5>
 		<top>
-			<opacity></opacity>
-			<data></data></top>
+			<opacity>models/cloth5/cloth5fbm/cloth5top_1024.png</opacity>
+			<data>models/cloth5/upcloth5.json</data></top>
 		<bottom>
-			<opacity></opacity>
-			<data></data></bottom>
+			<opacity>models/cloth5/cloth5fbm/cloth5bottom_1024.png</opacity>
+			<data>models/cloth5/trousers5.json</data></bottom>
 		<hair>
-			<data></data></hair>
+			<data>models/cloth5/hair5.json</data></hair>
 		<eyewear>
 			<data></data></eyewear>
 		<shoes>
-			<opacity></opacity>
-			<data></data></shoes>
+			<opacity>models/cloth5/cloth5fbm/cloth5shoes_1024.png</opacity>
+			<data>models/cloth5/shoes5.json</data></shoes>
 		<map>
-			<diffuse></diffuse>
-			<specular></specular>
-			<normal></normal>
-			<opacity></opacity>
-			<lighting></lighting>
+			<diffuse>models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse_1024.png</diffuse>
+			<specular>models/cloth5/cloth5fbm/cloth5_Packed0_Specular_1024.png</specular>
+			<normal>models/cloth5/cloth5fbm/cloth5_Packed0_Normal_1024.png</normal>
+			<opacity>models/cloth5/cloth5fbm/cloth5_Packed0_Opacity_1024.png</opacity>
+			<lighting>models/cloth5/cloth5fbm/Cloth5_LightingMap_1024.png</lighting>
 		</map>
 	</cloth5>
 </recipe>

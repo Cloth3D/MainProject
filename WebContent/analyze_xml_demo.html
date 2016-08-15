@@ -50,7 +50,10 @@
 		var strTest = getModelURL(xmlDoc, 'cloth1', 'bottom');
 		console.log(strTest);
 		
-		var mapTest = getMatURL(xmlDoc, 'cloth1');
+		var strTest2 = getModelOpacityURL(xmlDoc, 'cloth1', 'bottom');
+		console.log(strTest2);
+		
+		var mapTest = getMatURL(xmlDoc, 'cloth2');
 		console.log(mapTest);
 		
 		function getModelURL(xmlDoc, cloth_id, cloth_type)
@@ -121,6 +124,37 @@
 				return value;
 			}
 			else return null;
+		}
+		
+		function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
+		/**
+		* xmlDoc:xmlDocumention
+		* cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
+		* cloth_type:字符串衣服类型，可选 'top', 'bottom', 'hair', 'eyewear', 'shoes'
+		* return : 字符串，该模型的透明贴图的url
+		*/
+		{
+			var clothArray = xmlDoc.getElementsByTagName(cloth_id)[0];		// 找到衣服组的标签
+			clothArray = clothArray.children;								// cloth子节点
+			var type;
+			
+			for(var i = 0; i < clothArray.length; i++)
+			{
+				if(clothArray[i].nodeName == cloth_type)
+				{
+					type = clothArray[i];				// 找到那个衣服的标签
+					break;
+				}
+			}
+			if(type == undefined) return null;			// 如果没有寻找到
+			console.log(type);
+			var typeArray = type.children;			// 再寻找data标签得到服装
+			for(var i = 0; i < typeArray.length; i++)
+			{
+				if(typeArray[i].nodeName == 'opacity')
+					return typeArray[i].textContent;
+			}
+			return null;
 		}
 		
 	</script>

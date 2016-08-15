@@ -163,6 +163,7 @@ canvas {
 <script src='js/command/SetFigureCommand.js'>
 	// 体型变化
 </script>
+<script src = 'js/custom/XMLReader.js'></script>
 </head>
 
 <body
@@ -333,23 +334,23 @@ canvas {
 											<div class="col-md-6">
 												<img src="ui/image/up/upcloth4.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick = 'upcloth1();'>
+													onclick = 'wearCloth("cloth4", "top");'>
 											</div>
 											<div class="col-md-6">
 												<img src="ui/image/up/upcloth2.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick = "upcloth2();">
+													onclick = "wearCloth('cloth2', 'top');">
 											</div>
-											<!-- 下装  第二行 -->
+											<!-- 上装  第二行 -->
 											<div class="col-md-6" style="padding-top: 10px">
 												<img src="ui/image/up/upcloth3.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick = "upcloth3();">
+													onclick = "wearCloth('cloth3', 'top');">
 											</div>
 											<div class="col-md-6" style="padding-top: 10px">
 												<img src="ui/image/up/upcloth5.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick = "upcloth4();">
+													onclick = "wearCloth('cloth5', 'top');">
 											</div>
 										</div>
 									</div>
@@ -360,12 +361,12 @@ canvas {
 											<div class="col-md-6">
 												<img src="ui/image/down/bottom.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick = "bottom1();">
+													onclick = "wearCloth('cloth1', 'bottom');">
 											</div>
 											<div class="col-md-6">
 												<img src="ui/image/down/bottom2.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick="bottom2();">
+													onclick="wearCloth('cloth2', 'bottom');">
 											</div>
 											<!-- 下装  第二行 -->
 											<div>
@@ -374,12 +375,12 @@ canvas {
 											<div class="col-md-6" style="padding-top: 10px">
 												<img src="ui/image/down/bottom3.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick="bottom3();">
+													onclick="wearCloth('cloth3', 'bottom');">
 											</div>
 											<div class="col-md-6" style="padding-top: 10px">
 												<img src="ui/image/down/bottom5.png"
 													class="carousel-inner img-responsive img-rounded"
-													onclick="bottom4();">
+													onclick="wearCloth('cloth5','bottom');">
 											</div>
 										</div>
 									</div>
@@ -390,30 +391,30 @@ canvas {
 								<div id="shoes" class="collapse in"
 									style="padding-top: 5px; display: none">
 									<div class="row" id="up-cloth">
-										<!-- 下装  第一行 -->
+										<!-- 鞋子 第一行 -->
 										<div class="col-md-6">
 											<img src="ui/image/shoes/shoes.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick = 'shoes1();'>
+												onclick = "wearCloth('cloth1', 'shoes');">
 										</div>
 										<div class="col-md-6">
 											<img src="ui/image/shoes/shoes2.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="shoes2();">
+												onclick="wearCloth('cloth2', 'shoes');">
 										</div>
-										<!-- 下装  第二行 -->
+										<!-- 鞋子  第二行 -->
 										<div>
 											<br>
 										</div>
 										<div class="col-md-6" style="padding-top: 10px">
 											<img src="ui/image/shoes/shoes3.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick='shoes3();'>
+												onclick="wearCloth('cloth3', 'shoes');">
 										</div>
 										<div class="col-md-6" style="padding-top: 10px">
 											<img src="ui/image/shoes/shoes4.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick='shoes4();'>
+												onclick="wearCloth('cloth4', 'shoes');">
 										</div>
 									</div>
 
@@ -421,55 +422,55 @@ canvas {
 								<div id="glasses" class="collapse in"
 									style="padding-top: 5px; display: none">
 									<div class="row" id="up-cloth">
-										<!-- 下装  第一行 -->
+										<!-- 眼镜  第一行 -->
 										<div class="col-md-6">
 											<img src="ui/image/glasses/glasses.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="glasses1();">
+												onclick="wearCloth('cloth1', 'eyewear');">
 										</div>
 										<div class="col-md-6">
 											<img src="ui/image/glasses/glasses2.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="glasses2();">
+												onclick="wearCloth('cloth2', 'eyewear');">
 										</div>
-										<!-- 下装  第二行 -->
+										<!-- 眼镜  第二行 -->
 										<div>
 											<br>
 										</div>
 										<div class="col-md-6" style="padding-top: 10px">
 											<img src="ui/image/glasses/glasses3.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="glasses3();">
+												onclick="wearCloth('cloth3', 'eyewear');">
 										</div>
 									</div>
 								</div>
 								<div id="hair" class="collapse in"
 									style="padding-top: 5px; display: none">
 									<div class="row" id="up-cloth">
-										<!-- 下装  第一行 -->
+										<!-- 发型 第一行 -->
 										<div class="col-md-6">
 											<img src="ui/image/hair/hair.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="hair1();">
+												onclick="wearCloth('cloth1', 'hair');">
 										</div>
 										<div class="col-md-6">
 											<img src="ui/image/hair/hair2.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="hair2();">
+												onclick="wearCloth('cloth2', 'hair');">
 										</div>
 										<div>
 											<br>
 										</div>
-										<!-- 下装  第二行 -->
+										<!-- 发型  第二行 -->
 										<div class="col-md-6" style="padding-top: 10px">
 											<img src="ui/image/hair/hair3.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="hair3();">
+												onclick="wearCloth('cloth3', 'hair');">
 										</div>
 										<div class="col-md-6" style="padding-top: 10px">
 											<img src="ui/image/hair/hair5.png"
 												class="carousel-inner img-responsive img-rounded"
-												onclick="hair4();">
+												onclick="wearCloth('cloth5', 'hair');">
 										</div>
 									</div>
 								</div>
@@ -534,253 +535,46 @@ canvas {
 			}
 		}
 		
-		function upcloth1()
+		function wearCloth(cloth_id, cloth_type)		// 通过xml文件读取url
 		{
-			human1.CMDLoadCloth(human1,
-					'upcloth',
-					"models/cloth4/upcloth.json",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Diffuse.png",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Specular.png",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Normal.png",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Opacity.png",
-					"models/cloth4/cloth4fbm/Cloth4_LightingMap.png",
-					"models/cloth4/cloth4fbm/cloth4dress.png");
-		}
-		
-		function upcloth2()
-		{
-// 			human1.CMDLoadCloth(human1,
-// 					"upcloth",
-// 					'models/cloth2/upcloth.json',
-// 					'models/cloth2/cloth2fbm/cloth2_Packed0_Diffuse.png',
-// 					'models/cloth2/cloth2fbm/cloth2_Packed0_Specular.png',
-// 					'models/cloth2/cloth2fbm/cloth2_Packed0_Normal.png',
-// 					'models/cloth2/cloth2fbm/cloth2_Packed0_Opacity.png',
-// 					'models/cloth2/cloth2fbm/cloth2_LightingMap.png',
-// 					'models/cloth2/cloth2fbm/cloth2top.png');
-
-			human1.CMDLoadCloth(human1,
-					'upcloth',
-					"models/cloth4/upcloth.json",
-					"models/cloth4/cloth4fbm/cloth6_Packed0_BaseColor_change2副本.png",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Specular.png",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Normal.png",
-					"models/cloth4/cloth4fbm/cloth4_Packed0_Opacity.png",
-					"models/cloth4/cloth4fbm/Cloth4_LightingMap.png",
-					"models/cloth4/cloth4fbm/cloth4dress.png");
-		}
-		
-		function upcloth3()
-		{
-			human1.CMDLoadCloth(human1,
-					'upcloth',
-					'models/cloth3/upcloth.json',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Diffuse.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Specular.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Normal.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Opacity.png',
-					'models/cloth3/cloth3fbm/Cloth3_LightingMap.png',
-					'models/cloth3/cloth3fbm/cloth3top.png');
-		}
-		
-		function upcloth4()
-		{
-			human1.CMDLoadCloth(human1,
-					'upcloth',
-					'models/cloth5/upcloth5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/Cloth5_LightingMap.png',
-					'models/cloth5/cloth5fbm/cloth5top.png');
-		}
-		
-		function bottom1()
-		{
-			human1.CMDLoadCloth(human1,
-					'trousers',
-					'models/cloth1/trousers.json',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
-					'models/cloth1/cloth1fbm/cloth1_LightingMap.png',
-					'models/cloth1/cloth1fbm/cloth1bottom.png');
-		}
-		
-		function bottom2()
-		{
-			human1.CMDLoadCloth(human1,
-					'trousers',
-					'models/cloth2/bottom.json',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Diffuse.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Specular.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Normal.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Opacity.png',
-					'models/cloth2/cloth2fbm/cloth2_LightingMap.png',
-					'models/cloth2/cloth2fbm/cloth2bottom.png');
-		}
-		
-		function bottom3()
-		{
-			human1.CMDLoadCloth(human1,
-					'trousers',
-					'models/cloth3/bottom.json',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Diffuse.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Specular.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Normal.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Opacity.png',
-					'models/cloth3/cloth3fbm/Cloth3_LightingMap.png',
-					'models/cloth3/cloth3fbm/cloth3bottom.png');
-		}
-		
-		function bottom4()
-		{
-			human1.CMDLoadCloth(human1,
-					'trousers',
-					'models/cloth5/trousers5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/Cloth5_LightingMap.png',
-					'models/cloth5/cloth5fbm/cloth5bottom.png');
-		}
-		
-		function shoes1()
-		{
-			human1.CMDLoadCloth(human1,
-					'shoes',
-					'models/cloth1/shoes.json',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
-					'models/cloth1/cloth1fbm/cloth1_LightingMap.png',
-					'models/cloth1/cloth1fbm/cloth1shoes.png');
-		}
-		
-		function shoes2()
-		{
-			human1.CMDLoadCloth(human1,
-					'shoes',
-					'models/cloth2/shoes.json',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Diffuse.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Specular.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Normal.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Opacity.png',
-					'models/cloth2/cloth2fbm/cloth2_LightingMap.png',
-					'models/cloth2/cloth2fbm/cloth2shoes.png');
-		}
-		
-		function shoes3()
-		{
-			human1.CMDLoadCloth(human1,
-					'shoes',
-					'models/cloth3/shoes.json',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Diffuse.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Specular.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Normal.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Opacity.png',
-					'models/cloth3/cloth3fbm/Cloth3_LightingMap.png',
-					'models/cloth3/cloth3fbm/cloth3shoes.png');
-		}
-		
-		function shoes4()
-		{
-			human1.CMDLoadCloth(human1,
-					'shoes',
-					'models/cloth4/shoes.json',
-					'models/cloth4/cloth4fbm/cloth4_Packed0_Diffuse.png',
-					'models/cloth4/cloth4fbm/cloth4_Packed0_Specular.png',
-					'models/cloth4/cloth4fbm/cloth4_Packed0_Normal.png',
-					'models/cloth4/cloth4fbm/cloth4_Packed0_Opacity.png',
-					'models/cloth4/cloth4fbm/Cloth4_LightingMap.png',
-					'models/cloth4/cloth4fbm/cloth4shoes.png');
-		}
-		
-		function hair1()
-		{
-			human1.CMDLoadCloth(human1,
-					'hair',
-					'models/cloth1/hair.json',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
-					'models/cloth1/cloth1fbm/cloth1_LightingMap.png');
-		}
-		
-		function hair2()
-		{
-			human1.CMDLoadCloth(human1,
-					'hair',
-					'models/cloth2/hair.json',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Diffuse.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Specular.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Normal.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Opacity.png',
-					'models/cloth2/cloth2fbm/cloth2_LightingMap.png');
-		}
-		
-		function hair3()
-		{
-			human1.CMDLoadCloth(human1,
-					'hair',
-					'models/cloth3/hair.json',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Diffuse.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Specular.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Normal.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Opacity.png', 
-					'models/cloth3/cloth3fbm/Cloth3_LightingMap.png');
-		}
-		
-		function hair4()
-		{
-			human1.CMDLoadCloth(human1,
-					'hair',
-					'models/cloth5/hair5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/Cloth5_LightingMap.png');
-		}
-		
-		function glasses1()
-		{
-			human1.CMDLoadCloth(human1,
-					'glasses',
-					'models/cloth1/glasses.json',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Diffuse.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Specular.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Normal.png',
-					'models/cloth1/cloth1fbm/cloth1_Packed0_Opacity.png',
-					'models/cloth1/cloth1fbm/cloth1_LightingMap.png');
-		}
-		
-		function glasses2()
-		{
-			human1.CMDLoadCloth(human1,
-					'glasses',
-					'models/cloth2/glasses.json',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Diffuse.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Specular.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Normal.png',
-					'models/cloth2/cloth2fbm/cloth2_Packed0_Opacity.png',
-					'models/cloth2/cloth2fbm/cloth2_LightingMap.png');
-		}
-		function glasses3()
-		{
-			human1.CMDLoadCloth(human1,
-					'glasses',
-					'models/cloth3/glasses.json',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Diffuse.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Specular.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Normal.png',
-					'models/cloth3/cloth3fbm/cloth3_Packed0_Opacity.png',
-					'models/cloth3/cloth3fbm/Cloth3_LightingMap.png');
+			 var cloth_url = getModelURL(xmlDoc, cloth_id, cloth_type);				// 获得某件衣服模型
+			 //var cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);	// 只有 top, bottom, shoes有这句话
+			 var cloth_opacity = undefined;
+			 var human_cloth_type = '';
+			 switch(cloth_type)		// 只有 top, bottom, shoes有这句话
+			 {
+			 case 'top':
+			 		cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);
+			 		human_cloth_type = 'upcloth';
+			 		 break;
+			 case 'bottom':
+			 		cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);
+			 		human_cloth_type = 'trousers';
+			 		 break;
+			 case 'shoes':
+			 		cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);
+			 		human_cloth_type = 'shoes';
+			 		 break;
+			 case 'hair':
+			 		human_cloth_tyoe = 'hair';
+			 		 break;
+			 case 'eyewear':
+			 		human_cloth_type = 'glasses';
+			 		 break;
+			 }
+			 
+			 var cloth_mat = getMatURL(xmlDoc, cloth_id);			// 材质url
+			 human1.CMDLoadCloth(									// 上衣
+						human1,
+						human_cloth_type,
+						cloth_url,
+						cloth_mat.diffuse,
+						cloth_mat.specular,
+						cloth_mat.normal,
+						cloth_mat.opacity,
+						cloth_mat.lighting,
+						cloth_opacity
+						);
 		}
 		
 	</script>
@@ -803,6 +597,7 @@ canvas {
 		var trans; // 移动控制器
 		var human1; // 人体模型
 		var myRayCaster; // 定义一个射线管理器
+		var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
 	</script>
 
 	<script>
