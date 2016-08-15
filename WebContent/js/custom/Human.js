@@ -188,6 +188,16 @@ Human.prototype = {
 				human.skeleton = hu.eyelashes.skeleton;
 				human.bind(hu.eyelashes.skeleton, human.matrixWorld);
 			}
+			
+			if((eyes !== null && eyelashes !== null))		// 如果其他两个部分都已经加载完成，则全部设为可见
+			{
+				eyes.visible = true;
+				eyelashes.visible = true;
+			}
+			else
+			{
+				human.visible = false;
+			}
 
 			hu.group.add(human);																		// 将人体添加到group中,即添加到场景中
 			hu.human = human;
@@ -219,7 +229,18 @@ Human.prototype = {
 				eyes.skeleton = hu.eyelashes.skeleton;
 				eyes.bind(hu.eyelashes.skeleton, eyes.matrixWorld);
 			}
-
+			
+			if(human !== null && eyelashes !== null)				// 如果其他两个加载完成，则设为可见
+			{
+				eyes.visible = true;
+				human.visible = true;
+				eyelashes.visible = true;
+			}
+			else
+			{
+				eyes.visible = false;
+			}
+			
 			hu.group.add(eyes);
 			hu.eyes = eyes;
 
@@ -241,7 +262,17 @@ Human.prototype = {
 				eyelashes.skeleton = hu.eyes.skeleton;
 				eyelashes.bind(hu.eyes.skeleton, eyelashes.matrixWorld);
 			}
-
+			
+			if(human !== null && eyes !== null)		// 如果全部加载完成，则一起设为可见
+			{
+				human.visible = true;
+				eyes.visible = true;
+				eyelashes.visible = true;
+			}
+			else
+			{
+				eyelashes.visible = false;
+			}
 				hu.group.add(eyelashes);
 				hu.eyelashes = eyelashes;
 
@@ -907,13 +938,30 @@ init:function(hu)															// hu: 此类在new处的名称
 		var tool = new MergeAlphaMap();
 		tex = hu.alpha;
 		if(hu.clothAlpha['upcloth'])														// 如果添加了贴图,就将贴图合并，生成新的贴图
-			tex = tool.merge(tex, hu.clothAlpha['upcloth']);
+			tex = tool.merge_1024(tex, hu.clothAlpha['upcloth']);
 		if(hu.clothAlpha['trousers'])
-			tex = tool.merge(tex, hu.clothAlpha['trousers']);
+			tex = tool.merge_1024(tex, hu.clothAlpha['trousers']);
 		if(hu.clothAlpha['shoes'])
-			tex = tool.merge(tex, hu.clothAlpha['shoes']);
+			tex = tool.merge_1024(tex, hu.clothAlpha['shoes']);
 
-		hu.material.alphaMap = tex;															// 合成后的贴图附加在human材质上
+		return tex;		// 将合成后的贴图作为返回值
+		
+
+	},				// mergeAlpha:function()
+	
+	mergeAlpha_0815:function(hu)
+	{
+		var tex = null;
+		var tool = new MergeAlphaMap();
+		tex = hu.alpha;
+		if(hu.clothAlpha['upcloth'])		// 如果添加了贴图,就将贴图合并，生成新的贴图
+			tex = tool.merge_1024(tex, hu.clothAlpha['upcloth']);
+		if(hu.clothAlpha['trousers'])
+			tex = tool.merge_1024(tex, hu.clothAlpha['trousers']);
+		if(hu.clothAlpha['shoes'])
+			tex = tool.merge_1024(tex, hu.clothAlpha['shoes']);
+
+		hu.material.alphaMap = tex;				// 合成后的贴图附加在human材质上
 		hu.material.needsUpdate = true;
 
 	},				// mergeAlpha:function()
