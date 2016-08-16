@@ -705,17 +705,18 @@ canvas {
 			});
 		}
 
-		function loadhumantest() {
+		function loadhumantest() {			// 示例，使用xml存储human模型的地址
 			human1 = new Human(show);
-			human1.load(human1, 'models/catwalk_body.json',
-					"models/catwalk_eyes.json",
-					'models/catwalk_eyelashes.json',
-					"models/model_Packed0_Diffuse.png",
-					"models/model_Packed0_Specular.png",
-					"models/model_Packed0_Normal.png",
-					"models/model_Packed0_Opacity.png",
-					// "models/female1_Packed0_Opacity.png",
-					"models/BodyLightingMap.png");
+			var humanURL = gethumanURL(xmlDoc);
+			human1.load( human1, 
+					humanURL.body,
+					humanURL.eyes,
+					humanURL.eyelashes,
+					humanURL.diffuse,
+					humanURL.specular,
+					humanURL.normal,
+					humanURL.opacity,
+					humanURL.lighting );
 			human1.init(human1); // 添加到场景中
 
 		}
