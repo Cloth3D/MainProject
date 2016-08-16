@@ -161,15 +161,29 @@
    {
      this.control.detach();
      this.stats = false;
-     show.cameraControl.enable = true;
+     //show.cameraControl.enable = true;
    }
    else
    {
      this.control.attach(show.selected);
      this.stats = true;
-     show.cameraControl.enable = false;
+     //show.cameraControl.enable = false;
    }
 
+ },
+ 
+ stop:function()		// 停止工作
+ {
+	 this.control.detach();
+     this.stats = false;
+    // show.cameraControl.enable = true;
+ },
+ 
+ start:function()		// 开始工作
+ {
+	 this.control.attach(show.selected);
+     this.stats = true;
+     //show.cameraControl.enable = false;
  }
 
  };

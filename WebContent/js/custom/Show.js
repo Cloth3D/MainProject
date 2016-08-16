@@ -137,6 +137,9 @@
       {
         // this.selectNeedUpdate = false;
       }
+      if(this.raycasting !== null)
+    	  this.raycasting.update();
+      
 
    },     // update:function()
 

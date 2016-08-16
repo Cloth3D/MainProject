@@ -159,6 +159,8 @@ Human.prototype = {
 				light.needsUpdate = true;
 
 				mater.lightMap = light;											// 将贴图附加给材质
+				mater.lightMapIntensity = 0.9;				// 光照贴图的强度
+				mater.shininess = 20;						// 反光
 				mater.needsUpdate = true;
 
 				console.log("light贴图加载完成");

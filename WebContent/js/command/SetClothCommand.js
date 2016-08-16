@@ -53,11 +53,13 @@ SetClothCommand.prototype = {
     else {                    // 如果是恢复操作
 
       human.clothAlpha[this.ctype] = this.human_alpha;
-      human.mergeAlpha(human);
-
+      human.mergeAlpha_0815(human);						// 使用旧版的合成贴图函数
+      
+      human[this.ctype] = this.cloth;
       human.group.remove(this.oldCloth);
       human.group.add(this.cloth);
     }
+    console.log(human);
 
   },    // execute:function()
 
@@ -276,6 +278,10 @@ SetClothCommand.prototype = {
             light.image = image;
             light.needsUpdate = true;
             mater.lightMap = light;
+            
+            mater.lightMapIntensity = 0.5;			// 光照贴图的强度
+            mater.shininess = 10;					// 反光的强度
+            mater.normalScale = new THREE.Vector2(0.7, 0.7);	// 凹凸贴图的强度，数值越小，强度越大
             mater.needsUpdate = true;
             
             light_ready = true;
@@ -565,14 +571,16 @@ SetClothCommand.prototype = {
       // 移除新衣服
       human.group.remove(this.cloth);
       // 清空衣服引用
-      human.clothAlpha[this.ctype] = null;
+      human.clothAlpha[this.ctype] = undefined;
+      human[this.ctype] = undefined;
       //  如果需要的话，穿上旧衣服，加上衣服引用
       if(this.oldCloth)
         {
           human.group.add(this.oldCloth);
+          human[this.ctype] = this.oldCloth;
           human.clothAlpha[this.ctype] = this.oldAlphaMap;
         }
-      human.mergeAlpha(human);
+      human.mergeAlpha_0815(human);					// 此处使用的仍是旧版的合成贴图函数
   }
 
 };

@@ -537,6 +537,12 @@ canvas {
 		
 		function wearCloth(cloth_id, cloth_type)		// 通过xml文件读取url
 		{
+			if(human1 == undefined)
+			{
+				loadhumantest();
+				return;
+			}
+			
 			 var cloth_url = getModelURL(xmlDoc, cloth_id, cloth_type);				// 获得某件衣服模型
 			 //var cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);	// 只有 top, bottom, shoes有这句话
 			 var cloth_opacity = undefined;
@@ -689,13 +695,6 @@ canvas {
 			render();
 		}
 
-		function addmaterial() {
-			var tool = new MaterialTool(); // 测试给show.selected添加一个纹理
-			tool.addMeshLambertMaterial(show.selected,
-					'models/model/model_Packed0_Diffuse.png',
-					'models/model/model_Packed0_Specular.png');
-		}
-
 		function addImport() {
 			fileInput = document.createElement('input');
 			fileInput.type = 'file';
@@ -708,19 +707,6 @@ canvas {
 
 		function loadhumantest() {
 			human1 = new Human(show);
-			//   human1.load(
-			// 		  human1,
-			// 		  'models/thin_body.json',
-			// 		  "models/thin_eyes.json",
-			// 		  'models/catwalk_eyelashes.json',
-			// 		  "models/model_Packed0_Diffuse.png",
-			// 		  "models/model_Packed0_Specular.png",
-			// 		  "models/model_Packed0_Normal.png",
-			// 		  "models/model_Packed0_Opacity.png",
-			// 		  //"models/female1_Packed0_Opacity.png",
-			// 		  "models/BodyLightingMap.png"
-			// 		  );
-
 			human1.load(human1, 'models/catwalk_body.json',
 					"models/catwalk_eyes.json",
 					'models/catwalk_eyelashes.json',
@@ -730,79 +716,16 @@ canvas {
 					"models/model_Packed0_Opacity.png",
 					// "models/female1_Packed0_Opacity.png",
 					"models/BodyLightingMap.png");
-
-			// human1.loadHU(
-			// 		  human1,
-			// 		  'models/cloth1/test1.json',
-			// 		  "models/cloth1/cloth1_Packed0_Diffuse.png",
-			// 		  "models/cloth1/cloth1_Packed0_Specular.png",
-			// 		  "models/cloth1/cloth1_Packed0_Normal.png",
-			// 		  "models/cloth1/cloth1_Packed0_Opacity.png"
-			// 		  );
-
-			// human1.loadHU(
-			// 		  human1,
-			// 		  'models/model_test.json',
-			// 		  "models/cloth1/cloth1_Packed0_Diffuse.png",
-			// 		  "models/cloth1/cloth1_Packed0_Specular.png",
-			// 		  "models/cloth1/cloth1_Packed0_Normal.png",
-			// 		  "models/cloth1/cloth1_Packed0_Opacity.png",
-			// 		  "models/BodyLightingMap.png"
-			// 		  );
 			human1.init(human1); // 添加到场景中
 
 		}
 
-		function loadUpCloth() {
-			human1.CMDLoadCloth( // 上衣
-			human1, 'upcloth', 'models/cloth5/upcloth5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
-					'models/cloth5/cloth5fbm/cloth5top.png'
-
-			);
-
-			human1.CMDLoadCloth( // 头发
-			human1, 'hair', 'models/cloth5/hair5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png'
-
-			);
-
-			human1.CMDLoadCloth( // 下装
-			human1, 'trousers', 'models/cloth5/trousers5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
-					'models/cloth5/cloth5fbm/cloth5bottom.png'
-
-			);
-
-			human1.CMDLoadCloth( // 鞋
-			human1, 'shoes', 'models/cloth5/shoes5.json',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Diffuse.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Specular.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Normal.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Opacity.png',
-					'models/cloth5/cloth5fbm/cloth5_Packed0_Gloss.png',
-					'models/cloth5/cloth5fbm/cloth5shoes.png'
-
-			);
-
-		}
 
 		function transfor() // 添加使show.selected移动的控制器
 		{
 			trans = new transform(show);
 			trans.init(trans);
+			trans.stop();			// 默认不要工作
 		}
 
 		function addRayCasting() { // 通过射线实现点选功能
