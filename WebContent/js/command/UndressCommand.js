@@ -26,7 +26,7 @@ var UndressCommand = function(human, type)
 	this.type = this.ctype + 'UndressCommand';
 };
 
-SetClothCommand.prototype = {
+UndressCommand.prototype = {
 
 	execute : function() // 执行
 	{
@@ -34,7 +34,7 @@ SetClothCommand.prototype = {
 		
 		if(human[this.ctype] == undefined)		// 如果并没有穿衣服，误点的
 		{
-			
+			console.log(human);
 		}
 		else
 		{

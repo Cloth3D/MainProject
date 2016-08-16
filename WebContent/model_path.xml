@@ -110,4 +110,13 @@
 			<lighting>models/cloth5/cloth5fbm/Cloth5_LightingMap_1024.png</lighting>
 		</map>
 	</cloth5>
-</recipe>
+	<human>
+		<eyes>models/human/catwalk_eyes.json</eyes>
+		<eyelashes>models/human/catwalk_eyelashes.json</eyelashes>
+		<body>models/human/catwalk_body.json</body>
+		<map>
+			<diffuse>models/human/model_Packed0_Diffuse.png</diffuse>
+			<specular>models/human/model_Packed0_Specular.png</specular>
+			<normal>models/human/model_Packed0_Normal.png</normal>
+			<opacity>models/human/model_Packed0_Opacity_1024.png</opacity>
+			<lighting>models/human/BodyLightingMap.png</lighting></map></human></recipe>

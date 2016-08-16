@@ -159,7 +159,7 @@ SetClothCommand.prototype = {
       };
 
     };
-
+    var newHumanAlpha = undefined;
     var editAlphaMap = function(hu, human_alpha, type)												// 因为异步加载的关系，必须等到透明贴图加载完成后再调用这个函数
     {
       switch(type)     // 分成几类模型问题讨论
@@ -183,9 +183,11 @@ SetClothCommand.prototype = {
         break;
 
         default:
+        newHumanAlpha = hu.mergeAlpha(hu);
         console.log("未有匹配项");
       };
-      cmd.newHumanAlpha = hu.material.alphaMap;              // 合并贴图完成后，将记录保存到cmd
+      //cmd.newHumanAlpha = hu.material.alphaMap;              // 合并贴图完成后，将记录保存到cmd
+      cmd.newHumanAlpha = newHumanAlpha;
     };
 
     loader1.load( cmd.url_diffuse, function ( image ) {		// 读取diffuse贴图
