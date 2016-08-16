@@ -71,7 +71,7 @@ function getModelURL(xmlDoc, cloth_id, cloth_type)
 		}
 	}
 	if(type == undefined) return null;			// 如果没有寻找到
-	console.log(type);
+	//console.log(type);
 	var typeArray = type.children;			// 再寻找data标签得到服装
 	for(var i = 0; i < typeArray.length; i++)
 	{
@@ -84,16 +84,16 @@ function getModelURL(xmlDoc, cloth_id, cloth_type)
 
 function getMatURL(xmlDoc, cloth_id)
 /**
-* xmlDoc:xmlDocumention
-* cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
-* return:{
-*			diffuse: string,
-*			specular: string,
-*   		normal: string,
-*           opacity: string,
-* 			lighting: string
-* }
-*/
+ * xmlDoc:xmlDocumention
+ * cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
+ * return:{
+ *			diffuse: string,
+ *			specular: string,
+ *   		normal: string,
+ *           opacity: string,
+ * 			lighting: string
+ * }
+ */
 {
 	var clothArray = xmlDoc.getElementsByTagName(cloth_id)[0];		// 找到衣服组的标签
 	clothArray = clothArray.children;								// cloth子节点
@@ -122,11 +122,11 @@ function getMatURL(xmlDoc, cloth_id)
 
 function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
 /**
-* xmlDoc:xmlDocumention
-* cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
-* cloth_type:字符串衣服类型，可选 'top', 'bottom', 'hair', 'eyewear', 'shoes'
-* return : 字符串，该模型的透明贴图的url
-*/
+ * xmlDoc:xmlDocumention
+ * cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
+ * cloth_type:字符串衣服类型，可选 'top', 'bottom', 'hair', 'eyewear', 'shoes'
+ * return : 字符串，该模型的透明贴图的url
+ */
 {
 	var clothArray = xmlDoc.getElementsByTagName(cloth_id)[0];		// 找到衣服组的标签
 	clothArray = clothArray.children;								// cloth子节点
@@ -141,7 +141,7 @@ function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
 		}
 	}
 	if(type == undefined) return null;			// 如果没有寻找到
-	console.log(type);
+	//console.log(type);
 	var typeArray = type.children;			// 再寻找data标签得到服装
 	for(var i = 0; i < typeArray.length; i++)
 	{
@@ -149,4 +149,52 @@ function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
 			return typeArray[i].textContent;
 	}
 	return null;
+}
+
+function gethumanURL(xmlDoc)
+/**
+ * xmlDoc:xmlDocumention
+ * return:{
+ * 			eye: string,
+ * 			eyelashes: string,
+ * 			body: string,
+ *			diffuse: string,
+ *			specular: string,
+ *   		normal: string,
+ *           opacity: string,
+ * 			lighting: string
+ * 			}
+ */
+{
+	var humanArray = xmlDoc.getElementsByTagName("human")[0];		// 找到人体节点的标签
+	humanArray = humanArray.children;								// 找到human下的节点
+	var map = undefined;
+	for(var i = 0; i < humanArray.length; i++)
+	{
+		if(humanArray[i].nodeName == 'map')			// 找到map节点
+		{
+			map = humanArray[i];
+			break;
+		}
+	}
+	
+	var value = new Object();
+	
+	if(map != undefined)							// 没找到要返回null
+	{
+		var mapArray = map.children;
+		for(var i = 0; i < mapArray.length; i++)
+		{
+			value[mapArray[i].nodeName] = mapArray[i].textContent;
+		}
+	}
+	for(var i = 0; i < humanArray.length; i++)
+	{
+		if(humanArray[i].nodeName !== 'map')
+		{
+			value[humanArray[i].nodeName] = humanArray[i].textContent;
+		}
+	}
+	
+	return value;
 }

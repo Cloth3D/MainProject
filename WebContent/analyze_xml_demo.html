@@ -5,6 +5,7 @@
 <title>这是一个使用JavaScript语言解析xml文件的demo</title>
 </head>
 <body>
+
 	<script type="text/javascript">
 		var loadXML = function(xmlFile) {
 			var xmlDoc;
@@ -55,6 +56,11 @@
 		
 		var mapTest = getMatURL(xmlDoc, 'cloth2');
 		console.log(mapTest);
+		
+		var humanTest = gethumanURL(xmlDoc);
+		console.log(humanTest);
+		
+		
 		
 		function getModelURL(xmlDoc, cloth_id, cloth_type)
 		/**
@@ -157,6 +163,54 @@
 			return null;
 		}
 		
+		
+		function gethumanURL(xmlDoc)
+		/**
+		 * xmlDoc:xmlDocumention
+		 * return:{
+		 * 			eye: string,
+		 * 			eyelashes: string,
+		 * 			body: string,
+		 *			diffuse: string,
+		 *			specular: string,
+		 *   		normal: string,
+		 *           opacity: string,
+		 * 			lighting: string
+		 * 			}
+		 */
+		{
+			var humanArray = xmlDoc.getElementsByTagName("human")[0];		// 找到人体节点的标签
+			humanArray = humanArray.children;								// 找到human下的节点
+			var map = undefined;
+			for(var i = 0; i < humanArray.length; i++)
+			{
+				if(humanArray[i].nodeName == 'map')			// 找到map节点
+				{
+					map = humanArray[i];
+					break;
+				}
+			}
+			
+			var value = new Object();
+			
+			if(map != undefined)							// 没找到要返回null
+			{
+				var mapArray = map.children;
+				for(var i = 0; i < mapArray.length; i++)
+				{
+					value[mapArray[i].nodeName] = mapArray[i].textContent;
+				}
+			}
+			for(var i = 0; i < humanArray.length; i++)
+			{
+				if(humanArray[i].nodeName !== 'map')
+				{
+					value[humanArray[i].nodeName] = humanArray[i].textContent;
+				}
+			}
+			
+			return value;
+		}
 	</script>
 </body>
 </html>
