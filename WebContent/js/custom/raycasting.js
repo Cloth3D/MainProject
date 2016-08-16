@@ -66,7 +66,10 @@ raycasting.prototype = {
 			}
 			else
 			{
+				
 					console.log("没有选中目标物");
+					console.log(show.raycasting.meshes);
+					//console.log(show);
 			}
 		}
 
