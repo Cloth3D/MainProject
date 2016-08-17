@@ -48,18 +48,27 @@ SetClothCommand.prototype = {
   execute:function()                        // 执行
   {
     var human = this.human;
-    if(this.cloth == null)
-      this.load(this);        // 如果是直接执行
+    if(this.cloth == null){
+    	this.load(this);        // 如果是直接执行
+    	
+    }
     else {                    // 如果是恢复操作
 
       human.clothAlpha[this.ctype] = this.human_alpha;
       human.mergeAlpha_0815(human);						// 使用旧版的合成贴图函数
       
       human[this.ctype] = this.cloth;
-      human.group.remove(this.oldCloth);
+      human.show.signals.objectAdded(this.cloth);
+      if(this.oldCloth !== undefined){
+    	  human.group.remove(this.oldCloth);
+    	  
+    	  human.show.signals.objectRemoved(this.oldCloth);
+      }
+      
       human.group.add(this.cloth);
     }
-    console.log(human);
+    
+    //console.log(human);
 
   },    // execute:function()
 
@@ -125,31 +134,46 @@ SetClothCommand.prototype = {
       switch(type)     // 分成几类模型问题讨论
       {
         case 'upcloth':
-        if(hu.upcloth != null)	hu.group.remove(hu.upcloth);
+        if(hu.upcloth != null){	
+        	hu.show.signals.objectRemoved.dispatch(hu.upcloth);
+        	hu.group.remove(hu.upcloth);
+        }
         hu.upcloth = cloth;
         console.log('添加上衣');
         break;
 
         case 'trousers':
-        if(hu.trousers != null)	hu.group.remove(hu.trousers);
+        if(hu.trousers != null){
+        	hu.show.signals.objectRemoved.dispatch(hu.trousers);
+        	hu.group.remove(hu.trousers);
+        }
         hu.trousers = cloth;
         console.log('添加裤子');
         break;
 
         case 'glasses':
-        if(hu.glasses != null)	hu.group.remove(hu.glasses);
+        if(hu.glasses != null){
+        	hu.show.signals.objectRemoved.dispatch(hu.glasses);
+        	hu.group.remove(hu.glasses);
+        }
         hu.glasses = cloth;
         console.log('添加眼镜');
         break;
 
         case 'shoes':
-        if(hu.shoes != null)	hu.group.remove(hu.shoes);
+        if(hu.shoes != null){
+        	hu.show.signals.objectRemoved.dispatch(hu.shoes);
+        	hu.group.remove(hu.shoes);
+        }
         hu.shoes = cloth;
         console.log('添加鞋子');
         break;
 
         case 'hair':
-        if(hu.hair != null)	hu.group.remove(hu.hair);
+        if(hu.hair != null){
+        	hu.show.signals.objectRemoved.dispatch(hu.hair);
+        	hu.group.remove(hu.hair);
+        }
         hu.hair = cloth;
         console.log('添加头发');
         break;
@@ -157,6 +181,7 @@ SetClothCommand.prototype = {
         default:
         console.log("未有匹配项");
       };
+      hu.show.signals.objectAdded.dispatch(cloth);
 
     };
     var newHumanAlpha = undefined;
@@ -572,6 +597,7 @@ SetClothCommand.prototype = {
 
       // 移除新衣服
       human.group.remove(this.cloth);
+      human.show.signals.objectRemoved.dispatch(this.cloth);
       // 清空衣服引用
       human.clothAlpha[this.ctype] = undefined;
       human[this.ctype] = undefined;
@@ -581,8 +607,10 @@ SetClothCommand.prototype = {
           human.group.add(this.oldCloth);
           human[this.ctype] = this.oldCloth;
           human.clothAlpha[this.ctype] = this.oldAlphaMap;
+          human.show.signals.objectAdded.dispatch(this.oldCloth);
         }
       human.mergeAlpha_0815(human);					// 此处使用的仍是旧版的合成贴图函数
+      
   }
 
 };

@@ -25,12 +25,8 @@
   //  this.material = [];              // 存储场景中这类物品的数组
    this.objects = [];                  // 存储场景中这类物品的数组
 
-   this.raycasting  = null;           // 射线控制器
-
-  //  this.group = [];                 // 一个模型有多个部分时
    this.light = [];                 // 光
    this.selected = null;            // 指向被选择的object
-   this.selectNeedUpdate = false;
 
    this.history = new History(this);               // 之后用来存储历史纪录
    this.loader = null;              // 用来读取任意格式的模型, 结合fileInput使用
@@ -45,11 +41,14 @@
    */
 
    this.signals = {                         // 事件监听器
-      objectSelected: new SIGNALS.Signal(),
-      objectChanged: new SIGNALS.Signal(),
-      materialChanged: new SIGNALS.Signal(),
-      refreshSidebarObject3D: new SIGNALS.Signal()
-
+      objectSelected: new SIGNALS.Signal(),			// 有物体被选中信号
+      objectChanged: new SIGNALS.Signal(),			// 有物体被改动
+      materialChanged: new SIGNALS.Signal(),		// 改动材质
+      refreshSidebarObject3D: new SIGNALS.Signal(),	// 刷新侧边栏
+      
+      objectAdded: new SIGNALS.Signal(),			// 增添模型时，需要刷新射线的objects数组
+  	  objectRemoved: new SIGNALS.Signal()			// 模型被移除时也需要进行刷新数组处理
+   	  
    };
 
 
@@ -131,61 +130,28 @@
    {
 
      	this.renderer.render( this.scene, this.camera );
-      this.cameraControl.update();
-
-      //if(this.selectNeedUpdate )                                  // 交给相关的控件进行处理
-      {
-        // this.selectNeedUpdate = false;
-      }
-      if(this.raycasting !== null)
-    	  this.raycasting.update();
-      
+     	this.cameraControl.update();
 
    },     // update:function()
 
-   add:function(object)
-   {
-     if(object instanceof THREE.Mesh || object instanceof THREE.SkinnedMesh)
-        {
-          this.mesh.push(object);
-        }
-      else if(object instanceof THREE.Group)
-      {
-        this.group.push(object);
-      }
-
-    this.scene.add(object);
-  },      // add:function(object)
-
   addObject: function ( object ) {
 
-		var scope = this;
+		var scope = this;		// 底下有递归，this指向发生改变
 
-		// object.traverse( function ( child ) {
-    //
-		// 	if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
-		// 	if ( child.material !== undefined ) scope.addMaterial( child.material );
-    //
-		// 	scope.addHelper( child );
-    //
-		// } );
     // 添加到数组中存储
     if(object !== undefined)
     {
-      this.objects.push(object);
+    	object.traverse( function ( child ) {
+			
+			if(child instanceof THREE.Bone) return;
+			scope.objects.push( child );
+
+		} );
       this.scene.add( object );
-      this.selected = object;
 
-      this.signals.objectSelected.dispatch(object);         // 发布选择物体信号
-
-      this.selectNeedUpdate = true;
-      if(this.raycasting !== null)                               // 如果定义了raycaster
-    	  {
-    	  	this.raycasting.needUpdate = true;
-    	  	console.log("updateRay");
-    	  }
-
-
+      //this.signals.objectSelected.dispatch(object);         // 发布选择物体信号
+      this.signals.objectAdded.dispatch(object);			// 发布添加物体信号
+      
       console.log("模型已经添加到场景",object);
     }
 
@@ -208,11 +174,18 @@
 
    removeObject:function(show, object)                    // show是当前类在全局中的名称
    {
+	 if ( object.parent === null ) return; 	// avoid deleting the camera or scene
      if(object == null) return;                           // 如果模型不存在，就不去移除
-     show.scene.remove(object);
-     var pos = show.objects.indexOf(object);
-     if(pos >= 0)
-        show.objects.splice(pos, 1);      // 删除数组中间某个元素
+     show.scene.remove(object);							  // 从场景中删除物体
+     
+     object.traverse( function ( child ) {
+
+			show.objects.splice( show.objects.indexOf( child ), 1 );
+
+		} );
+     
+     show.signals.objectRemoved.dispatch(object);
+     show.select(null);				// 万一删除的是正在选择的物体
    },       // removeObject:function(show, object)
 
    removeSelected:function(show)                        // show代指当前场景
@@ -241,7 +214,9 @@
 
    select:function(object)
    {
-      this.selected = object;     // 暂且默认这个模型是场景内的
+	  if(this.selected == object) return;				// 如果选中的物体是同一个，或者是一直没有选中新物体
+      this.selected = object;     						// 暂且默认这个模型是场景内的
+      this.signals.objectSelected.dispatch(object);		// 发送选中物体信号
    },       // select:function(object)
 
    isIncluded:function(object)                // 未测试

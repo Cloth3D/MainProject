@@ -200,8 +200,9 @@ Human.prototype = {
 			{
 				human.visible = false;
 			}
-
-			hu.group.add(human);																		// 将人体添加到group中,即添加到场景中
+			
+			hu.group.add(human);				// 将人体添加到group中,即添加到场景中
+			hu.show.signals.objectAdded.dispatch(human);		// 发送加载完成信号量
 			hu.human = human;
 			
 			if(onload != undefined)
@@ -243,7 +244,8 @@ Human.prototype = {
 				eyes.visible = false;
 			}
 			
-			hu.group.add(eyes);
+			hu.group.add(eyes);	
+			hu.show.signals.objectAdded.dispatch(eyes);		// 发送加载完成信号量
 			hu.eyes = eyes;
 
 			console.log("添加了人体eyes模型");
@@ -276,6 +278,7 @@ Human.prototype = {
 				eyelashes.visible = false;
 			}
 				hu.group.add(eyelashes);
+				hu.show.signals.objectAdded.dispatch(eyelashes);	// 发送加载完成信号量
 				hu.eyelashes = eyelashes;
 
 		},onProgress, onError);					// load eyelashes

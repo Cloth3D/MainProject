@@ -95,6 +95,7 @@ canvas {
   	var human1;        // 人体模型
   	var myRayCaster;    // 定义一个射线管理器
 	var startReq = new signals.Signal();		// 定义一个signals
+	var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
 	</script>
 	
 <Script>  
@@ -142,8 +143,6 @@ function GetRequest() {
 		 	show.execute(new SetFigureCommand(human1, figure, 'figure'));
 		 }
 	 console.log('startRequest已经执行');
-	 
-	 var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
 	 
 	 var top = undefined,
 	 hair = undefined,
@@ -318,19 +317,18 @@ function animation()			// 动画
 function loadhumantest()
 {
   human1 = new Human(show);
-  human1.load(
-		  human1,
-		  'models/catwalk_body.json',
-		  "models/catwalk_eyes.json",
-		  'models/catwalk_eyelashes.json',
-		  "models/model_Packed0_Diffuse.png",
-		  "models/model_Packed0_Specular.png",
-		  "models/model_Packed0_Normal.png",
-		  "models/model_Packed0_Opacity.png",
-		 // "models/female1_Packed0_Opacity.png",
-		  "models/BodyLightingMap.png",
-		  startReq
-		  );
+  var humanURL = gethumanURL(xmlDoc);
+	human1.load( human1, 
+			humanURL.body,
+			humanURL.eyes,
+			humanURL.eyelashes,
+			humanURL.diffuse,
+			humanURL.specular,
+			humanURL.normal,
+			humanURL.opacity,
+			humanURL.lighting,
+			startReq
+			);
   human1.group.visible = false;				// 先让人体不可见
   human1.init(human1);						// 添加到场景中
   

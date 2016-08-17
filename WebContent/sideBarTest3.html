@@ -156,6 +156,7 @@ canvas {
 </script>
 <script src = 'js/custom/XMLReader.js'></script>
 <script src = 'js/command/UndressCommand.js'></script>
+<script src = 'js/custom/MoveAndChooseManager.js'></script>
 
 </head>
 <body>
@@ -247,6 +248,7 @@ canvas {
 		var human1; // 人体模型
 		var myRayCaster; // 定义一个射线管理器
 		var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
+		var macm;			// 移动和选择管理
 	</script>
 
 	<script type="text/javascript">
@@ -397,17 +399,6 @@ canvas {
 			show.execute(new UndressCommand(human1, cloth_type));
 		}
 
-		function transfor() // 添加使show.selected移动的控制器
-		{
-			trans = new transform(show);
-			trans.init(trans);
-		}
-
-		function addRayCasting() { // 通过射线实现点选功能
-			myRayCaster = new raycasting(show);
-			myRayCaster.init();
-		}
-
 		function playAni() {
 			if (human1.mixer === null)
 				human1.addMixer(human1);
@@ -422,6 +413,10 @@ canvas {
 		function resetAni() {
 			human1.clipaction.reset();
 		}
+		
+		function MACM() {	// 初始化MoveAndChooseManager
+			macm = new MoveAndChooseManager(show);
+		}
 
 		function main() {
 			init(); // 初始化窗口
@@ -432,9 +427,8 @@ canvas {
 			addGrid(); // 添加网格
 			animation(); // 调用动画
 			addImport();
-			transfor();
-			addRayCasting(); //点选功能
-
+			
+			MACM();
 		}
 		main(); //为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
 	</script>

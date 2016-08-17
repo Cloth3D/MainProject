@@ -260,7 +260,7 @@ var Loader = function ( show ) {
 				break;
 
 			case 'obj':
-			case 'w3d':
+			case 'w3d':		// 自定义格式
 
 				reader.addEventListener( 'load', function ( event ) {
 
