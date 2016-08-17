@@ -7,6 +7,7 @@ var MoveAndChooseManager = function(show){
 	this.show = show;
 	var signals = show.signals;				// 信号量
 	var camera = show.camera;
+	var scene = show.scene;
 	var container = document.getElementById("canvas");			// canvas dom
 	
 	var objects = [];
@@ -86,6 +87,7 @@ var MoveAndChooseManager = function(show){
 					break;
 
 			}
+			render();
 
 		}
 
@@ -132,6 +134,7 @@ var MoveAndChooseManager = function(show){
 		         break;
 
 		     }
+		     render();
 
 		   });
 
@@ -145,6 +148,7 @@ var MoveAndChooseManager = function(show){
 		         break;
 
 		     }
+		     render();
 
 		   });
 	
@@ -196,7 +200,7 @@ var MoveAndChooseManager = function(show){
 			}
 			//console.log("objects数组",objects)
 			//console.log("相交数组",intersects);
-			//render();
+			render();
 
 		}
 
@@ -261,7 +265,7 @@ var MoveAndChooseManager = function(show){
 
 			//signals.objectFocused.dispatch( intersect.object );
 			show.select(intersect.object);		// 选中物体
-
+			render();
 		}
 
 	}
@@ -322,4 +326,30 @@ var MoveAndChooseManager = function(show){
 
 	} );
 	
+	signals.objectChanged.add( function ( object ) {	// 因为使用sidebar更改位置信息时，会偶尔出现helper没有跟上物体的情况
+
+		if ( show.selected === object ) {		// 先判断是否是选择的物体
+
+			//selectionBox.update( object );
+			transformControls.update();
+
+		}
+
+//		if ( object instanceof THREE.PerspectiveCamera ) {
+//
+//			object.updateProjectionMatrix();
+//
+//		}
+
+		render();
+
+	} );
+	
+	function render() {
+
+		transformControls.updateMatrixWorld();
+		scene.updateMatrixWorld();
+
+	}
+
 };
