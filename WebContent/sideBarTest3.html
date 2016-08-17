@@ -10,10 +10,10 @@ body {
 	overflow: hidden;
 }
 
-canvas {
-	width: 100%;
-	height: 100%
-}
+/* canvas { */
+/* 	width: 100%; */
+/* 	height: 100% */
+/* } */
 
 #ctrl {
 	position: absolute;
@@ -27,8 +27,8 @@ canvas {
 	z-index: 100;
 }
 </style>
-<link href="css/main.css" rel="stylesheet" />
-<link id="theme" href="css/light.css" rel="stylesheet" />
+
+<link href='ui/sideBar.css' rel="stylesheet">
 
 <script src='js/custom/Sidebar.js'></script>
 <script src='js/custom/Sidebar.Material.js'></script>
@@ -264,7 +264,7 @@ canvas {
 			sidebar = new Sidebar(show);
 			document.body.appendChild(sidebar.dom);
 			console.log(sidebar);
-			sidebar.dom.hidden = true;
+			sidebar.dom.hidden = false;
 		}
 
 		function addstats() // 添加状态显示模块，在init之后执行

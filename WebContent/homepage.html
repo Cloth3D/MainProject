@@ -2,23 +2,22 @@
 <html lang="zh-CN">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>Fitting Room</title>
 <!-- style -->
 <style>
-body {
-	margin: 0;
-	overflow: hidden;
-}
+  body {  
+  	margin: 0;  
+  	overflow: hidden;  
+  }  
 
-canvas {
-	width: 100%;
-	height: 100%
-}
-</style>
+  #canvas {  
+  	width: 100%;  
+  	height: 100%  
+  }  
+</style> 
 
 <!-- Bootstrap core CSS -->
 <link href="ui/css/bootstrap.css" rel="stylesheet">
@@ -36,8 +35,8 @@ canvas {
 	rel="stylesheet">
 <!-- fitting scene -->
 
-<link href="css/main.css" rel="stylesheet" />
-<link id="theme" href="css/light.css" rel="stylesheet" />
+<!-- <link href="css/main.css" rel="stylesheet" /> -->
+<link href='ui/sideBar.css' rel="stylesheet">
 
 <script src='js/custom/Sidebar.js'></script>
 <script src='js/custom/Sidebar.Material.js'></script>
@@ -164,6 +163,7 @@ canvas {
 	// 体型变化
 </script>
 <script src = 'js/custom/XMLReader.js'></script>
+<script src = 'js/custom/MoveAndChooseManager.js'></script>
 </head>
 
 <body
@@ -249,7 +249,7 @@ canvas {
 											<button data-original-title="更多信息" title=""
 												data-placement="bottom" data-toggle="tooltip"
 												class="btn btn-default mrs" type="button"
-												onclick="trans.work();">
+												onclick="document.getElementById('left-inside').style.visibility = 'visible';">
 												<i class="icon-signin icon-large"></i>
 											</button>
 										</div>
@@ -600,9 +600,7 @@ canvas {
 		var gridHelper; // 网格助手
 		var helper; // 显示骨骼的工具
 		var fileInput; // 想办法进行文件输入
-		var trans; // 移动控制器
 		var human1; // 人体模型
-		var myRayCaster; // 定义一个射线管理器
 		var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
 	</script>
 
@@ -680,13 +678,8 @@ canvas {
 
 			show.update(); // 渲染相机和场景
 			//stats.update(); // 更新
-			if (trans)
-				trans.update();
 			if (human1)
 				human1.update(human1);
-			if (myRayCaster)
-				myRayCaster.update(myRayCaster);
-
 		}
 
 		function animation() // 动画
@@ -721,19 +714,6 @@ canvas {
 
 		}
 
-
-		function transfor() // 添加使show.selected移动的控制器
-		{
-			trans = new transform(show);
-			trans.init(trans);
-			trans.stop();			// 默认不要工作
-		}
-
-		function addRayCasting() { // 通过射线实现点选功能
-			myRayCaster = new raycasting(show);
-			myRayCaster.init();
-		}
-
 		function playAni() {
 			if (human1.mixer === null)
 				human1.addMixer(human1);
@@ -744,19 +724,20 @@ canvas {
 		function stopAni() {
 			human1.clipaction.stop();
 		}
+		
+		function MACM() {	// 初始化MoveAndChooseManager
+			macm = new MoveAndChooseManager(show);
+		}
 
 		function main() {
 			init(); // 初始化窗口
 			addListener() // 添加监听器
 			//addstats(); // 添加状态显示
-
 			addLight(); // 添加光线
 			addGrid(); // 添加网格
 			animation(); // 调用动画
 			addImport();
-			transfor();
-			addRayCasting(); //点选功能
-
+			MACM();
 		}
 		main(); //为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
 	</script>

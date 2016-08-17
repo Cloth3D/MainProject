@@ -1,0 +1,88 @@
+@CHARSET "UTF-8";
+.Panel {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+
+	/* No support for these yet */
+	-o-user-select: none;
+	user-select: none;
+}
+
+	.Panel.Collapsible .Static {
+		margin: 0;
+	}
+
+	.Panel.Collapsible .Static .Button {
+		float: left;
+		margin-right: 6px;
+		width: 0;
+		height: 0;
+		border: 6px solid transparent;
+	}
+
+	.Panel.Collapsible.collapsed .Static .Button {
+		margin-top: 2px;
+		border-left-color: #bbb;
+	}
+
+	.Panel.Collapsible:not(.collapsed) .Static .Button {
+		margin-top: 6px;
+		border-top-color: #bbb;
+	}
+
+	.Panel.Collapsible.collapsed .Content {
+		display: none;
+	}
+
+#sidebar {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	bottom: 0;
+	width: 300px;
+	background: #eee;
+	overflow: auto;
+}
+
+	#sidebar * {
+		vertical-align: middle;
+	}
+
+	#sidebar input,
+	#sidebar textarea,
+	#sidebar select {
+		border: 1px solid transparent;
+		color: #444;
+	}
+
+	#sidebar .Panel {
+		color: #888;
+		padding: 10px;
+		border-top: 1px solid #ccc;
+	}
+
+	#sidebar .Panel.collapsed {
+		margin-bottom: 0;
+	}
+
+	#sidebar .Row {
+		min-height: 20px;
+		margin-bottom: 10px;
+	}
+
+#tabs {
+	background-color: #ddd;
+	border-top: 1px solid #ccc;
+}
+
+	#tabs span {
+		color: #aaa;
+		border-right: 1px solid #ccc;
+		padding: 10px;
+	}
+
+	#tabs span.selected {
+		color: #888;
+		background-color: #eee;
+	}

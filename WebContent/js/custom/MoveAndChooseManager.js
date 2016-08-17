@@ -194,8 +194,8 @@ var MoveAndChooseManager = function(show){
 				show.select( null );		// 没有选中物体的话
 
 			}
-			console.log("objects数组",objects)
-			console.log("相交数组",intersects);
+			//console.log("objects数组",objects)
+			//console.log("相交数组",intersects);
 			//render();
 
 		}
