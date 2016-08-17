@@ -167,7 +167,7 @@
 </head>
 
 <body
-	style="background-color: #c0392b; padding-top: 0px; overflow-y: scroll">
+	style="background-color: #F08080; padding-top: 0px; overflow-y: scroll">
 	<div class="container-fluid">
 		<!-- 标题部分 -->
 		<div class="row page-header" style="margin-top: 0px; padding-top: 0px">
@@ -715,6 +715,12 @@
 		}
 
 		function playAni() {
+			if(human1 == undefined)
+			{
+				loadhumantest();
+				return;
+			}
+			
 			if (human1.mixer === null)
 				human1.addMixer(human1);
 			human1.clipaction.play();
@@ -722,6 +728,11 @@
 		}
 
 		function stopAni() {
+			if(human1 == undefined)
+			{
+				loadhumantest();
+				return;
+			}
 			human1.clipaction.stop();
 		}
 		

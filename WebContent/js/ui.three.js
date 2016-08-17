@@ -76,7 +76,7 @@ UI.Texture = function ( mapping ) {
 
 	this.dom = dom;
 	this.texture = null;
-	this.onChangeCallback = null;
+	//this.onChangeCallback = null;
 
 	return this;
 

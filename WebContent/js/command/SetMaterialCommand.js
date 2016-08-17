@@ -26,20 +26,20 @@ SetMaterialCommand.prototype = {
 
 	execute: function () {
 
-		if(this.object.parent instanceof THREE.Group)
-		{
-			var objArray = this.object.parent.children;
-			for(var i = 0; i < objArray.length; i++)
-			{
-				objArray[i].material = this.newMaterial;
-			}
-
-			this.show.signals.materialChanged.dispatch( this.object.material );
-		}
-		else {
+//		if(this.object.parent instanceof THREE.Group)
+//		{
+//			var objArray = this.object.parent.children;
+//			for(var i = 0; i < objArray.length; i++)
+//			{
+//				objArray[i].material = this.newMaterial;
+//			}
+//
+//			this.show.signals.materialChanged.dispatch( this.object.material );
+//		}
+//		else {
 			this.object.material = this.newMaterial;
 			this.show.signals.materialChanged.dispatch( this.object.material );
-		}
+//		}
 
 	},
 

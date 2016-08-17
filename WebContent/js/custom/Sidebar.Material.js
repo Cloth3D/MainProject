@@ -520,16 +520,19 @@ Sidebar.Material = function ( show ) {
 				show.execute( new SetMaterialValueCommand( currentObject, 'skinning', materialSkinning.getValue() ) );
 
 			}
-
+			console.log(material.map);
 			if ( material.map !== undefined ) {
 
 				var mapEnabled = materialMapEnabled.getValue() === true;
-
+				//console.log("objectHasUvs",objectHasUvs);
+				
 				if ( objectHasUvs ) {
 
 					var map = mapEnabled ? materialMap.getValue() : null;
+					//console.log("materialMap.getValue()",materialMap.getValue());
 					if ( material.map !== map ) {
-
+						
+						//console.log("尝试更换贴图");
 						show.execute( new SetMaterialMapCommand( currentObject, 'map', map ) );
 
 					}

@@ -58,11 +58,12 @@ SetClothCommand.prototype = {
       human.mergeAlpha_0815(human);						// 使用旧版的合成贴图函数
       
       human[this.ctype] = this.cloth;
-      human.show.signals.objectAdded(this.cloth);
-      if(this.oldCloth !== undefined){
+      human.show.signals.objectAdded.dispatch(this.cloth);
+      
+      if(this.oldCloth !== null){
     	  human.group.remove(this.oldCloth);
     	  
-    	  human.show.signals.objectRemoved(this.oldCloth);
+    	  human.show.signals.objectRemoved.dispatch(this.oldCloth);
       }
       
       human.group.add(this.cloth);

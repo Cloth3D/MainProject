@@ -47,7 +47,6 @@
 
 	#sidebar * {
 		vertical-align: middle;
-		    font-size: 14px;
 	}
 
 	#sidebar input,
@@ -81,7 +80,6 @@
 		color: #aaa;
 		border-right: 1px solid #ccc;
 		padding: 10px;
-		
 	}
 
 	#tabs span.selected {

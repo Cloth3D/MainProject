@@ -358,7 +358,8 @@ Sidebar.Object = function ( show ) {
 
 			var newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );
 			if ( object.position.distanceTo( newPosition ) >= 0.01 ) {
-
+				
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetPositionCommand( object, newPosition ) );
 
 			}
@@ -366,6 +367,7 @@ Sidebar.Object = function ( show ) {
 			var newRotation = new THREE.Euler( objectRotationX.getValue(), objectRotationY.getValue(), objectRotationZ.getValue() );
 			if ( object.rotation.toVector3().distanceTo( newRotation.toVector3() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetRotationCommand( object, newRotation ) );
 
 			}
@@ -373,12 +375,14 @@ Sidebar.Object = function ( show ) {
 			var newScale = new THREE.Vector3( objectScaleX.getValue(), objectScaleY.getValue(), objectScaleZ.getValue() );
 			if ( object.scale.distanceTo( newScale ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetScaleCommand( object, newScale ) );
 
 			}
 
 			if ( object.fov !== undefined && Math.abs( object.fov - objectFov.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'fov', objectFov.getValue() ) );
 				object.updateProjectionMatrix();
 
@@ -386,60 +390,70 @@ Sidebar.Object = function ( show ) {
 
 			if ( object.near !== undefined && Math.abs( object.near - objectNear.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'near', objectNear.getValue() ) );
 
 			}
 
 			if ( object.far !== undefined && Math.abs( object.far - objectFar.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'far', objectFar.getValue() ) );
 
 			}
 
 			if ( object.intensity !== undefined && Math.abs( object.intensity - objectIntensity.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'intensity', objectIntensity.getValue() ) );
 
 			}
 
 			if ( object.color !== undefined && object.color.getHex() !== objectColor.getHexValue() ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetColorCommand( object, 'color', objectColor.getHexValue() ) );
 
 			}
 
 			if ( object.groundColor !== undefined && object.groundColor.getHex() !== objectGroundColor.getHexValue() ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetColorCommand( object, 'groundColor', objectGroundColor.getHexValue() ) );
 
 			}
 
 			if ( object.distance !== undefined && Math.abs( object.distance - objectDistance.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'distance', objectDistance.getValue() ) );
 
 			}
 
 			if ( object.angle !== undefined && Math.abs( object.angle - objectAngle.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'angle', objectAngle.getValue() ) );
 
 			}
 
 			if ( object.penumbra !== undefined && Math.abs( object.penumbra - objectPenumbra.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'penumbra', objectPenumbra.getValue() ) );
 
 			}
 
 			if ( object.decay !== undefined && Math.abs( object.decay - objectDecay.getValue() ) >= 0.01 ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'decay', objectDecay.getValue() ) );
 
 			}
 
 			if ( object.visible !== objectVisible.getValue() ) {
 
+				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'visible', objectVisible.getValue() ) );
 
 			}
