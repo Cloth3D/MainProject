@@ -119,4 +119,15 @@
 			<specular>models/human/model_Packed0_Specular.png</specular>
 			<normal>models/human/model_Packed0_Normal.png</normal>
 			<opacity>models/human/model_Packed0_Opacity_1024.png</opacity>
-			<lighting>models/human/BodyLightingMap.png</lighting></map></human></recipe>
+			<lighting>models/human/BodyLightingMap.png</lighting></map></human>
+	<skybox_1>
+		<right>textures/skybox1/rightImage.png</right>
+		<left>textures/skybox1/leftImage.png</left>
+		<up>textures/skybox1/upImage.png</up>
+		<down>textures/skybox1/downImage.png</down>
+		<back>textures/skybox1/backImage.png</back><front>textures/skybox1/frontImage.png</front>
+		
+		
+		
+		
+		</skybox_1></recipe>

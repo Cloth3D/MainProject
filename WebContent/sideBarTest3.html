@@ -157,7 +157,7 @@ body {
 <script src = 'js/custom/XMLReader.js'></script>
 <script src = 'js/command/UndressCommand.js'></script>
 <script src = 'js/custom/MoveAndChooseManager.js'></script>
-
+<script src = 'js/custom/SkyBox.js'></script>
 </head>
 <body>
 
@@ -267,6 +267,8 @@ body {
 			document.body.appendChild(sidebar.dom);
 			console.log(sidebar);
 			sidebar.dom.hidden = false;
+			
+			addSkyBox(xmlDoc, "skybox_1", show);
 		}
 
 		function addstats() // 添加状态显示模块，在init之后执行

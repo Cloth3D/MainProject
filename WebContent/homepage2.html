@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>Fitting Room</title>
+<!-- style -->
+<style>
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+#canvas {
+	width: 100%;
+	height: 100%
+}
+
+#share {
+	position: absolute;
+	padding: 0px;
+	width: 120px;
+	z-index: 100;
+	right: 3%;
+	top: 85%;
+	overflow: hidden;
+}
+</style>
+
+<!-- Bootstrap core CSS -->
+<link href="ui/css/bootstrap.css" rel="stylesheet">
+<link href="ui/dist/css/vendor/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<!-- flat-ui 扁平ui库 Custom styles for this template -->
+<link href="ui/css/starter-template.css" rel="stylesheet">
+<link href="ui/dist/css/flat-ui.css" rel="stylesheet">
+<link href="ui/docs/assets/css/demo.css" rel="stylesheet">
+<link href="ui/img/favicon.ico" rel="shortcut icon">
+
+<!-- Font Awesome 图标库 -->
+<link href="ui/Font-Awesome-3.2.1/css/font-awesome.min.css"
+	rel="stylesheet">
+<!-- fitting scene -->
+
+<!-- <link href="css/main.css" rel="stylesheet" /> -->
+<link href='ui/sideBar.css' rel="stylesheet">
+
+<script src='js/custom/Sidebar.js'></script>
+<script src='js/custom/Sidebar.Material.js'></script>
+<script src='js/custom/Sidebar.Object.js'></script>
+<script src='js/signals.min.js'></script>
+
+<script src='js/ui.js'></script>
+<script src='js/ui.three.js'></script>
+
+<script src='js/three.js'></script>
+<script src='js/stats.min.js'></script>
+<script src='js/TrackballControls.js'></script>
+
+<script src='js/loaders/AMFLoader.js'></script>
+<script src='js/loaders/AWDLoader.js'></script>
+<script src='js/loaders/BabylonLoader.js'></script>
+<script src='js/loaders/ColladaLoader.js'></script>
+<script src='js/loaders/FBXLoader.js'></script>
+<script src='js/loaders/KMZLoader.js'></script>
+<script src='js/loaders/MD2Loader.js'></script>
+<script src='js/loaders/MTLLoader.js'></script>
+<script src='js/loaders/OBJLoader.js'></script>
+<script src='js/loaders/PlayCanvasLoader.js'></script>
+<script src='js/loaders/PLYLoader.js'></script>
+<script src='js/loaders/STLLoader.js'></script>
+<script src='js/loaders/UTF8Loader.js'></script>
+<script src='js/loaders/VRMLLoader.js'></script>
+<script src='js/loaders/VTKLoader.js'></script>
+<script src='js/loaders/ctm/ctm.js'></script>
+<script src='js/loaders/ctm/CTMLoader.js'></script>
+<script src='js/loaders/ctm/lzma.js'></script>
+
+<script src='js/TransformControls.js'></script>
+<script src='js/SkeletonHelper.js'></script>
+<script src='js/AnimationMixer.js'></script>
+<script src='js/custom/Show.js'></script>
+<script src="js/OrbitControls.js"></script>
+<script src='js/TransformControls.js'></script>
+<script src='js/custom/Loader.js'></script>
+<script src='js/custom/transform.js'></script>
+<script src='js/custom/MaterialTools.js'></script>
+<script src='js/custom/Human.js'></script>
+<script src='js/custom/raycasting.js'></script>
+<script src='js/custom/MergeAlphaMap.js'></script>
+
+<script src='js/command/Command.js'></script>
+<script src='js/custom/History.js'></script>
+<script src='js/command/AddObjectCommand.js'></script>
+<script src='js/command/RemoveObjectCommand.js'></script>
+<script src='js/command/SetPositionCommand.js'></script>
+<script src='js/command/SetRotationCommand.js'></script>
+<script src='js/command/SetScaleCommand.js'></script>
+<script src='js/command/SetMaterialColorCommand.js'></script>
+<script src='js/command/SetMaterialCommand.js'></script>
+<script src='js/command/SetMaterialMapCommand.js'></script>
+<script src='js/command/SetMaterialValueCommand.js'></script>
+<script src='js/command/SetValueCommand.js'></script>
+<script src='js/command/SetColorCommand.js'></script>
+
+<script src='js/command/SetClothCommand2.js'></script>
+<script src='js/command/SetFigureCommand.js'></script>
+<script src='js/custom/XMLReader.js'></script>
+<script src='js/custom/MoveAndChooseManager.js'></script>
+<script src='js/custom/SkyBox.js'></script>
+</head>
+
+<body
+	style="background-color: #71C5F2; padding-top: 0px; overflow-y: hidden">
+	<div class="container-fluid">
+		<!-- 标题部分 -->
+		<div class="row page-header"
+			style="position: absolute; height: 13%; width: 100%; top: 2%; margin-top: 0px; padding-top: 0px">
+			<div class="col-md-offset-1 ">
+				<h1 class="col-md-5" style="color: #ecf0f1; margin-bottom: 0px">Fitting
+					Room</h1>
+<!-- 				<div class="col-md-1" style="margin-top: 5%"> -->
+<!-- 					<span class="fui-user"></span> <a style="color: white;">登录</a> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-1" style="margin-top: 5%"> -->
+<!-- 					<span class="fui-new"></span> <a style="color: white;">注册</a> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-1" style="margin-top: 5%"> -->
+<!-- 					<span class="fui-export"></span> <a style="color: white;">分享</a> -->
+<!-- 				</div> -->
+				<div class="col-md-1" style="margin-top: 5% ">
+				<p style="color: white; width:300px;" >欢迎使用虚拟试衣间</p>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<!-- 总体部分 -->
+		<div class="row" style="margin-left: 0px">
+
+			<!-- 左边部分 -->
+			<div class="col-md-3"
+				style="position: absolute; top: 20%; height: 59%; left: 2%; width: 25%; padding: 0px;">
+				<div class="panel-group" id="accordion">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#collapseOne">人体模型编辑</a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse in">
+							<div class="panel-body">
+
+								<div id="ctrl">
+
+									身高:<input type="range" value="0" min="0" max="100"
+										onchange="show.execute(new SetFigureCommand(human1, value/100, 'height'));" />
+									肥胖:<input type="range" value="0" min="0" max="100"
+										onchange="show.execute(new SetFigureCommand(human1, value/100, 'figure'));" />
+									<!-- <buttononclick="show.execute(new RemoveObjectCommand(show.selected));">移除选中模型</button>
+									<button onclick="trans.work();">停止移动工具</button>
+									<button onclick="addmaterial();">读取贴图测试</button>
+									<button onclick="human1.human.material.needsUpdate = true;">刷新材质测试</button>-->
+
+									<div class="row" style="margin-top: 5px">
+
+										<div class="col-md-6">
+											<button data-original-title="从本地读取人体模型" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="fileInput.click();">
+												<i class="icon-download-alt icon-large"></i>
+											</button>
+										</div>
+										<div class="col-md-6">
+											<button data-original-title="从服务器读取人体模型" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="loadhumantest();">
+												<i class="icon-cloud-download icon-large"></i>
+											</button>
+										</div>
+									</div>
+
+									<div class="row" style="margin-top: 5px">
+										<div class="col-md-6">
+											<button data-original-title="待定功能" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="alert('敬请期待！');">
+												<i class="icon-eye-open icon-large"></i>
+											</button>
+										</div>
+										<div class="col-md-6">
+											<button data-original-title="更多信息" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="rightPart();">
+												<i class="icon-signin icon-large"></i>
+											</button>
+										</div>
+									</div>
+
+									<div class="row" style="margin-top: 5px">
+										<div class="col-md-6" style="vertical-align: middle">
+											<button data-original-title="播放动画" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="playAni();">
+												<i class="icon-play icon-large"></i>
+											</button>
+										</div>
+										<div class="col-md-6" style="vertical-align: middle">
+											<button data-original-title="停止动画" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="stopAni();">
+												<i class="icon-stop icon-large"></i>
+											</button>
+										</div>
+
+
+									</div>
+
+									<div class="row"
+										style="margin-top: 5px; vertical-align: middle">
+										<div class="col-md-6">
+											<button data-original-title="撤销" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="show.undo();">
+												<i class="icon-reply icon-large"></i>
+											</button>
+										</div>
+										<div class="col-md-6">
+											<button data-original-title="恢复" title=""
+												data-placement="bottom" data-toggle="tooltip"
+												class="btn btn-default mrs" type="button"
+												onclick="show.redo();">
+												<i class="icon-share-alt icon-large"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#collapseTwo">试衣</a>
+							</h4>
+						</div>
+						<div id="collapseTwo" class="panel-collapse collapse">
+							<div class="panel-body">
+								<div class="row" style= "text-align: center; 
+								padding-top:10px; padding-bottom:10px;">
+									<!-- 按钮集 -->
+									<button type="button" class="btn btn-primary"
+										data-toggle="collapse" data-target="#up"
+										style = "margin:5px;"
+										onclick="showPart('up');"> 上衣 </button>
+										
+									<button type="button" class="btn btn-primary"
+										data-toggle="collapse" data-target="#down"
+										style = "margin:5px;"
+										onclick="showPart('down');"> 下装 </button>
+										
+									<button type="button" class="btn btn-primary"
+										data-toggle="collapse" data-target="#shoes"
+										style = "margin:5px;"
+										onclick="showPart('shoes');"> 鞋子 </button>
+										
+									<button type="button" class="btn btn-primary"
+										data-toggle="collapse" data-target="#hair"
+										style = "margin:5px;"
+										onclick="showPart('hair');"> 头发 </button>
+										
+									<button type="button" class="btn btn-primary"
+										data-toggle="collapse" data-target="#glasses"
+										style = "margin:5px;"
+										onclick="showPart('glasses');"> 眼镜 </button>
+								</div>
+
+								<div id="up" class="collapse in"
+									style="padding-top: 5px; display: block">
+									<div class="row" id="up-cloth">
+										<!-- 上装  第一行 -->
+										<div class="col-md-6">
+											<img src="ui/image/up/upcloth4.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick='wearCloth("cloth4", "top");'>
+										</div>
+										<div class="col-md-6">
+											<img src="ui/image/up/upcloth2.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth2', 'top');">
+										</div>
+										<!-- 上装  第二行 -->
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/up/upcloth3.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth3', 'top');">
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/up/upcloth5.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth5', 'top');">
+										</div>
+									</div>
+								</div>
+								<div id="down" class="collapse in"
+									style="padding-top: 5px; display: none">
+									<div class="row" id="down-cloth">
+										<!-- 下装  第一行 -->
+										<div class="col-md-6">
+											<img src="ui/image/down/bottom.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth1', 'bottom');">
+										</div>
+										<div class="col-md-6">
+											<img src="ui/image/down/bottom2.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth2', 'bottom');">
+										</div>
+										<!-- 下装  第二行 -->
+										<div>
+											<br>
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/down/bottom3.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth3', 'bottom');">
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/down/bottom5.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth5','bottom');">
+										</div>
+									</div>
+								</div>
+
+
+
+
+								<div id="shoes" class="collapse in"
+									style="padding-top: 5px; display: none">
+									<div class="row" id="shoes">
+										<!-- 鞋子 第一行 -->
+										<div class="col-md-6">
+											<img src="ui/image/shoes/shoes.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth1', 'shoes');">
+										</div>
+										<div class="col-md-6">
+											<img src="ui/image/shoes/shoes2.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth2', 'shoes');">
+										</div>
+										<!-- 鞋子  第二行 -->
+										<div>
+											<br>
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/shoes/shoes3.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth3', 'shoes');">
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/shoes/shoes4.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth4', 'shoes');">
+										</div>
+									</div>
+
+								</div>
+								<div id="glasses" class="collapse in"
+									style="padding-top: 5px; display: none">
+									<div class="row" id="glasses">
+										<!-- 眼镜  第一行 -->
+										<div class="col-md-6">
+											<img src="ui/image/glasses/glasses.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth1', 'eyewear');">
+										</div>
+										<div class="col-md-6">
+											<img src="ui/image/glasses/glasses2.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth2', 'eyewear');">
+										</div>
+										<!-- 眼镜  第二行 -->
+										<div>
+											<br>
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/glasses/glasses3.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth3', 'eyewear');">
+										</div>
+									</div>
+								</div>
+								<div id="hair" class="collapse in"
+									style="padding-top: 5px; display: none">
+									<div class="row" id="hair">
+										<!-- 发型 第一行 -->
+										<div class="col-md-6">
+											<img src="ui/image/hair/hair.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth1', 'hair');">
+										</div>
+										<div class="col-md-6">
+											<img src="ui/image/hair/hair2.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth2', 'hair');">
+										</div>
+										<div>
+											<br>
+										</div>
+										<!-- 发型  第二行 -->
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/hair/hair3.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth3', 'hair');">
+										</div>
+										<div class="col-md-6" style="padding-top: 10px">
+											<img src="ui/image/hair/hair5.png"
+												class="carousel-inner img-responsive img-rounded"
+												onclick="wearCloth('cloth5', 'hair');">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 中间部分，人体模型展示 -->
+			<div id='TopMiddlePart' class="col-md-9"
+				style="position: absolute; height: 70%; width: 67%; left: 30%; top: 20%; padding: 0px;">
+				<div id="middlePart"></div>
+				<canvas id='canvas'
+					style="position: absolute; width = 100%; height =auto; padding: 0px;">
+				你的浏览器不支持本应用
+				</canvas>
+				<div id="left-inside"></div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id='share' class="bdsharebuttonbox">
+		<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a> <a
+			href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a> <a
+			href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+	</div>
+	<script>
+		window._bd_share_config = {
+			"common" : {
+				"bdSnsKey" : {},
+				"bdDesc" : "我在虚拟试衣间搭配了一套衣服，你也来试试吧！", // 分享的摘要
+				"bdText" : "我在虚拟试衣间搭配了一套衣服，你也来试试吧！", // 分享的文字
+				"bdMini" : "2",
+				"bdMiniList" : false,
+				"bdPic" : "", // 分享的图片
+				"bdUrl" : '', // 分享的url 
+				"onBeforeClick" : shareURL, // 在分享前执行的函数，用来修改配置
+				"bdStyle" : "1",
+				"bdSize" : "32"
+			},
+			"share" : {}
+		};
+		with (document)
+			0[(getElementsByTagName('head')[0] || body)
+					.appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='
+					+ ~(-new Date() / 36e5)];
+
+		/**
+		 * cmd:分享目标的id
+		 * config:当前的设置
+		 * return:更新后的设置
+		 */
+		function shareURL(cmd, config) {
+			//console.log(window._bd_share_config);
+			console.log(config);
+
+			// 重要的操作，更改bdURL,也就是确保分享后的网页能够
+			var local = window.location.href; // 当前的url
+			var pathname = window.location.pathname;// 当前的pathname 
+			var origin = local.substring(0, local.length - pathname.length);
+			console.log(window.location);
+			Url = origin + '/webgl/sharePage.html?';
+			if (human1) {
+				Url = Url + 'height=' + human1.heightScale * 100 + '&height='
+						+ human1.heightScale * 100;
+				if (human1.upcloth) {
+					Url = Url + '&top=' + human1.upcloth.cloth_id;
+				}
+				if (human1.hair) {
+					Url = Url + '&hair=' + human1.hair.cloth_id;
+				}
+				if (human1.trousers) {
+					Url = Url + '&bottom=' + human1.trousers.cloth_id;
+				}
+				if (human1.glasses) {
+					Url = Url + '&eyewear=' + human1.glasses.cloth_id;
+				}
+				if (human1.shoes) {
+					Url = Url + '&shoes=' + human1.shoes.cloth_id;
+				}
+
+			}
+			config.bdUrl = Url;
+
+			// 使用canvas截取canvas上的图片，更改bdPic
+			// 	var ctx = document.getElementById('canvas');
+			// 	var image = document.createElement( 'img' );    // 创建图片
+
+			// 	config.bdPic = ctx.toDataURL("image/png");
+			return config;
+		}
+	</script>
+	<p align="center"
+		style="width: 100%; color: white; bottom: 20px; position: absolute; text-align: center;">copyright
+		@ Fight Team 河海大学</p>
+
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="ui/js/jquery.js"></script>
+	<script src="ui/js/bootstrap.js"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="ui/js/ie10-viewport-bug-workaround.js"></script>
+
+	<script src="ui/dist/js/flat-ui.min.js"></script>
+
+	<script>
+		//左边 按钮动态注释
+		$(function() {
+			$('[data-toggle=tooltip]').tooltip();
+		});
+	</script>
+
+	<script>
+		//左边部分动态展示
+		function showPart(part) {
+			if (document.getElementById(part).style.display == "none") {
+				document.getElementById(part).style.display = "block";
+			}
+			if (part != "up") {
+				document.getElementById("up").style.display = "none";
+			}
+			if (part != "down") {
+				document.getElementById("down").style.display = "none";
+			}
+			if (part != "hair") {
+				document.getElementById("hair").style.display = "none";
+			}
+			if (part != "glasses") {
+				document.getElementById("glasses").style.display = "none";
+			}
+			if (part != "shoes") {
+				document.getElementById("shoes").style.display = "none";
+			}
+		}
+
+		function wearCloth(cloth_id, cloth_type) // 通过xml文件读取url
+		{
+			if (human1 == undefined) {
+				loadhumantest();
+				return;
+			}
+
+			var cloth_url = getModelURL(xmlDoc, cloth_id, cloth_type); // 获得某件衣服模型
+			//var cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);	// 只有 top, bottom, shoes有这句话
+			var cloth_opacity = undefined;
+			var human_cloth_type = '';
+			switch (cloth_type) // 只有 top, bottom, shoes有这句话
+			{
+			case 'top':
+				cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);
+				human_cloth_type = 'upcloth';
+				break;
+			case 'bottom':
+				cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);
+				human_cloth_type = 'trousers';
+				break;
+			case 'shoes':
+				cloth_opacity = getModelOpacityURL(xmlDoc, cloth_id, cloth_type);
+				human_cloth_type = 'shoes';
+				break;
+			case 'hair':
+				human_cloth_type = 'hair';
+				break;
+			case 'eyewear':
+				human_cloth_type = 'glasses';
+				break;
+			}
+
+			var cloth_mat = getMatURL(xmlDoc, cloth_id); // 材质url
+			human1.CMDLoadCloth2( // 上衣
+			human1, human_cloth_type, cloth_id, cloth_url, cloth_mat,
+					cloth_opacity);
+		}
+
+		function sidebarShow() // 用来动态的调整右侧侧边栏的显示效果
+		{
+			sidebar.dom.hidden = true;
+		}
+	</script>
+
+
+	<!-- fitting scene script -->
+
+	<script type="text/javascript">
+		//这里用来存放一些全局变量
+		var show; //封装
+		var sidebar; // 侧边栏
+		var canvas; // 画板
+		var stats; // 帧数显示器
+		var axes; // 坐标轴
+		var clock; // 时钟和轨迹球控制器
+		var dtrectionalLight; // 平行光线
+		var gridHelper; // 网格助手
+		var helper; // 显示骨骼的工具
+		var fileInput; // 想办法进行文件输入
+		var human1; // 人体模型
+		var xmlDoc = checkXMLDocObj('model_path.xml'); // 读取xml文档
+	</script>
+
+	<script>
+		//右侧边栏函数
+		var showRight = false;
+		function rightPart() {
+			if (!showRight) {
+				//显示右侧边栏
+				document.getElementById('left-inside').style.visibility = "visible";
+				showRight = true;
+			} else {
+				document.getElementById('left-inside').style.visibility = "hidden";
+				showRight = false;
+			}
+		}
+	</script>
+
+	<script type="text/javascript">
+		function onWindowResize() //重置窗口大小
+		{
+			//document.getElementById('TopMiddlePart').width = 3/4 * window.innerWidth;
+			//document.getElementById('TopMiddlePart').height = 3/4 * window.innerWidth;
+
+			show.onwindowresize(
+					document.getElementById('TopMiddlePart').clientWidth,
+					document.getElementById('TopMiddlePart').clientHeight); // 将canvas区域设置的window.inner那么大
+		}
+
+		function init() {
+			show = new Show();
+			show.init(document.getElementById('canvas').clientWidth, document
+					.getElementById('canvas').clientHeight);
+			//alert("x,y:"+document.getElementById('canvas').clientWidth+" "+document.getElementById('canvas').clientHeight)
+
+			sidebar = new Sidebar(show);
+			document.getElementById('left-inside').appendChild(sidebar.dom);
+			document.getElementById('left-inside').style.visibility = "hidden";
+			//document.body.appendChild(sidebar.dom);
+
+			addSkyBox(xmlDoc, "skybox_1", show);
+		}
+
+		function addstats() // 添加状态显示模块，在init之后执行
+		{
+			stats = new Stats(); // 新建一个状态显示器
+			stats.setMode(0); // 设置为默认显示fps
+			// 设置stats的位置s
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.left = '0px';
+			stats.domElement.style.top = '0px';
+			document.getElementById("middlePart").appendChild(stats.domElement);
+			//document.body.appendChild(stats.domElement); // 添加到页面中
+		}
+
+		function addListener() // 用来统一添加监听器
+		{
+			window.addEventListener('resize', onWindowResize, false); // 添加监听器，用来监听窗口变化
+		}
+
+		function addLight() // 添加光线
+		{
+			//directionalLight = new THREE.DirectionalLight(0xabfeff, 0.4);
+			directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+			directionalLight.position.set(1, 1, 1); // 设置光线方向
+			show.scene.add(directionalLight);
+		}
+
+		function addGrid() // 添加网格
+		{
+			var size = 10;
+			var step = 0.5;
+			gridHelper = new THREE.GridHelper(size, step); // 添加一个网格助手
+			show.scene.add(gridHelper);
+		}
+
+		function render() {
+
+			show.update(); // 渲染相机和场景
+			//stats.update(); // 更新
+			if (human1)
+				human1.update(human1);
+		}
+
+		function animation() // 动画
+		{
+			requestAnimationFrame(animation); // 要求定时渲染
+			render();
+		}
+
+		function addImport() {
+			fileInput = document.createElement('input');
+			fileInput.type = 'file';
+			fileInput.addEventListener('change', function(event) {
+
+				show.loader.loadFile(fileInput.files[0]);
+
+			});
+		}
+
+		function loadhumantest() { // 示例，使用xml存储human模型的地址
+			human1 = new Human(show);
+			var humanURL = gethumanURL(xmlDoc);
+			human1.load(human1, humanURL.body, humanURL.eyes,
+					humanURL.eyelashes, humanURL.diffuse, humanURL.specular,
+					humanURL.normal, humanURL.opacity, humanURL.lighting);
+			human1.init(human1); // 添加到场景中
+
+		}
+
+		function playAni() {
+			if (human1 == undefined) {
+				loadhumantest();
+				return;
+			}
+
+			if (human1.mixer === null)
+				human1.addMixer(human1);
+			human1.clipaction.play();
+			human1.play
+		}
+
+		function stopAni() {
+			if (human1 == undefined) {
+				loadhumantest();
+				return;
+			}
+			human1.clipaction.stop();
+		}
+
+		function MACM() { // 初始化MoveAndChooseManager
+			macm = new MoveAndChooseManager(show);
+		}
+
+		function main() {
+			init(); // 初始化窗口
+			addListener() // 添加监听器
+			//addstats(); // 添加状态显示
+			addLight(); // 添加光线
+			addGrid(); // 添加网格
+			animation(); // 调用动画
+			addImport();
+			MACM();
+		}
+		main(); //为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
+	</script>
+
+</body>
+</html>

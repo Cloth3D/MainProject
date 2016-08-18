@@ -79,7 +79,7 @@
 	      this.renderer.setClearColor(0xEEEEEE);
 
         // 初始化camera
-        this.camera  = new  THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
+        this.camera  = new  THREE.PerspectiveCamera( 75, width / height, 0.1, 8000 );
         if(camera_position === undefined)
         {
           this.camera.position.x = 0.03;

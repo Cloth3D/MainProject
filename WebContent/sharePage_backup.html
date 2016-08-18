@@ -2,8 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <title>您的好友向你分享了该试衣</title>
 <style>
 body {
@@ -15,74 +14,75 @@ canvas {
 	width: 100%;
 	height: 100%
 }
-
 #homepage {
-	position: absolute;
-	padding: 0px;
-	width: 100%;
-	z-index: 100;
-	bottom: 0px;
-	overflow: auto;
-	text-align: center;
-}
+				position: absolute;
+				top: 200px;
+				left: 0px;
+				width: 200px;
+				color: #555555;
+				padding: 5px;
+				font-family: Monospace;
+				font-size: 13px;
+				z-index:100;
+			}
 </style>
 
-<link href="ui/LXUI/css/lxui.css" rel="stylesheet">
 
-<script src='js/custom/Sidebar.js'></script>
-<script src='js/custom/Sidebar.Material.js'></script>
-<script src='js/custom/Sidebar.Object.js'></script>
-<script src='js/signals.min.js'></script>
 
-<script src='js/ui.js'></script>
-<script src='js/ui.three.js'></script>
+<script src = 'js/custom/Sidebar.js'></script>
+<script src = 'js/custom/Sidebar.Material.js'></script>
+<script src = 'js/custom/Sidebar.Object.js'></script>
+<script src = 'js/signals.min.js'></script>
+
+<script src = 'js/ui.js'></script>
+<script src = 'js/ui.three.js'></script>
 
 <script src='js/dat.gui.js'></script>
 <script src='js/three.js'></script>
 <script src='js/stats.min.js'></script>
 <script src='js/TrackballControls.js'></script>
 <script src='js/TransformControls.js'></script>
-<script src='js/SkeletonHelper.js'></script>
-<script src='js/AnimationMixer.js'></script>
-<script src='js/custom/Show.js'></script>
-<script src="js/OrbitControls.js"></script>
-<script src='js/TransformControls.js'></script>
-<script src='js/custom/Loader.js'></script>
-<script src='js/custom/transform.js'></script>
-<script src='js/custom/MaterialTools.js'></script>
-<script src='js/custom/Human.js'></script>
-<script src='js/custom/raycasting.js'></script>
-<script src='js/custom/MergeAlphaMap.js'></script>
-<script src='js/command/Command.js'>/</script>
-<script src='js/custom/History.js'></script>
-<script src='js/command/AddObjectCommand.js'></script>
-<script src='js/command/RemoveObjectCommand.js'></script>
-<script src='js/command/SetPositionCommand.js'></script>
-<script src='js/command/SetRotationCommand.js'></script>
-<script src='js/command/SetScaleCommand.js'></script>
-<script src='js/command/SetMaterialColorCommand.js'></script>
-<script src='js/command/SetMaterialCommand.js'></script>
-<script src='js/command/SetMaterialMapCommand.js'></script>
-<script src='js/command/SetMaterialValueCommand.js'></script>
-<script src='js/command/SetValueCommand.js'></script>
-<script src='js/command/SetColorCommand.js'></script>
-<script src='js/command/SetClothCommand.js'></script>
-<script src='js/command/SetFigureCommand.js'></script>
-<script src='js/custom/XMLReader.js'></script>
-<script src='js/custom/SkyBox.js'></script>
+<script src = 'js/SkeletonHelper.js'></script>
+<script src = 'js/AnimationMixer.js'></script>
+<script src = 'js/custom/Show.js'></script>
+<script src = "js/OrbitControls.js"></script>
+<script src = 'js/TransformControls.js'></script>
+<script src = 'js/custom/Loader.js'></script>
+<script src = 'js/custom/transform.js'></script>
+<script src = 'js/custom/MaterialTools.js'></script>
+<script src = 'js/custom/Human.js'></script>
+<script src = 'js/custom/raycasting.js'></script>
+<script src = 'js/custom/MergeAlphaMap.js'></script>
+<script src = 'js/command/Command.js'>/</script>
+<script src = 'js/custom/History.js'></script>
+<script src = 'js/command/AddObjectCommand.js'></script>
+<script src = 'js/command/RemoveObjectCommand.js'></script>
+<script src = 'js/command/SetPositionCommand.js'></script>
+<script src = 'js/command/SetRotationCommand.js'></script>
+<script src = 'js/command/SetScaleCommand.js'></script>
+<script src = 'js/command/SetMaterialColorCommand.js'></script>
+<script src = 'js/command/SetMaterialCommand.js'></script>
+<script src = 'js/command/SetMaterialMapCommand.js'></script>
+<script src = 'js/command/SetMaterialValueCommand.js'></script>
+<script src = 'js/command/SetValueCommand.js'></script>
+<script src = 'js/command/SetColorCommand.js'></script>
+<script src = 'js/command/SetClothCommand.js'></script>
+<script src = 'js/command/SetFigureCommand.js'></script>	
+<script src = 'js/custom/XMLReader.js'></script>
+<script src = 'js/custom/SkyBox.js'></script>
 
 </head>
 
 <body onload="main();">
-	<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
+<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
 你的浏览器不支持本应用
 </canvas>
 
-	<div id="homepage">
-		<a href="homepage2.html" class="btn btn-primary btn-lg btn-block"><strong>转入主页进行尝试</strong></a>
-	</div>
+<div id = "homepage">
+	<a href="homepage2.html"><h1>转入主页进行尝试</h1></a>
+</div>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	//这里用来存放一些全局变量
 	var show;						//封装
 	var sidebar;					// 侧边栏
@@ -100,8 +100,8 @@ canvas {
 	var startReq = new signals.Signal();		// 定义一个signals
 	var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
 	</script>
-
-	<Script>  
+	
+<Script>  
 // 用来分析加载什么衣服，待show初始化完成后，用signals进行调用
 
 function GetRequest() {   
@@ -250,27 +250,6 @@ function onWindowResize() //重置窗口大小
 {
 	show.onwindowresize(window.innerWidth,window.innerHeight);								// 将canvas区域设置的window.inner那么大
 }
-var winWidth = 0;
-var winHeight = 0;
-function findDimensions() //函数：获取尺寸
-{
-	//获取窗口宽度
-	if (window.innerWidth)
-		winWidth = window.innerWidth;
-	else if ((document.body) && (document.body.clientWidth))
-		winWidth = document.body.clientWidth;
-	//获取窗口高度
-	if (window.innerHeight)
-		winHeight = window.innerHeight;
-	else if ((document.body) && (document.body.clientHeight))
-		winHeight = document.body.clientHeight;
-	//通过深入Document内部对body进行检测，获取窗口大小
-	if (document.documentElement  && document.documentElement.clientHeight && document.documentElement.clientWidth)
-	{
-		winHeight = document.documentElement.clientHeight;
-		winWidth = document.documentElement.clientWidth;
-	}
-}
 
 function init()
 {
@@ -285,6 +264,17 @@ function init()
 	
 	loadhumantest();
 	
+}
+
+function addstats()		// 添加状态显示模块，在init之后执行
+{
+	stats = new Stats();									// 新建一个状态显示器
+	stats.setMode(0);										// 设置为默认显示fps
+	// 设置stats的位置s
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top	 = '0px';
+	document.body.appendChild(stats.domElement);			// 添加到页面中
 }
 
 function addListener()		// 用来统一添加监听器
@@ -312,9 +302,13 @@ function render()
 {
 
 	show.update();					// 渲染相机和场景
-	//stats.update();										// 更新
+	stats.update();										// 更新
+	if(trans)
+		trans.update();
 	if(human1)
 		human1.update(human1);
+	if(myRayCaster)
+		myRayCaster.update(myRayCaster);
 
 }
 
@@ -345,6 +339,19 @@ function loadhumantest()
 
 }
 
+
+
+function transfor()                       // 添加使show.selected移动的控制器
+{
+  trans = new transform(show);
+  trans.init(trans);
+}
+
+function addRayCasting(){                 // 通过射线实现点选功能
+  myRayCaster = new raycasting(show);
+  myRayCaster.init();
+}
+
 function playAni()
 {
 	if(human1.mixer === null) human1.addMixer(human1);
@@ -366,11 +373,15 @@ function main()  // 放在 <body onload>时执行，保证js文件全部加载�
 {
 	init();					// 初始化窗口
 	addListener()			// 添加监听器
+	addstats();				// 添加状态显示
 	addLight();				// 添加光线
 	addGrid();				// 添加网格
 	animation();			// 调用动画
+  	transfor();
+  	addRayCasting();			//点选功能
 
 }
+//main();						//为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
 </script>
 </body>
 </html>

@@ -290,6 +290,10 @@ Human.prototype = {
 	{
 		this.show.execute(new SetClothCommand(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light, url_human_alpha));
 	},
+	CMDLoadCloth2:function(human, type, cloth_id, cloth_url, cloth_mat, cloth_opacity)
+	{
+		this.show.execute(new SetClothCommand(human, type, cloth_id, cloth_url, cloth_mat, cloth_opacity));
+	},
 
 	loadCloth:function(hu, type, url_cloth, url_diffuse, url_specular, url_normal, url_Opacity, url_light, url_human_alpha)
 	/**

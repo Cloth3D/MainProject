@@ -50,13 +50,13 @@ var checkXMLDocObj = function(xmlFile) {
 	return xmlDoc;
 }
 
-function getModelURL(xmlDoc, cloth_id, cloth_type)
 /**
 * xmlDoc:xmlDocumention
 * cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
 * cloth_type:字符串衣服类型，可选 'top', 'bottom', 'hair', 'eyewear', 'shoes'
 * return : 字符串，该模型的url
 */
+function getModelURL(xmlDoc, cloth_id, cloth_type)
 {
 	var clothArray = xmlDoc.getElementsByTagName(cloth_id)[0];		// 找到衣服组的标签
 	clothArray = clothArray.children;								// cloth子节点
@@ -81,8 +81,6 @@ function getModelURL(xmlDoc, cloth_id, cloth_type)
 	return null;
 }
 
-
-function getMatURL(xmlDoc, cloth_id)
 /**
  * xmlDoc:xmlDocumention
  * cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
@@ -94,6 +92,7 @@ function getMatURL(xmlDoc, cloth_id)
  * 			lighting: string
  * }
  */
+function getMatURL(xmlDoc, cloth_id)
 {
 	var clothArray = xmlDoc.getElementsByTagName(cloth_id)[0];		// 找到衣服组的标签
 	clothArray = clothArray.children;								// cloth子节点
@@ -120,13 +119,13 @@ function getMatURL(xmlDoc, cloth_id)
 	else return null;
 }
 
-function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
 /**
  * xmlDoc:xmlDocumention
  * cloth_id:字符串与xml中的服装节点相同<cloth1>……</cloth1>
  * cloth_type:字符串衣服类型，可选 'top', 'bottom', 'hair', 'eyewear', 'shoes'
  * return : 字符串，该模型的透明贴图的url
  */
+function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
 {
 	var clothArray = xmlDoc.getElementsByTagName(cloth_id)[0];		// 找到衣服组的标签
 	clothArray = clothArray.children;								// cloth子节点
@@ -151,7 +150,6 @@ function getModelOpacityURL(xmlDoc, cloth_id, cloth_type)
 	return null;
 }
 
-function gethumanURL(xmlDoc)
 /**
  * xmlDoc:xmlDocumention
  * return:{
@@ -165,6 +163,7 @@ function gethumanURL(xmlDoc)
  * 			lighting: string
  * 			}
  */
+function gethumanURL(xmlDoc)
 {
 	var humanArray = xmlDoc.getElementsByTagName("human")[0];		// 找到人体节点的标签
 	humanArray = humanArray.children;								// 找到human下的节点
