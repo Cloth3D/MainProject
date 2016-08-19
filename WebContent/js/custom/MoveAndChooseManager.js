@@ -330,18 +330,23 @@ var MoveAndChooseManager = function(show){
 
 		if ( show.selected === object ) {		// 先判断是否是选择的物体
 
-			//selectionBox.update( object );
 			transformControls.update();
 
 		}
 
-//		if ( object instanceof THREE.PerspectiveCamera ) {
-//
-//			object.updateProjectionMatrix();
-//
-//		}
-
 		render();
+
+	} );
+	
+	signals.transformModeChanged.add( function ( mode ) {
+
+		transformControls.setMode( mode );
+
+	} );
+	
+	signals.spaceChanged.add( function ( space ) {
+
+		transformControls.setSpace( space );
 
 	} );
 	

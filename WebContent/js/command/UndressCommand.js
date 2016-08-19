@@ -19,9 +19,9 @@ var UndressCommand = function(human, type)
 	this.human = human;								// 留下引用
 	this.oldCloth = human[type]; 					// 原有的衣服的模型
 	this.oldHumanAlpha = human.material.alphaMap; 	// 原有的人体透明贴图
+	this.oldClothAlpha = human.clothAlpha[this.ctype];	// 原有的衣服透明贴图
 	
-	this.ctype = type; 								// 类型  "upcloth", "trousers" , "glasses", "shoes", "hair"
-	this.human_alpha = null; 						// 衣服携带的透明贴图
+	this.ctype = type; 			// 类型  "upcloth", "trousers" , "glasses", "shoes", "hair"
 	
 	this.type = this.ctype + 'UndressCommand';
 };
@@ -54,7 +54,8 @@ UndressCommand.prototype = {
 		{
 			human[this.ctype] = this.oldCloth;					// 重新加上引用
 			human.group.add(this.oldCloth);						// 穿衣服
-			human.material.alphaMap = this.human_alpha;			// 合成后的贴图附加在human材质上
+			human.clothAlpha[this.ctype] = this.oldClothAlpha;		// 将衣服携带的透明贴图归还
+			human.material.alphaMap = this.oldHumanAlpha;			// 合成后的贴图附加在human材质上
 			human.material.needsUpdate = true;
 		    
 		}

@@ -10,6 +10,7 @@ Sidebar.Material = function ( show ) {
 	var container = new UI.Panel();
 	container.setBorderTop( '0' );
 	container.setPaddingTop( '20px' );
+	container.setDisplay( 'none' );
 
 	// type
 
@@ -520,7 +521,7 @@ Sidebar.Material = function ( show ) {
 				show.execute( new SetMaterialValueCommand( currentObject, 'skinning', materialSkinning.getValue() ) );
 
 			}
-			console.log(material.map);
+			//console.log(material.map);
 			if ( material.map !== undefined ) {
 
 				var mapEnabled = materialMapEnabled.getValue() === true;

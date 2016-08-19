@@ -252,6 +252,106 @@ Sidebar.Object = function ( show ) {
 	objectVisibleRow.add( objectVisible );
 
 	container.add( objectVisibleRow );
+	
+	var objectDownloadRow = new UI.Row();	// 导出文件
+	objectDownloadRow.add( new UI.Text('Export').setWidth('90px'));
+	
+	var toJSON = new UI.Button('json').onClick(function(){
+		
+		var object = show.selected;
+
+		if ( object === null ) {
+
+			alert( 'No object selected' );
+			return;
+
+		}
+
+		var output = object.toJSON();
+
+		try {
+
+			output = JSON.stringify( output, null, '\t' );
+			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+
+		} catch ( e ) {
+
+			output = JSON.stringify( output );
+
+		}
+
+		saveString( output, 'model.json' );
+		
+	});
+	
+	objectDownloadRow.add(toJSON);				// 添加toJSON按钮
+	
+	var toOBJ = new UI.Button('obj').onClick(function(){
+		
+		var object = show.selected;
+
+		if ( object === null ) {
+
+			alert( 'No object selected.' );
+			return;
+
+		}
+
+		var exporter = new THREE.OBJExporter();
+
+		saveString( exporter.parse( object ), 'model.obj' );
+		
+	});
+	
+	objectDownloadRow.add(toOBJ);	// 添加obj导出按钮
+	
+	var toSTL = new UI.Button('stl').onClick(function(){
+		
+		var exporter = new THREE.STLExporter();
+
+		saveString( exporter.parse( show.selected ), 'model.stl' );
+		
+	});
+	
+	objectDownloadRow.add(toSTL);		// 添加stl导出按钮
+	
+	container.add(objectDownloadRow);
+	
+	
+	
+	
+	container.add( new UI.Text( 'Translate' ).setWidth( '90px' ) );
+	
+	var translate = new UI.Button( 'Translate' ).onClick( function () {
+
+		signals.transformModeChanged.dispatch( 'translate' );
+
+	} );
+	container.add( translate );
+
+	var rotate = new UI.Row().add(new UI.Text( 'Rotation' ).setWidth( '90px' ));
+	rotate.add(new UI.Button( 'Rotate' ).onClick( function () {
+
+		signals.transformModeChanged.dispatch( 'rotate' );
+
+	} ));
+	container.add( rotate );
+
+	var scale = new UI.Row().add(new UI.Text( 'Scale' ).setWidth( '90px' ));
+	scale.add( new UI.Button( 'Scale' ).onClick( function () {
+
+		signals.transformModeChanged.dispatch( 'scale' );
+
+	} ));
+	container.add( scale );
+	
+	var local =  new UI.Row().add(new UI.Text('Axis').setWidth('90px'));
+	local.add(new UI.THREE.Boolean( false, 'local' ).onChange( function(){
+		
+		signals.spaceChanged.dispatch( local.getValue() === true ? "local" : "world" );
+		
+	} ));
+	container.add( local );
 
 	// user data
 
@@ -444,16 +544,8 @@ Sidebar.Object = function ( show ) {
 
 			}
 
-			if ( object.decay !== undefined && Math.abs( object.decay - objectDecay.getValue() ) >= 0.01 ) {
-
-				if(object.parent instanceof THREE.Group)	object = object.parent;
-				show.execute( new SetValueCommand( object, 'decay', objectDecay.getValue() ) );
-
-			}
-
 			if ( object.visible !== objectVisible.getValue() ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'visible', objectVisible.getValue() ) );
 
 			}
@@ -723,6 +815,27 @@ Sidebar.Object = function ( show ) {
 		updateTransformRows( object );
 
 	}
+	
+	var link = document.createElement( 'a' );
+	link.style.display = 'none';
+	document.body.appendChild( link ); // Firefox workaround, see #6594
+	
+	function save( blob, filename ) {
+
+		link.href = URL.createObjectURL( blob );
+		link.download = filename || 'data.json';
+		link.click();
+
+		// URL.revokeObjectURL( url ); breaks Firefox...
+
+	}
+
+	function saveString( text, filename ) {
+
+		save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+
+	}
+
 
 	return container;
 

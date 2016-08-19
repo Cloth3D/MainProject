@@ -47,7 +47,9 @@
       refreshSidebarObject3D: new SIGNALS.Signal(),	// 刷新侧边栏
       
       objectAdded: new SIGNALS.Signal(),			// 增添模型时，需要刷新射线的objects数组
-  	  objectRemoved: new SIGNALS.Signal()			// 模型被移除时也需要进行刷新数组处理
+  	  objectRemoved: new SIGNALS.Signal(),			// 模型被移除时也需要进行刷新数组处理
+  	  transformModeChanged: new SIGNALS.Signal(),	// 改变移动控制器模式
+  	  spaceChanged: new SIGNALS.Signal()
    	  
    };
 

@@ -10,10 +10,10 @@ body {
 	overflow: hidden;
 }
 
-canvas {
-	width: 100%;
-	height: 100%
-}
+/* canvas { */
+/* 	width: 100%; */
+/* 	height: 100% */
+/* } */
 
 #ctrl {
 	position: absolute;
@@ -27,8 +27,8 @@ canvas {
 	z-index: 100;
 }
 </style>
-<link href="css/main.css" rel="stylesheet" />
-<link id="theme" href="css/light.css" rel="stylesheet" />
+
+<link href='ui/sideBar_test_page.css' rel="stylesheet">
 
 <script src='js/custom/Sidebar.js'></script>
 <script src='js/custom/Sidebar.Material.js'></script>
@@ -156,7 +156,12 @@ canvas {
 </script>
 <script src = 'js/custom/XMLReader.js'></script>
 <script src = 'js/command/UndressCommand.js'></script>
+<script src = 'js/custom/MoveAndChooseManager.js'></script>
+<script src = 'js/custom/SkyBox.js'></script>
 
+<script src = 'js/exporets/OBJExporter.js'></script>
+<script src = 'js/exporets/STLBinaryExporter.js'></script>
+<script src = 'js/exporets/STLExporter.js'></script>
 </head>
 <body>
 
@@ -221,15 +226,71 @@ canvas {
 		<button onclick = "wearCloth('cloth2', 'eyewear');">眼镜2</button>
 		<button onclick = "wearCloth('cloth3', 'eyewear');">眼镜3</button>
 		<button onclick = "undress('glasses');">摘眼镜</button>
+		<br/>
+		<button onclick = "toJson();">储存为json</button>
+		<button onclick = "toOBJ();">储存为obj</button>
+		<button onclick = "toSTL();">储存为stl</button>
 		
-
-
+		
 	</div>
 	<div id='div1'>
 		<canvas id='canvas' width=window.innerWidth height=window.innerHeight>
 你的浏览器不支持本应用
 </canvas>
 	</div>
+<script>
+function toJson() {
+
+	var object = show.selected;
+
+	if ( object === null ) {
+
+		alert( 'No object selected' );
+		return;
+
+	}
+
+	var output = object.toJSON();
+
+	try {
+
+		output = JSON.stringify( output, null, '\t' );
+		output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+
+	} catch ( e ) {
+
+		output = JSON.stringify( output );
+
+	}
+
+	saveString( output, 'model.json' );
+
+};
+function toOBJ() {
+
+	var object = show.selected;
+
+	if ( object === null ) {
+
+		alert( 'No object selected.' );
+		return;
+
+	}
+
+	var exporter = new THREE.OBJExporter();
+
+	saveString( exporter.parse( object ), 'model.obj' );
+
+} 
+function toSTL() {
+
+	var exporter = new THREE.STLExporter();
+
+	saveString( exporter.parse( show.selected ), 'model.stl' );
+
+} 
+
+</script>
 
 	<script type="text/javascript">
 		//这里用来存放一些全局变量
@@ -247,6 +308,7 @@ canvas {
 		var human1; // 人体模型
 		var myRayCaster; // 定义一个射线管理器
 		var xmlDoc = checkXMLDocObj('model_path.xml');		// 读取xml文档
+		var macm;			// 移动和选择管理
 	</script>
 
 	<script type="text/javascript">
@@ -262,7 +324,9 @@ canvas {
 			sidebar = new Sidebar(show);
 			document.body.appendChild(sidebar.dom);
 			console.log(sidebar);
-			sidebar.dom.hidden = true;
+			sidebar.dom.hidden = false;
+			
+			addSkyBox(xmlDoc, "skybox_1", show);
 		}
 
 		function addstats() // 添加状态显示模块，在init之后执行
@@ -397,17 +461,6 @@ canvas {
 			show.execute(new UndressCommand(human1, cloth_type));
 		}
 
-		function transfor() // 添加使show.selected移动的控制器
-		{
-			trans = new transform(show);
-			trans.init(trans);
-		}
-
-		function addRayCasting() { // 通过射线实现点选功能
-			myRayCaster = new raycasting(show);
-			myRayCaster.init();
-		}
-
 		function playAni() {
 			if (human1.mixer === null)
 				human1.addMixer(human1);
@@ -422,6 +475,30 @@ canvas {
 		function resetAni() {
 			human1.clipaction.reset();
 		}
+		
+		function MACM() {	// 初始化MoveAndChooseManager
+			macm = new MoveAndChooseManager(show);
+		}
+		
+		var link = document.createElement( 'a' );
+		link.style.display = 'none';
+		document.body.appendChild( link ); // Firefox workaround, see #6594
+		
+		function save( blob, filename ) {
+
+			link.href = URL.createObjectURL( blob );
+			link.download = filename || 'data.json';
+			link.click();
+
+			// URL.revokeObjectURL( url ); breaks Firefox...
+
+		}
+
+		function saveString( text, filename ) {
+
+			save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+
+		}
 
 		function main() {
 			init(); // 初始化窗口
@@ -432,9 +509,8 @@ canvas {
 			addGrid(); // 添加网格
 			animation(); // 调用动画
 			addImport();
-			transfor();
-			addRayCasting(); //点选功能
-
+			
+			MACM();
 		}
 		main(); //为了更清晰的理清逻辑，建立一个main函数,在窗口打开后执行一次
 	</script>
