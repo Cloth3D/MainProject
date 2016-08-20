@@ -20,16 +20,7 @@ var MoveAndChooseManager = function(show){
 
 		if ( object !== undefined ) {
 
-			//selectionBox.update( object );
-
-			//if ( editor.helpers[ object.id ] !== undefined ) {
-
-				//editor.helpers[ object.id ].update();
-			// 这里是刷新,辅助工具的显示
-			
-			//}
-
-			//signals.refreshSidebarObject3D.dispatch( object );
+			signals.refreshSidebarObject3D.dispatch( object );
 
 		}
 
@@ -162,7 +153,6 @@ var MoveAndChooseManager = function(show){
 	function getIntersects( point, objects ) {
 
 		mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
-		//console.log(mouse);
 		raycaster.setFromCamera( mouse, camera );
 
 		return raycaster.intersectObjects( objects );
@@ -176,7 +166,6 @@ var MoveAndChooseManager = function(show){
 	function getMousePosition( dom, x, y ) {		// 获得可以用于raycaster的鼠标坐标信息
 
 		var rect = dom.getBoundingClientRect();
-		//console.log(rect);
 		return [ ( x - rect.left ) / rect.width, ( y - rect.top ) / rect.height ];
 
 	}
@@ -198,8 +187,6 @@ var MoveAndChooseManager = function(show){
 				show.select( null );		// 没有选中物体的话
 
 			}
-			//console.log("objects数组",objects)
-			//console.log("相交数组",intersects);
 			render();
 
 		}
@@ -263,7 +250,6 @@ var MoveAndChooseManager = function(show){
 
 			var intersect = intersects[ 0 ];
 
-			//signals.objectFocused.dispatch( intersect.object );
 			show.select(intersect.object);		// 选中物体
 			render();
 		}
@@ -276,18 +262,10 @@ var MoveAndChooseManager = function(show){
 	
 	signals.objectSelected.add(function ( object ) {			// 模型被选中时信号量
 
-		//selectionBox.visible = false;
 		transformControls.detach();
 
 		if ( object !== null ) {
-			// 这部分是用来处理选择框的
-//			if ( object.geometry !== undefined &&
-//				 object instanceof THREE.Sprite === false ) {
-//
-//				selectionBox.update( object );
-//				selectionBox.visible = true;
-//
-//			}
+			
 			if(object.parent instanceof THREE.Group){
 				
 				transformControls.attach( object.parent );
@@ -304,11 +282,10 @@ var MoveAndChooseManager = function(show){
 	});
 	
 	signals.objectAdded.add( function ( object ) {		// 添加了模型后把它加入到ray 判断数组中
-		//console.log("执行了objectAdded信号量");
+		
 		object.traverse( function ( child ) {
 			
 			if(child instanceof THREE.Bone) return;
-			//console.log("执行了objectAdded信号量",child);
 			objects.push( child );
 
 		} );
@@ -328,7 +305,10 @@ var MoveAndChooseManager = function(show){
 	
 	signals.objectChanged.add( function ( object ) {	// 因为使用sidebar更改位置信息时，会偶尔出现helper没有跟上物体的情况
 
-		if ( show.selected === object ) {		// 先判断是否是选择的物体
+		var obj = show.selected;		// 防止出现父子关系混乱
+		if(obj.parent instanceof THREE.Group)
+			obj = obj.parent;
+		if ( obj === object ) {		// 先判断是否是选择的物体
 
 			transformControls.update();
 
