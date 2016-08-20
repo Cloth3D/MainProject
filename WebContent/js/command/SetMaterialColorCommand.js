@@ -29,20 +29,8 @@ SetMaterialColorCommand.prototype = {
 
 	execute: function () {
 
-//		if(this.object.parent instanceof THREE.Group)
-//		{
-//			var objArray = this.object.parent.children;
-//			for(var i = 0; i < objArray.length; i++)
-//			{
-//				objArray[i].material[ this.attributeName ].setHex( this.newValue );
-//			}
-//
-//			this.show.signals.materialChanged.dispatch( this.object.material );
-//		}
-//		else {
 			this.object.material[ this.attributeName ].setHex( this.newValue );
 			this.show.signals.materialChanged.dispatch( this.object.material );
-//		}
 
 	},
 
@@ -68,30 +56,6 @@ SetMaterialColorCommand.prototype = {
 	update: function ( cmd ) {
 
 		this.newValue = cmd.newValue;
-
-	},
-
-	toJSON: function () {
-
-		var output = Command.prototype.toJSON.call( this );
-
-		output.objectUuid = this.object.uuid;
-		output.attributeName = this.attributeName;
-		output.oldValue = this.oldValue;
-		output.newValue = this.newValue;
-
-		return output;
-
-	},
-
-	fromJSON: function ( json ) {
-
-		Command.prototype.fromJSON.call( this, json );
-
-		this.object = this.show.objectByUuid( json.objectUuid );
-		this.attributeName = json.attributeName;
-		this.oldValue = json.oldValue;
-		this.newValue = json.newValue;
 
 	}
 

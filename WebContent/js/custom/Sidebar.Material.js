@@ -35,23 +35,6 @@ Sidebar.Material = function ( show ) {
 
 	container.add( materialClassRow );
 
-	// uuid
-
-	// var materialUUIDRow = new UI.Row();
-	// var materialUUID = new UI.Input().setWidth( '115px' ).setFontSize( '12px' ).setDisabled( true );
-	// var materialUUIDRenew = new UI.Button( '⟳' ).setMarginLeft( '7px' ).onClick( function () {
-	//
-	// 	materialUUID.setValue( THREE.Math.generateUUID() );
-	// 	update();
-	//
-	// } );
-	//
-	// materialUUIDRow.add( new UI.Text( 'UUID' ).setWidth( '90px' ) );
-	// materialUUIDRow.add( materialUUID );
-	// materialUUIDRow.add( materialUUIDRenew );
-	//
-	// container.add( materialUUIDRow );
-
 	// name
 
 	var materialNameRow = new UI.Row();
@@ -65,40 +48,6 @@ Sidebar.Material = function ( show ) {
 	materialNameRow.add( materialName );
 
 	container.add( materialNameRow );
-
-	// program
-
-	// var materialProgramRow = new UI.Row();
-	// materialProgramRow.add( new UI.Text( 'Program' ).setWidth( '90px' ) );
-	//
-	// var materialProgramInfo = new UI.Button( 'Info' );
-	// materialProgramInfo.setMarginLeft( '4px' );
-	// materialProgramInfo.onClick( function () {
-	//
-	// 	//signals.editScript.dispatch( currentObject, 'programInfo' );
-	//
-	// } );
-	// materialProgramRow.add( materialProgramInfo );
-	//
-	// var materialProgramVertex = new UI.Button( 'Vertex' );
-	// materialProgramVertex.setMarginLeft( '4px' );
-	// materialProgramVertex.onClick( function () {
-	//
-	// 	//signals.editScript.dispatch( currentObject, 'vertexShader' );
-	//
-	// } );
-	// materialProgramRow.add( materialProgramVertex );
-	//
-	// var materialProgramFragment = new UI.Button( 'Fragment' );
-	// materialProgramFragment.setMarginLeft( '4px' );
-	// materialProgramFragment.onClick( function () {
-	//
-	// 	//signals.editScript.dispatch( currentObject, 'fragmentShader' );
-	//
-	// } );
-	// materialProgramRow.add( materialProgramFragment );
-	//
-	// container.add( materialProgramRow );
 
 	// color
 
@@ -449,12 +398,6 @@ Sidebar.Material = function ( show ) {
 
 		if ( material ) {
 
-			// if ( material.uuid !== undefined && material.uuid !== materialUUID.getValue() ) {
-			//
-			// 	show.execute( new SetMaterialValueCommand( currentObject, 'uuid', materialUUID.getValue() ) );
-			//
-			// }
-
 			if ( material instanceof THREE[ materialClass.getValue() ] === false ) {
 
 				material = new THREE[ materialClass.getValue() ]();
@@ -521,19 +464,15 @@ Sidebar.Material = function ( show ) {
 				show.execute( new SetMaterialValueCommand( currentObject, 'skinning', materialSkinning.getValue() ) );
 
 			}
-			//console.log(material.map);
 			if ( material.map !== undefined ) {
 
 				var mapEnabled = materialMapEnabled.getValue() === true;
-				//console.log("objectHasUvs",objectHasUvs);
 				
 				if ( objectHasUvs ) {
 
 					var map = mapEnabled ? materialMap.getValue() : null;
-					//console.log("materialMap.getValue()",materialMap.getValue());
 					if ( material.map !== map ) {
 						
-						//console.log("尝试更换贴图");
 						show.execute( new SetMaterialMapCommand( currentObject, 'map', map ) );
 
 					}
@@ -896,7 +835,6 @@ Sidebar.Material = function ( show ) {
 			'emissive': materialEmissiveRow,
 			'specular': materialSpecularRow,
 			'shininess': materialShininessRow,
-			//'vertexShader': materialProgramRow,
 			'vertexColors': materialVertexColorsRow,
 			'skinning': materialSkinningRow,
 			'map': materialMapRow,
@@ -936,12 +874,6 @@ Sidebar.Material = function ( show ) {
 		if ( ! currentObject ) return;
 
 		var material = currentObject.material;
-
-		// if ( material.uuid !== undefined ) {
-		//
-		// 	materialUUID.setValue( material.uuid );
-		//
-		// }
 
 		if ( material.name !== undefined ) {
 

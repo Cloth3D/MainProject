@@ -34,44 +34,10 @@ var Loader = function ( show ) {
 					var amfobject = loader.parse( event.target.result );
 
 					show.execute( new AddObjectCommand( amfobject ) );
-					//show.addObject(amfobject);
 				}, false );
 				reader.readAsArrayBuffer( file );
 
 				break;
-
-			// case 'awd':
-			//
-			// 	reader.addEventListener( 'load', function ( event ) {
-			//
-			// 		var loader = new THREE.AWDLoader();
-			// 		var scene = loader.parse( event.target.result );
-			// 		/*---------------------------------------------------------------------------------------*/
-			// 		// 用来设置场景的，考虑不去实现它，但先丢在这好了
-			// 		// editor.execute( new SetSceneCommand( scene ) );
-			//
-			// 	}, false );
-			// 	reader.readAsArrayBuffer( file );
-			//
-			// 	break;
-
-			// case 'babylon':
-			//
-			// 	reader.addEventListener( 'load', function ( event ) {
-			//
-			// 		var contents = event.target.result;
-			// 		var json = JSON.parse( contents );
-			//
-			// 		var loader = new THREE.BabylonLoader();
-			// 		var scene = loader.parse( json );
-			// 		/*---------------------------------------------------------------------------------------*/
-			// 		// 用来设置场景的，考虑不去实现它，但先丢在这好了
-			// 		// editor.execute( new SetSceneCommand( scene ) );
-			//
-			// 	}, false );
-			// 	reader.readAsText( file );
-			//
-			// 	break;
 
 			case 'babylonmeshdata':
 
@@ -117,7 +83,6 @@ var Loader = function ( show ) {
 						mesh.name = filename;
 
 						show.execute( new AddObjectCommand( mesh ) );
-						//show.addObject(mesh);
 
 					} );
 
@@ -138,7 +103,6 @@ var Loader = function ( show ) {
 					collada.scene.name = filename;
 
 					show.execute( new AddObjectCommand( collada.scene ) );
-					//show.addObject(collada.scene);
 
 				}, false );
 				reader.readAsText( file );
@@ -155,7 +119,6 @@ var Loader = function ( show ) {
 					var object = loader.parse( contents );
 
 					show.execute( new AddObjectCommand( object ) );
-					//show.addObject(object);
 
 				}, false );
 				reader.readAsText( file );
@@ -229,7 +192,6 @@ var Loader = function ( show ) {
 					collada.scene.name = filename;
 
 					show.execute( new AddObjectCommand( collada.scene ) );
-					//show.addObject(collada.scene);
 
 				}, false );
 				reader.readAsArrayBuffer( file );
@@ -253,7 +215,7 @@ var Loader = function ( show ) {
 					mesh.name = filename;
 
 					show.execute( new AddObjectCommand( mesh ) );
-					//show.addObject(mesh);
+					
 				}, false );
 				reader.readAsArrayBuffer( file );
 
@@ -269,7 +231,6 @@ var Loader = function ( show ) {
 					var object = new THREE.OBJLoader().parse( contents );
 					object.name = filename;
 
-					//show.addObject(object);
 					show.execute( new AddObjectCommand( object ) );
 
 				}, false );
@@ -288,7 +249,6 @@ var Loader = function ( show ) {
 					var object = loader.parse( json );
 
 					show.execute( new AddObjectCommand( object ) );
-					//show.addObject(object);
 
 				}, false );
 				reader.readAsText( file );
@@ -311,7 +271,6 @@ var Loader = function ( show ) {
 					mesh.name = filename;
 
 					show.execute( new AddObjectCommand( mesh ) );
-					//show.addObject(mesh);
 
 				}, false );
 				reader.readAsText( file );
@@ -334,7 +293,6 @@ var Loader = function ( show ) {
 					mesh.name = filename;
 
 					show.execute( new AddObjectCommand( mesh ) );
-					//show.addObject(mesh);
 
 				}, false );
 
@@ -349,26 +307,6 @@ var Loader = function ( show ) {
 				}
 
 				break;
-
-			/*
-			case 'utf8':
-
-				reader.addEventListener( 'load', function ( event ) {
-
-					var contents = event.target.result;
-
-					var geometry = new THREE.UTF8Loader().parse( contents );
-					var material = new THREE.MeshLambertMaterial();
-
-					var mesh = new THREE.Mesh( geometry, material );
-
-					editor.execute( new AddObjectCommand( mesh ) );
-
-				}, false );
-				reader.readAsBinaryString( file );
-
-				break;
-			*/
 
 			case 'vtk':
 
@@ -386,27 +324,11 @@ var Loader = function ( show ) {
 					mesh.name = filename;
 
 					show.execute( new AddObjectCommand( mesh ) );
-					//show.addObject(mesh);
 
 				}, false );
 				reader.readAsText( file );
 
 				break;
-
-			// case 'wrl':
-			//
-			// 	reader.addEventListener( 'load', function ( event ) {
-			//
-			// 		var contents = event.target.result;
-			//
-			// 		var result = new THREE.VRMLLoader().parse( contents );
-			//
-			// 		// editor.execute( new SetSceneCommand( result ) );
-			//
-			// 	}, false );
-			// 	reader.readAsText( file );
-			//
-			// 	break;
 
 			default:
 
@@ -448,7 +370,6 @@ var Loader = function ( show ) {
 				var mesh = new THREE.Mesh( result );
 
 				show.execute( new AddObjectCommand( mesh ) );
-				//show.addObject(mesh);
 
 				break;
 
@@ -498,41 +419,8 @@ var Loader = function ( show ) {
 				mesh.name = filename;
 
 				show.execute( new AddObjectCommand( mesh ) );
-				//show.addObject(mesh);
 
 				break;
-
-			// case 'object':
-			//
-			// 	var loader = new THREE.ObjectLoader();
-			// 	loader.setTexturePath( scope.texturePath );
-			//
-			// 	var result = loader.parse( data );
-			//
-			// 	if ( result instanceof THREE.Scene ) {
-			//
-			// 		// editor.execute( new SetSceneCommand( result ) );
-			//
-			// 	} else {
-			//
-			// 		editor.execute( new AddObjectCommand( result ) );
-			//
-			// 	}
-			//
-			// 	break;
-
-			// case 'scene':
-			//
-			// 	// DEPRECATED
-			//
-			// 	var loader = new THREE.SceneLoader();
-			// 	loader.parse( data, function ( result ) {
-			//
-			// 		// editor.execute( new SetSceneCommand( result.scene ) );
-			//
-			// 	}, '' );
-			//
-			// 	break;
 
 			case 'app':
 

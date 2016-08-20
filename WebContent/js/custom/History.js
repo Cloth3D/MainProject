@@ -12,7 +12,6 @@ History = function ( show ) {
 	this.idCounter = 0;																// undos.length
 
 	this.historyDisabled = false;											// 正在进行一些特殊操作时应暂时禁止撤销恢复
-	//this.config = show.config;											// 设置，本系统暂时不需要
 
 	//Set show-reference in Command
 
@@ -32,7 +31,6 @@ History.prototype = {
 			cmd.updatable &&
 			lastCmd.object === cmd.object &&
 			lastCmd.type === cmd.type &&
-			// lastCmd.script === cmd.script &&						// 我们不用设置脚本语言
 			lastCmd.attributeName === cmd.attributeName;
 
 		if ( isUpdatableCmd && timeDifference < 500 ) {										// 时间长度超过半秒后生成新的操作
@@ -41,8 +39,6 @@ History.prototype = {
 			cmd = lastCmd;
 
 		} else {
-
-			// the command is not updatable and is added as a new part of the history
 
 			this.undos.push( cmd );
 			cmd.id = ++ this.idCounter;
@@ -53,19 +49,11 @@ History.prototype = {
 		cmd.execute();
 		cmd.inMemory = true;
 
-		// if ( this.config.getKey( 'settings/history' ) ) {
-		//
-		// 	cmd.json = cmd.toJSON();	// serialize the cmd immediately after execution and append the json to the cmd
-		//
-		// }
-
 		this.lastCmdTime = new Date();												// 更新上次操作时间
 
-		// clearing all the redo-commands
 		// 一旦进行了新的操作，恢复队列便可以清除了
 
 		this.redos = [];
-		// this.show.signals.historyChanged.dispatch( cmd );
 
 	},
 
@@ -84,19 +72,12 @@ History.prototype = {
 
 			cmd = this.undos.pop();
 
-			// if ( cmd.inMemory === false ) {
-			//
-			// 	cmd.fromJSON( cmd.json );
-			//
-			// }
-
 		}
 
 		if ( cmd !== undefined ) {
 
 			cmd.undo();
 			this.redos.push( cmd );															// 撤销之后将cmd放入恢复队列
-			//this.show.signals.historyChanged.dispatch( cmd );
 
 		}
 
@@ -119,19 +100,12 @@ History.prototype = {
 
 			cmd = this.redos.pop();
 
-			// if ( cmd.inMemory === false ) {
-			//
-			// 	cmd.fromJSON( cmd.json );
-			//
-			// }
-
 		}
 
 		if ( cmd !== undefined ) {
 
 			cmd.execute();
 			this.undos.push( cmd );													// 恢复之后将操作放入撤销队列
-			// this.show.signals.historyChanged.dispatch( cmd );
 
 		}
 

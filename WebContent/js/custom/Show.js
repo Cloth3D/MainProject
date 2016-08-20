@@ -21,8 +21,6 @@
    this.counter_material = 0;
 
    this.helper = [];                // 存贮场景中这类物品的数组s
-  //  this.geometry = [];              // 存储场景中这类物品的数组
-  //  this.material = [];              // 存储场景中这类物品的数组
    this.objects = [];                  // 存储场景中这类物品的数组
 
    this.light = [];                 // 光

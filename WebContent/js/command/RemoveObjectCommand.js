@@ -16,12 +16,6 @@ var RemoveObjectCommand = function ( object ) {
 	this.name = 'Remove Object';
 
 	this.object = object;
-	// this.parent = ( object !== undefined ) ? object.parent : undefined;
-	// if ( this.parent !== undefined ) {
-	//
-	// 	this.index = this.parent.children.indexOf( this.object );
-	//
-	// }
 
 };
 

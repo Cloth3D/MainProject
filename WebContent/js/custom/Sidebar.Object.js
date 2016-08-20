@@ -11,47 +11,6 @@ Sidebar.Object = function ( show ) {
 	container.setPaddingTop( '20px' );
 	container.setDisplay( 'none' );
 
-	// Actions
-
-	// var objectActions = new UI.Select().setPosition( 'absolute' ).setRight( '8px' ).setFontSize( '11px' );
-	// objectActions.setOptions( {
-	//
-	// 	'Actions': 'Actions',
-	// 	'Reset Position': 'Reset Position',
-	// 	'Reset Rotation': 'Reset Rotation',
-	// 	'Reset Scale': 'Reset Scale'
-	//
-	// } );
-	// objectActions.onClick( function ( event ) {
-	//
-	// 	event.stopPropagation(); // Avoid panel collapsing
-	//
-	// } );
-	// objectActions.onChange( function ( event ) {
-	//
-	// 	var object = show.selected;
-	//
-	// 	switch ( this.getValue() ) {
-	//
-	// 		case 'Reset Position':
-	// 			show.execute( new SetPositionCommand( object, new THREE.Vector3( 0, 0, 0 ) ) );
-	// 			break;
-	//
-	// 		case 'Reset Rotation':
-	// 			show.execute( new SetRotationCommand( object, new THREE.Euler( 0, 0, 0 ) ) );
-	// 			break;
-	//
-	// 		case 'Reset Scale':
-	// 			show.execute( new SetScaleCommand( object, new THREE.Vector3( 1, 1, 1 ) ) );
-	// 			break;
-	//
-	// 	}
-	//
-	// 	this.setValue( 'Actions' );
-	//
-	// } );
-	// container.addStatic( objectActions );
-
 	// type
 
 	var objectTypeRow = new UI.Row();
@@ -75,19 +34,7 @@ Sidebar.Object = function ( show ) {
 	objectNameRow.add( objectName );
 
 	container.add( objectNameRow );
-
-	/*
-	// parent
-
-	var objectParentRow = new UI.Row();
-	var objectParent = new UI.Select().setWidth( '150px' ).setFontSize( '12px' ).onChange( update );
-
-	objectParentRow.add( new UI.Text( 'Parent' ).setWidth( '90px' ) );
-	objectParentRow.add( objectParent );
-
-	container.add( objectParentRow );
-	*/
-
+	
 	// position
 
 	var objectPositionRow = new UI.Row();
@@ -226,23 +173,6 @@ Sidebar.Object = function ( show ) {
 
 	container.add( objectDecayRow );
 
-	// shadow
-	//
-	// var objectShadowRow = new UI.Row();
-	//
-	// objectShadowRow.add( new UI.Text( 'Shadow' ).setWidth( '90px' ) );
-	//
-	// var objectCastShadow = new UI.THREE.Boolean( false, 'cast' ).onChange( update );
-	// objectShadowRow.add( objectCastShadow );
-	//
-	// var objectReceiveShadow = new UI.THREE.Boolean( false, 'receive' ).onChange( update );
-	// objectShadowRow.add( objectReceiveShadow );
-	//
-	// var objectShadowRadius = new UI.Number( 1 ).onChange( update );
-	// objectShadowRow.add( objectShadowRadius );
-	//
-	// container.add( objectShadowRow );
-
 	// visible
 
 	var objectVisibleRow = new UI.Row();
@@ -353,36 +283,6 @@ Sidebar.Object = function ( show ) {
 	} ));
 	container.add( local );
 
-	// user data
-
-	// var timeout;
-	//
-	// var objectUserDataRow = new UI.Row();
-	// var objectUserData = new UI.TextArea().setWidth( '150px' ).setHeight( '40px' ).setFontSize( '12px' ).onChange( update );
-	// objectUserData.onKeyUp( function () {
-	//
-	// 	try {
-	//
-	// 		JSON.parse( objectUserData.getValue() );
-	//
-	// 		objectUserData.dom.classList.add( 'success' );
-	// 		objectUserData.dom.classList.remove( 'fail' );
-	//
-	// 	} catch ( error ) {
-	//
-	// 		objectUserData.dom.classList.remove( 'success' );
-	// 		objectUserData.dom.classList.add( 'fail' );
-	//
-	// 	}
-	//
-	// } );
-	//
-	// objectUserDataRow.add( new UI.Text( 'User data' ).setWidth( '90px' ) );
-	// objectUserDataRow.add( objectUserData );
-	//
-	// container.add( objectUserDataRow );
-
-
 	//
 
 	function updateScaleX() {
@@ -439,27 +339,14 @@ Sidebar.Object = function ( show ) {
 	function update() {
 
 		var object = show.selected;
+		if(object.parent instanceof THREE.Group)
+			object = object.parent;
 
 		if ( object !== null ) {
-
-			/*
-			if ( object.parent !== null ) {
-
-				var newParentId = parseInt( objectParent.getValue() );
-
-				if ( object.parent.id !== newParentId && object.id !== newParentId ) {
-
-					show.execute( new MoveObjectCommand( object, show.scene.getObjectById( newParentId ) ) );
-
-				}
-
-			}
-			*/
-
+			
 			var newPosition = new THREE.Vector3( objectPositionX.getValue(), objectPositionY.getValue(), objectPositionZ.getValue() );
 			if ( object.position.distanceTo( newPosition ) >= 0.01 ) {
 				
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetPositionCommand( object, newPosition ) );
 
 			}
@@ -467,7 +354,6 @@ Sidebar.Object = function ( show ) {
 			var newRotation = new THREE.Euler( objectRotationX.getValue(), objectRotationY.getValue(), objectRotationZ.getValue() );
 			if ( object.rotation.toVector3().distanceTo( newRotation.toVector3() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetRotationCommand( object, newRotation ) );
 
 			}
@@ -475,14 +361,12 @@ Sidebar.Object = function ( show ) {
 			var newScale = new THREE.Vector3( objectScaleX.getValue(), objectScaleY.getValue(), objectScaleZ.getValue() );
 			if ( object.scale.distanceTo( newScale ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetScaleCommand( object, newScale ) );
 
 			}
 
 			if ( object.fov !== undefined && Math.abs( object.fov - objectFov.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'fov', objectFov.getValue() ) );
 				object.updateProjectionMatrix();
 
@@ -490,56 +374,48 @@ Sidebar.Object = function ( show ) {
 
 			if ( object.near !== undefined && Math.abs( object.near - objectNear.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'near', objectNear.getValue() ) );
 
 			}
 
 			if ( object.far !== undefined && Math.abs( object.far - objectFar.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'far', objectFar.getValue() ) );
 
 			}
 
 			if ( object.intensity !== undefined && Math.abs( object.intensity - objectIntensity.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'intensity', objectIntensity.getValue() ) );
 
 			}
 
 			if ( object.color !== undefined && object.color.getHex() !== objectColor.getHexValue() ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetColorCommand( object, 'color', objectColor.getHexValue() ) );
 
 			}
 
 			if ( object.groundColor !== undefined && object.groundColor.getHex() !== objectGroundColor.getHexValue() ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetColorCommand( object, 'groundColor', objectGroundColor.getHexValue() ) );
 
 			}
 
 			if ( object.distance !== undefined && Math.abs( object.distance - objectDistance.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'distance', objectDistance.getValue() ) );
 
 			}
 
 			if ( object.angle !== undefined && Math.abs( object.angle - objectAngle.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'angle', objectAngle.getValue() ) );
 
 			}
 
 			if ( object.penumbra !== undefined && Math.abs( object.penumbra - objectPenumbra.getValue() ) >= 0.01 ) {
 
-				if(object.parent instanceof THREE.Group)	object = object.parent;
 				show.execute( new SetValueCommand( object, 'penumbra', objectPenumbra.getValue() ) );
 
 			}
@@ -550,48 +426,6 @@ Sidebar.Object = function ( show ) {
 
 			}
 
-			// if ( object.castShadow !== objectCastShadow.getValue() ) {
-			//
-			// 	show.execute( new SetValueCommand( object, 'castShadow', objectCastShadow.getValue() ) );
-			//
-			// }
-			//
-			// if ( object.receiveShadow !== undefined ) {
-			//
-			// 	if ( object.receiveShadow !== objectReceiveShadow.getValue() ) {
-			//
-			// 		show.execute( new SetValueCommand( object, 'receiveShadow', objectReceiveShadow.getValue() ) );
-			// 		object.material.needsUpdate = true;
-			//
-			// 	}
-			//
-			// }
-			//
-			// if ( object.shadow !== undefined ) {
-			//
-			// 	if ( object.shadow.radius !== objectShadowRadius.getValue() ) {
-			//
-			// 		show.execute( new SetValueCommand( object.shadow, 'radius', objectShadowRadius.getValue() ) );
-			//
-			// 	}
-
-			//}
-
-			// try {
-			//
-			// 	var userData = JSON.parse( objectUserData.getValue() );
-			// 	if ( JSON.stringify( object.userData ) != JSON.stringify( userData ) ) {
-			//
-			// 		show.execute( new SetValueCommand( object, 'userData', userData ) );
-			//
-			// 	}
-			//
-			// } catch ( exception ) {
-			//
-			// 	console.warn( exception );
-			//
-			// }
-
 		}
 
 	}
@@ -599,7 +433,6 @@ Sidebar.Object = function ( show ) {
 	function updateRows( object ) {
 
 		var properties = {
-			// 'parent': objectParentRow,
 			'fov': objectFovRow,
 			'near': objectNearRow,
 			'far': objectFarRow,
@@ -610,9 +443,6 @@ Sidebar.Object = function ( show ) {
 			'angle' : objectAngleRow,
 			'penumbra' : objectPenumbraRow,
 			'decay' : objectDecayRow,
-			//'castShadow' : objectShadowRow,
-			//'receiveShadow' : objectReceiveShadow,
-			//'shadow': objectShadowRadius
 		};
 
 		for ( var property in properties ) {
@@ -647,7 +477,10 @@ Sidebar.Object = function ( show ) {
 		if ( object !== null ) {
 
 			container.setDisplay( 'block' );
-
+			
+			if(object.parent instanceof THREE.Group)
+				object = object.parent;
+			
 			updateRows( object );
 			updateUI( object );
 
@@ -659,26 +492,13 @@ Sidebar.Object = function ( show ) {
 
 	} );
 
-	/*
-	signals.sceneGraphChanged.add( function () {
-
-		var scene = show.scene;
-		var options = {};
-
-		scene.traverse( function ( object ) {
-
-			options[ object.id ] = object.name;
-
-		} );
-
-		objectParent.setOptions( options );
-
-	} );
-	*/
-
 	signals.objectChanged.add( function ( object ) {
 
-		if ( object !== show.selected ) return;
+		var obj = show.selected;		// 防止出现父子关系混乱
+		if(obj.parent instanceof THREE.Group)
+			obj = obj.parent;
+		
+		if ( object !== obj ) return;
 
 		updateUI( object );
 
@@ -686,7 +506,11 @@ Sidebar.Object = function ( show ) {
 
 	signals.refreshSidebarObject3D.add( function ( object ) {
 
-		if ( object !== show.selected ) return;
+		var obj = show.selected;		// 防止出现父子关系混乱
+		if(obj.parent instanceof THREE.Group)
+			obj = obj.parent;
+		
+		if ( object !== obj ) return;
 
 		updateUI( object );
 
@@ -696,16 +520,7 @@ Sidebar.Object = function ( show ) {
 
 		objectType.setValue( object.type );
 
-		//objectUUID.setValue( object.uuid );
 		objectName.setValue( object.name );
-
-		/*
-		if ( object.parent !== null ) {
-
-			objectParent.setValue( object.parent.id );
-
-		}
-		*/
 
 		objectPositionX.setValue( object.position.x );
 		objectPositionY.setValue( object.position.y );
@@ -779,38 +594,7 @@ Sidebar.Object = function ( show ) {
 
 		}
 
-		// if ( object.castShadow !== undefined ) {
-		//
-		// 	objectCastShadow.setValue( object.castShadow );
-		//
-		// }
-		//
-		// if ( object.receiveShadow !== undefined ) {
-		//
-		// 	objectReceiveShadow.setValue( object.receiveShadow );
-		//
-		// }
-		//
-		// if ( object.shadow !== undefined ) {
-		//
-		// 	objectShadowRadius.setValue( object.shadow.radius );
-		//
-		// }
-
 		objectVisible.setValue( object.visible );
-
-//		try {
-//
-//			// objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
-//
-//		} catch ( error ) {
-//
-//			console.log( error );
-//
-//		}
-
-		// objectUserData.setBorderColor( 'transparent' );
-		// objectUserData.setBackgroundColor( '' );
 
 		updateTransformRows( object );
 

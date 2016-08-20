@@ -28,14 +28,12 @@ AddObjectCommand.prototype = {
 	execute: function () {
 
 		this.show.addObject( this.object );
-		//this.show.select( this.object );
 
 	},
 
 	undo: function () {
 
 		this.show.removeObject( this.show, this.object );
-		//this.editor.deselect();
 		this.show.selected = null;
 		this.show.selectNeedUpdate = true;
 

@@ -13,8 +13,6 @@ var UndressCommand = function(human, type)
 {
 	Command.call(this);
 
-	//this.type = 'UndressCommand';
-	
 	this.updatable = true;							// 防止多次误击
 	this.human = human;								// 留下引用
 	this.oldCloth = human[type]; 					// 原有的衣服的模型
