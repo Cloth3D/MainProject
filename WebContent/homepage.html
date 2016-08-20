@@ -56,9 +56,7 @@ body {
 <script src='js/ui.js'></script>
 <script src='js/ui.three.js'></script>
 
-<script src='js/three.js'></script>
-<script src='js/stats.min.js'></script>
-<script src='js/TrackballControls.js'></script>
+<script src='js/three.min.js'></script>
 
 <script src='js/loaders/AMFLoader.js'></script>
 <script src='js/loaders/AWDLoader.js'></script>
@@ -80,11 +78,9 @@ body {
 <script src='js/loaders/ctm/lzma.js'></script>
 
 <script src='js/TransformControls.js'></script>
-<script src='js/SkeletonHelper.js'></script>
 <script src='js/AnimationMixer.js'></script>
 <script src='js/custom/Show.js'></script>
 <script src="js/OrbitControls.js"></script>
-<script src='js/TransformControls.js'></script>
 <script src='js/custom/Loader.js'></script>
 <script src='js/custom/Human.js'></script>
 <script src='js/custom/MergeAlphaMap.js'></script>
@@ -109,6 +105,18 @@ body {
 <script src='js/custom/XMLReader.js'></script>
 <script src='js/custom/MoveAndChooseManager.js'></script>
 <script src='js/custom/SkyBox.js'></script>
+
+<!-- <script src = 'js/zip/command_all.js'></script> -->
+<!-- <script src = 'js/zip/custom_all.js'></script> -->
+<!-- <script src = 'js/zip/exporters_all.js'></script> -->
+<!-- <script src = 'js/zip/loaders_all.js'></script> -->
+<!-- <script src = 'js/zip/OrbitControls.js'></script> -->
+<!-- <script src = 'js/zip/three.min.js'></script> -->
+<!-- <script src = 'js/zip/TransformControls.js'></script> -->
+<!-- <script src = 'js/zip/ui.js'></script> -->
+<!-- <script src = 'js/zip/ui.three.js'></script> -->
+<!-- <script src = 'js/zip/AnimationMixer.js'></script> -->
+<!-- <script src = 'js/zip/signals.min.js'></script> -->
 </head>
 
 <body
@@ -640,8 +648,12 @@ body {
 			}
 
 			var cloth_mat = getMatURL(xmlDoc, cloth_id); // 材质url
-			human1.CMDLoadCloth2( // 上衣
-			human1, human_cloth_type, cloth_id, cloth_url, cloth_mat,
+			human1.CMDLoadCloth2(
+			human1, 
+			human_cloth_type, 
+			cloth_id, 
+			cloth_url, 
+			cloth_mat,
 					cloth_opacity);
 		}
 

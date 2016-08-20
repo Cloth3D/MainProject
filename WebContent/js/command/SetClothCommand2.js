@@ -119,6 +119,8 @@ SetClothCommand.prototype = {
     var loader5 = new THREE.ImageLoader();		// 读取light贴图
     var loader6 = new THREE.ImageLoader();		// 读取人体的透明贴图
     
+    var jsonloader = new THREE.JSONLoader();
+    var cloth = undefined;
 
     var onProgress = function ( xhr ) {		// 用来调试读取进度
       if ( xhr.lengthComputable ) {
@@ -206,7 +208,7 @@ SetClothCommand.prototype = {
         case 'shoes':
         hu.clothAlpha['shoes'] = human_alpha;							  // 将透明贴图保存
         newHumanAlpha = hu.mergeAlpha(hu);																	// 调用合并贴图函数
-        console.log('添加鞋子');
+        console.log('合成鞋子贴图');
         break;
 
         default:
@@ -351,12 +353,12 @@ SetClothCommand.prototype = {
     }
     else			// 如果不需要加载透明贴图则直接算贴图加载完成
     {
+    	editAlphaMap(cmd.human, human_alpha, cmd.ctype);	// 贴图加载完成，开始合成贴图
     	human_alpha_ready = true;
     }
     
 
-    var jsonloader = new THREE.JSONLoader();
-    var cloth = null;
+
     
     jsonloader.load( cmd.url_cloth, function ( geometry, materials ) {				// 加载衣服模型，使用上面加载的衣服
 
