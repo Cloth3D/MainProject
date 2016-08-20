@@ -160,7 +160,7 @@ body {
 									<div class="row" style="margin-top: 5px">
 
 										<div class="col-md-6">
-											<button data-original-title="从本地读取人体模型" title=""
+											<button data-original-title="加载本地模型" title=""
 												data-placement="bottom" data-toggle="tooltip"
 												class="btn btn-default mrs" type="button"
 												onclick="fileInput.click();">
@@ -179,10 +179,10 @@ body {
 
 									<div class="row" style="margin-top: 5px">
 										<div class="col-md-6">
-											<button data-original-title="导出模型" title=""
+											<button data-original-title="删除选中模型" title=""
 												data-placement="bottom" data-toggle="tooltip"
 												class="btn btn-default mrs" type="button"
-												onclick="if (!showRight) {rightPart();}">
+												onclick="show.execute(new RemoveObjectCommand(show.selected));">
 												<i class="icon-eye-open icon-large"></i>
 											</button>
 										</div>
@@ -819,7 +819,6 @@ body {
 		function main() {
 			init(); // 初始化窗口
 			addListener() // 添加监听器
-			//addstats(); // 添加状态显示
 			addLight(); // 添加光线
 			addGrid(); // 添加网格
 			animation(); // 调用动画
