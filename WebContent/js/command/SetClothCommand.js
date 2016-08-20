@@ -118,6 +118,8 @@ SetClothCommand.prototype = {
     var loader5 = new THREE.ImageLoader();		// 读取light贴图
     var loader6 = new THREE.ImageLoader();		// 读取人体的透明贴图
     
+    var jsonloader = new THREE.JSONLoader();
+    var cloth = undefined;
 
     var onProgress = function ( xhr ) {		// 用来调试读取进度
       if ( xhr.lengthComputable ) {
@@ -205,13 +207,14 @@ SetClothCommand.prototype = {
         case 'shoes':
         hu.clothAlpha['shoes'] = human_alpha;							  // 将透明贴图保存
         newHumanAlpha = hu.mergeAlpha(hu);																	// 调用合并贴图函数
-        console.log('添加鞋子');
+        console.log('合成鞋子贴图');
         break;
 
         default:
         newHumanAlpha = hu.mergeAlpha(hu);
         console.log("未有匹配项");
       };
+      //cmd.newHumanAlpha = hu.material.alphaMap;              // 合并贴图完成后，将记录保存到cmd
       cmd.newHumanAlpha = newHumanAlpha;
     };
 
@@ -316,7 +319,6 @@ SetClothCommand.prototype = {
               	hu.material.alphaMap = newHumanAlpha;				// 合成后的贴图附加在human材质上
           		hu.material.needsUpdate = true;
             }
-            //console.log("light贴图加载完成");
 
         } ,onProgress,onError);			// load light
     }
@@ -350,19 +352,20 @@ SetClothCommand.prototype = {
     }
     else			// 如果不需要加载透明贴图则直接算贴图加载完成
     {
+    	editAlphaMap(cmd.human, human_alpha, cmd.ctype);	// 贴图加载完成，开始合成贴图
     	human_alpha_ready = true;
     }
     
 
-    var jsonloader = new THREE.JSONLoader();
-    var cloth = null;
+
+    
     jsonloader.load( cmd.url_cloth, function ( geometry, materials ) {				// 加载衣服模型，使用上面加载的衣服
 
       cloth = new THREE.SkinnedMesh(geometry, mater);		//	新建衣服模型
       cloth.bind(hu.human.skeleton, cloth.matrixWorld);			// 将人体模型的骨架绑定在衣服上
 
       cmd.cloth = cloth;                                    // 将记录保存在cmd里
-      
+      cmd.cloth.cloth_id = cmd.cloth_id;					// 将衣服的id信息储存在模型中
       cloth.visible =false;									// 初始时衣服不显示
       
       // 判断几个贴图是否都已加载完全

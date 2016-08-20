@@ -37,23 +37,36 @@ canvas {
 <script src='js/ui.js'></script>
 <script src='js/ui.three.js'></script>
 
-<script src='js/dat.gui.js'></script>
 <script src='js/three.js'></script>
-<script src='js/stats.min.js'></script>
-<script src='js/TrackballControls.js'></script>
+
+<script src='js/loaders/AMFLoader.js'></script>
+<script src='js/loaders/AWDLoader.js'></script>
+<script src='js/loaders/BabylonLoader.js'></script>
+<script src='js/loaders/ColladaLoader.js'></script>
+<script src='js/loaders/FBXLoader.js'></script>
+<script src='js/loaders/KMZLoader.js'></script>
+<script src='js/loaders/MD2Loader.js'></script>
+<script src='js/loaders/MTLLoader.js'></script>
+<script src='js/loaders/OBJLoader.js'></script>
+<script src='js/loaders/PlayCanvasLoader.js'></script>
+<script src='js/loaders/PLYLoader.js'></script>
+<script src='js/loaders/STLLoader.js'></script>
+<script src='js/loaders/UTF8Loader.js'></script>
+<script src='js/loaders/VRMLLoader.js'></script>
+<script src='js/loaders/VTKLoader.js'></script>
+<script src='js/loaders/ctm/ctm.js'></script>
+<script src='js/loaders/ctm/CTMLoader.js'></script>
+<script src='js/loaders/ctm/lzma.js'></script>
+
 <script src='js/TransformControls.js'></script>
-<script src='js/SkeletonHelper.js'></script>
 <script src='js/AnimationMixer.js'></script>
 <script src='js/custom/Show.js'></script>
 <script src="js/OrbitControls.js"></script>
-<script src='js/TransformControls.js'></script>
 <script src='js/custom/Loader.js'></script>
-<script src='js/custom/transform.js'></script>
-<script src='js/custom/MaterialTools.js'></script>
 <script src='js/custom/Human.js'></script>
-<script src='js/custom/raycasting.js'></script>
 <script src='js/custom/MergeAlphaMap.js'></script>
-<script src='js/command/Command.js'>/</script>
+
+<script src='js/command/Command.js'></script>
 <script src='js/custom/History.js'></script>
 <script src='js/command/AddObjectCommand.js'></script>
 <script src='js/command/RemoveObjectCommand.js'></script>
@@ -66,10 +79,15 @@ canvas {
 <script src='js/command/SetMaterialValueCommand.js'></script>
 <script src='js/command/SetValueCommand.js'></script>
 <script src='js/command/SetColorCommand.js'></script>
+
 <script src='js/command/SetClothCommand.js'></script>
+<script src='js/command/UndressCommand.js'></script>
 <script src='js/command/SetFigureCommand.js'></script>
 <script src='js/custom/XMLReader.js'></script>
+<script src='js/custom/MoveAndChooseManager.js'></script>
 <script src='js/custom/SkyBox.js'></script>
+<script src='js/XHRLoader.js'></script>
+
 
 </head>
 
@@ -312,7 +330,6 @@ function render()
 {
 
 	show.update();					// 渲染相机和场景
-	//stats.update();										// 更新
 	if(human1)
 		human1.update(human1);
 
@@ -343,23 +360,6 @@ function loadhumantest()
   human1.init(human1);						// 添加到场景中
   
 
-}
-
-function playAni()
-{
-	if(human1.mixer === null) human1.addMixer(human1);
-	human1.clipaction.play();
-	human1.play
-}
-
-function stopAni()
-{
-	human1.clipaction.stop();
-}
-
-function resetAni()
-{
-	human1.clipaction.reset();
 }
 
 function main()  // 放在 <body onload>时执行，保证js文件全部加载到位
