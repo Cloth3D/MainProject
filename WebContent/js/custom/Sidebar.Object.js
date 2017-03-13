@@ -245,6 +245,25 @@ Sidebar.Object = function ( show ) {
 	
 	objectDownloadRow.add(toSTL);		// 添加stl导出按钮
 	
+var toOBJ = new UI.Button('w3d').onClick(function(){
+		
+		var object = show.selected;
+
+		if ( object === null ) {
+
+			alert( 'No object selected.' );
+			return;
+
+		}
+
+		var exporter = new THREE.OBJExporter();
+
+		saveString( exporter.parse( object ), 'model.w3d' );
+		
+	});
+	
+	objectDownloadRow.add(toOBJ);	// 添加obj导出按钮
+	
 	container.add(objectDownloadRow);
 	
 	

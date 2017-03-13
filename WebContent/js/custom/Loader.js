@@ -38,6 +38,36 @@ var Loader = function ( show ) {
 				reader.readAsArrayBuffer( file );
 
 				break;
+			case 'awd':
+
+				reader.addEventListener( 'load', function ( event ) {
+
+					var loader = new THREE.AWDLoader();
+					var scene = loader.parse( event.target.result );
+
+					show.execute( new SetSceneCommand( scene ) );
+
+				}, false );
+				reader.readAsArrayBuffer( file );
+
+				break;
+
+			case 'babylon':
+
+				reader.addEventListener( 'load', function ( event ) {
+
+					var contents = event.target.result;
+					var json = JSON.parse( contents );
+
+					var loader = new THREE.BabylonLoader();
+					var scene = loader.parse( json );
+
+					show.execute( new SetSceneCommand( scene ) );
+
+				}, false );
+				reader.readAsText( file );
+
+				break;
 
 			case 'babylonmeshdata':
 
@@ -215,7 +245,7 @@ var Loader = function ( show ) {
 					mesh.name = filename;
 
 					show.execute( new AddObjectCommand( mesh ) );
-					
+
 				}, false );
 				reader.readAsArrayBuffer( file );
 
@@ -329,6 +359,21 @@ var Loader = function ( show ) {
 				reader.readAsText( file );
 
 				break;
+				// vrml 格式支持
+			case 'wrl':
+
+				reader.addEventListener( 'load', function ( event ) {
+
+					var contents = event.target.result;
+
+					var result = new THREE.VRMLLoader().parse( contents );
+
+					show.execute( new SetSceneCommand( result ) );
+
+				}, false );
+				reader.readAsText( file );
+
+				break;
 
 			default:
 
@@ -369,7 +414,7 @@ var Loader = function ( show ) {
 
 				var mesh = new THREE.Mesh( result );
 
-				show.execute( new AddObjectCommand( mesh ) );
+				editor.execute( new AddObjectCommand( mesh ) );
 
 				break;
 
@@ -422,9 +467,35 @@ var Loader = function ( show ) {
 
 				break;
 
-			case 'app':
+			case 'object':
 
-				editor.fromJSON( data );
+				var loader = new THREE.ObjectLoader();
+				loader.setTexturePath( scope.texturePath );
+
+				var result = loader.parse( data );
+
+				if ( result instanceof THREE.Scene ) {
+
+					show.execute( new SetSceneCommand( result ) );
+
+				} else {
+
+					show.execute( new AddObjectCommand( result ) );
+
+				}
+
+				break;
+
+			case 'scene':
+
+				// DEPRECATED
+
+				var loader = new THREE.SceneLoader();
+				loader.parse( data, function ( result ) {
+
+					show.execute( new SetSceneCommand( result.scene ) );
+
+				}, '' );
 
 				break;
 
